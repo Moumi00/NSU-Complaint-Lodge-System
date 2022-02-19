@@ -11,3 +11,25 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
 }
+
+.primary-color {
+  background-color: #95b486;
+}
+
+.social-box ul {
+  float: right;
+  margin-bottom: 0;
+  margin-top: 5px;
+}
+
+.social-list li a {
+  color: #e1e1e1;
+}
+
+ul {
+  list-style: none;
+}
+
+li {
+  vertical-align: baseline;
+}

@@ -3,7 +3,7 @@ import React, { useState } from "react";
 function Navbar() {
   return (
     <div>
-      <nav class="navbar navbar-expand-lg navbar-light primary-color">
+      <nav class="navbar navbar-expand-lg primary-color">
         <div class="container-fluid">
           <a class="navbar-brand ms-5" href="#">
             <img

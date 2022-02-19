@@ -4,10 +4,14 @@ import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
 import Navbar from './Components/navbar';
+import Footer from './Components/footer';
+import Homepage from './Components/homepage';
 
 ReactDOM.render(
   <React.StrictMode>
     <Navbar />
+    <Homepage />
+    <Footer />
   </React.StrictMode>,
   document.getElementById('root')
 );
