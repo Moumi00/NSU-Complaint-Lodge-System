@@ -31,19 +31,19 @@ function Navbar() {
           <div class="collapse navbar-collapse" id="navbarSupportedContent">
             <ul className="navbar-nav ms-auto">
               <li className="nav-item">
-                <button className="btn btn-lg btn-outline-success my-2 ms-4 ms-lg-0 me-5" href="#">
+                <a className="btn btn-lg btn-outline-success my-2 ms-4 ms-lg-0 me-5" href="#">
                   Lodge Complain
-                </button>
+                </a>
               </li>
               <li className="nav-item me-2">
-                <button className="btn btn-lg btn-outline-success my-2 ms-4 me-2" href="#">
-                  Signup
-                </button>
+                <a className="btn btn-lg btn-outline-success my-2 ms-4 me-2" href="/register">
+                  Register
+                </a>
               </li>
               <li>
-                <button className="btn btn-lg btn-outline-success my-2 ms-4 ms-lg-0 me-5" href="#">
+                <a className="btn btn-lg btn-outline-success my-2 ms-4 ms-lg-0 me-5" href="#">
                   Login
-                </button>
+                </a>
               </li>
             </ul>
           </div>

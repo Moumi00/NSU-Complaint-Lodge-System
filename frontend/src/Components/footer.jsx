@@ -29,7 +29,7 @@ function Footer() {
               <FontAwesomeIcon icon={faEnvelope} /> registrar@northsouth.edu
             </p>
           </div>
-          <div class="col-md-6">
+          <div class="col-md-5 offset-lg-1">
             <div class="">
               <ul class="list-group list-group-horizontal mb-3">
                 <li class="border border-2 rounded border-dark me-2">
