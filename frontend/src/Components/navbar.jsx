@@ -1,3 +1,5 @@
+import { faBars } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import React, { useState } from "react";
 
 function Navbar() {
@@ -14,7 +16,7 @@ function Navbar() {
             ></img>
           </a>
           <button
-            class="navbar-toggler"
+            class="navbar-toggler border border-dark"
             type="button"
             data-bs-toggle="collapse"
             data-bs-target="#navbarSupportedContent"
@@ -22,7 +24,9 @@ function Navbar() {
             aria-expanded="false"
             aria-label="Toggle navigation"
           >
-            <span class="navbar-toggler-icon"></span>
+            <span class="navbar-toggler-icon d-flex justify-content-center align-items-center">
+              <FontAwesomeIcon icon={faBars} />
+            </span>
           </button>
           <div class="collapse navbar-collapse" id="navbarSupportedContent">
             <ul className="navbar-nav ms-auto">

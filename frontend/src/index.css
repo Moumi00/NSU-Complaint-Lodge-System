@@ -12,24 +12,18 @@ code {
     monospace;
 }
 
-.primary-color {
+/* .primary-color {
   background-color: #95b486;
-}
+} */
 
-.social-box ul {
-  float: right;
-  margin-bottom: 0;
-  margin-top: 5px;
-}
-
-.social-list li a {
-  color: #e1e1e1;
+.primary-color {
+  background-color: #d9964a;
 }
 
 ul {
   list-style: none;
 }
 
-li {
-  vertical-align: baseline;
+li:hover{
+  opacity: 50%;
 }
