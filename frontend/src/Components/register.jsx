@@ -1,56 +1,75 @@
 import React, { useState } from "react";
+import Select from "react-select";
 
 function Register() {
+  const Designations = [
+    { label: "Faculty", value: 1 },
+    { label: "Student", value: 2 },
+    { label: "RA / TA / Lab Instructor", value: 3 },
+    { label: "Helper", value: 4 },
+  ];
+
   return (
-    <div class="flex-grow-1">
-      <div class="row justify-content-center mt-4">
-        <div className="col-3 align-self-center">
-          <img
-            src={require("../Assets/register-logo.png")}
-            style={{ maxWidth: "100%" }}
-          ></img>
-        </div>
-        <div class="col-4 bg-light">
+    <div class="flex-grow-1 d-flex align-items-center justify-content-center">
+      <div class="row justify-content-center w-100">
+        <div class="col-xl-3 col-lg-4 col-md-8 col-sm-12 my-4 primary-background-color px-5 pb-5">
+          <div class="separator my-5 ">
+            <h1 className="text-dark fw-light">Register</h1>
+          </div>
           <form>
-            <div class="form-group mb-3">
-              <label for="fullNameInput">Full Name</label>
+            <div class="form-group mb-4">
               <input
                 type="text"
                 class="form-control"
                 id="fullNameInput"
-                placeholder="Enter Full Name"
+                placeholder="Full Name"
               ></input>
             </div>
-            <div class="form-group mb-3">
-              <label for="idInput">NSU ID</label>
+            <div class="form-group mb-4">
               <input
                 type="text"
                 class="form-control"
-                id="idInput"
-                placeholder="Enter NSU ID"
+                id="nsuIdInput"
+                placeholder="NSU ID"
               ></input>
             </div>
-            <div class="form-group mb-3">
-              <label for="emailInput">Email address</label>
+            <div class="form-group mb-4">
               <input
                 type="text"
                 class="form-control"
                 id="emailInput"
-                placeholder="Enter email"
+                placeholder="Email"
               ></input>
             </div>
-            <div class="form-group mb-3">
-              <label for="exampleInputPassword1">Password</label>
+            <div className="form-group d-flex mb-4">
+              <div className="col-12">
+                <Select
+                  options={Designations}
+                  placeholder={<div style={{ color: "grey" }}>Designation</div>}
+                />
+              </div>
+            </div>
+            <div class="form-group mb-4">
               <input
                 type="password"
                 class="form-control"
-                id="exampleInputPassword1"
+                id="passwordInput"
                 placeholder="Password"
               ></input>
             </div>
-            <button type="submit" class="btn btn-primary">
-              Submit
-            </button>
+            <div class="form-group mb-4">
+              <input
+                type="password"
+                class="form-control"
+                id="confirmPasswordInput"
+                placeholder="Confirm Password"
+              ></input>
+            </div>
+            <div className="d-block">
+              <button type="submit" class="btn btn-primary w-100 fw-bold">
+                Register
+              </button>
+            </div>
           </form>
         </div>
       </div>

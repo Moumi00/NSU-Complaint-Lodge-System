@@ -27,3 +27,32 @@ ul {
 li:hover{
   opacity: 50%;
 }
+
+.border-color{
+  border-color: #e6e9ec !important;
+}
+
+.separator {
+  display: flex;
+  align-items: center;
+  text-align: center;
+}
+
+.separator::before,
+.separator::after {
+  content: '';
+  flex: 1;
+  border-bottom: 1px solid #000;
+}
+
+.separator:not(:empty)::before {
+  margin-right: .25em;
+}
+
+.separator:not(:empty)::after {
+  margin-left: .25em;
+}
+
+.primary-background-color{
+  background-color: #e1e1e1;
+}
