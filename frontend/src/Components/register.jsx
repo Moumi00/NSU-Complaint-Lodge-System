@@ -10,9 +10,9 @@ function Register() {
   ];
 
   return (
-    <div class="flex-grow-1 d-flex align-items-center justify-content-center">
+    <div class="flex-grow-1 background-color d-flex align-items-center justify-content-center">
       <div class="row justify-content-center w-100">
-        <div class="col-xl-3 col-lg-4 col-md-8 col-sm-12 my-4 primary-background-color px-5 pb-5">
+        <div class="col-xl-4 col-lg-6 col-md-8 col-11 my-4 primary-background-color px-5 pb-5">
           <div class="separator my-5 ">
             <h1 className="text-dark fw-light">Register</h1>
           </div>

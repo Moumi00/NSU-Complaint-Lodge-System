@@ -41,7 +41,7 @@ function Navbar() {
                 </a>
               </li>
               <li>
-                <a className="btn btn-lg btn-outline-success my-2 ms-4 ms-lg-0 me-5" href="#">
+                <a className="btn btn-lg btn-outline-success my-2 ms-4 ms-lg-0 me-5" href="/login">
                   Login
                 </a>
               </li>

@@ -56,3 +56,8 @@ li:hover{
 .primary-background-color{
   background-color: #e1e1e1;
 }
+
+.background-color{
+  background: rgb(186,208,212);
+  background: radial-gradient(circle, rgba(186,208,212,1) 0%, rgba(62,159,168,1) 100%);
+}

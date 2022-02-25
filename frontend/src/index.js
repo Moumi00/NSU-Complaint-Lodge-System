@@ -8,6 +8,7 @@ import Footer from './Components/footer';
 import Homepage from './Components/homepage';
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import Register from './Components/register';
+import Login from './Components/login';
 
 ReactDOM.render(
   <React.StrictMode>
@@ -16,6 +17,7 @@ ReactDOM.render(
     <Routes>
       <Route path='/' element={<Homepage/>}/>
       <Route path='/register' element={<Register/>}/>
+      <Route path='/login' element={<Login/>}/>
     </Routes>
     <Footer/>
     </BrowserRouter>
