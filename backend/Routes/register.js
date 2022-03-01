@@ -47,6 +47,7 @@ router.post("/register", async (req, res) => {
     await Users.create({
       UNID: ID,
       fullName: req.body.fullName,
+      nsuId: req.body.nsuId,
       email: req.body.email,
       password: password,
       userType: req.body.userType,

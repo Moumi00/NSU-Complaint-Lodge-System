@@ -13,7 +13,7 @@ router.post("/login", async (req, res) => {
     console.log("Not found!");
     return res.json({
       data: "",
-      error: "Credentials don't match :("
+      error: "Credentials don't match"
     });
   } else {
     if (check.isVerified) {

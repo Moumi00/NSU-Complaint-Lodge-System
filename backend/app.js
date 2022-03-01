@@ -16,11 +16,9 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 
 const db = require("./models");
-
-app.use("/", registerRouter);
  
 app.use('/', login);
-// app.use('/', register);
+app.use('/', register);
 
 db.sequelize.sync().then(() => {
   app.listen(8000, () => {

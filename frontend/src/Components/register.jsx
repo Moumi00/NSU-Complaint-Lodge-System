@@ -5,14 +5,16 @@ function Register() {
   const [fullName, setFullName] = useState("");
   const [nsuId, setNsuId] = useState("");
   const [email, setEmail] = useState("");
+  const [designation, setDesignation] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [nameErrorClass, setNameErrorClass] = useState("none");
   const [nsuIdErrorClass, setNsuIdErrorClass] = useState("none");
   const [emailErrorClass, setEmailErrorClass] = useState("none");
+  const [designationErrorClass, setDesignationErrorClass] = useState("none");
   const [passwordErrorClass, setPasswordErrorClass] = useState("none");
   const [confirmPassErrorClass, setConfirmPassErrorClass] = useState("none");
-  const [Designations, setDesignation] = useState([
+  const [Designations, setDesignations] = useState([
     { label: "Faculty", value: 1, isDisabled: true },
     { label: "Student", value: 2, isDisabled: true },
     {
@@ -34,6 +36,8 @@ function Register() {
   async function handleSubmit(e) {
     e.preventDefault(); //stops the page from reloading
 
+    console.log(designation);
+
     if (fullName.length < 3) {
       setNameErrorClass("block");
       return;
@@ -49,6 +53,11 @@ function Register() {
       setEmailErrorClass("block");
       return;
     }
+    
+    if (designation.length === 0){
+      setDesignationErrorClass("block");
+      return;
+    }
 
     if (password.length < 6) {
       setPasswordErrorClass("block");
@@ -59,6 +68,17 @@ function Register() {
       setConfirmPassErrorClass("block");
       return;
     }
+
+
+    // let response = await axios.post("http://localhost:8000/login", {
+
+    //   fullName: fullName,
+    //   nsuId: nsuId,
+    //   email: email,
+    //   password: password,
+    // });
+
+
   }
 
   return (
@@ -116,7 +136,7 @@ function Register() {
                     email.length > 8 &&
                     email.substring(email.length - 3) === "com"
                   ) {
-                    setDesignation([
+                    setDesignations([
                       { label: "Faculty", value: 1, isDisabled: true },
                       { label: "Student", value: 2, isDisabled: true },
                       {
@@ -130,7 +150,7 @@ function Register() {
                     email.length > 13 &&
                     email.substring(email.length - 3) === "edu"
                   ) {
-                    setDesignation([
+                    setDesignations([
                       { label: "Faculty", value: 1, isDisabled: false },
                       { label: "Student", value: 2, isDisabled: false },
                       {
@@ -141,7 +161,7 @@ function Register() {
                       { label: "Helper", value: 4, isDisabled: true },
                     ]);
                   } else {
-                    setDesignation([
+                    setDesignations([
                       { label: "Faculty", value: 1, isDisabled: true },
                       { label: "Student", value: 2, isDisabled: true },
                       {
@@ -162,13 +182,21 @@ function Register() {
                 Enter a valid email
               </span>
             </div>
-            <div className="form-group d-flex mb-4">
+            <div className="form-group d-flex flex-column mb-4">
               <div className="col-12">
                 <Select
                   options={Designations}
                   placeholder={<div style={{ color: "grey" }}>Designation</div>}
+                  onChange={(e)=>{
+                    setDesignation(e.target.value);
+                    setDesignationErrorClass("none");
+                  }}
+                  value={designation}
                 />
               </div>
+              <span class={"text-danger d-" + designationErrorClass}>
+                Please select your designation
+              </span>
             </div>
             <div class="form-group mb-4">
               <input

@@ -19,7 +19,6 @@ function Login() {
   async function handleLoginButtonClicked(e) {
     e.preventDefault();
 
-    console.log(email);
     if (!validateEmail()) {
       setEmailErrorClass("block");
       return;
@@ -52,7 +51,10 @@ function Login() {
                 id="emailInput"
                 placeholder="Email"
                 onInput={(e) => setEmail(e.target.value)}
-                onChange={(e) => setEmailErrorClass("none")}
+                onChange={(e) => {
+                  setEmailErrorClass("none");
+                  setErrorClass("none");
+                }}
               ></input>
               <span class={"text-danger d-" + emailErrorClass}>
                 Enter a valid Email.
@@ -69,7 +71,7 @@ function Login() {
               ></input>
             </div>
             <div className="d-block">
-              <span class={"text-danger d-" + errorClass}>{error}</span>
+              <span class={"mb-2 text-danger d-" + errorClass}>{error}</span>
               <button type="submit" class="btn btn-primary w-100 fw-bold">
                 Login
               </button>
