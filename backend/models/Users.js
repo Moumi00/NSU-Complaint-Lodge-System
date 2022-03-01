@@ -1,7 +1,10 @@
 module.exports = (sequelize, DataTypes) => {
 
     const Users = sequelize.define("Users", {
-        UNID: DataTypes.STRING,
+        UNID: {
+            type: DataTypes.STRING,
+            primaryKey: true
+        },
         fullName: DataTypes.STRING,
         email: DataTypes.STRING,
         password: DataTypes.STRING,
@@ -14,7 +17,6 @@ module.exports = (sequelize, DataTypes) => {
             type: DataTypes.BOOLEAN,
             defaultValue: true,
         }
-
     })
 
     return Users
