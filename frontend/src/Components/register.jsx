@@ -12,13 +12,16 @@ function Register() {
   const [emailErrorClass, setEmailErrorClass] = useState("none");
   const [passwordErrorClass, setPasswordErrorClass] = useState("none");
   const [confirmPassErrorClass, setConfirmPassErrorClass] = useState("none");
-
-  const Designations = [
-    { label: "Faculty", value: 1 },
-    { label: "Student", value: 2 },
-    { label: "RA / TA / Lab Instructor", value: 3 },
-    { label: "Helper", value: 4 },
-  ];
+  const [Designations, setDesignation] = useState([
+    { label: "Faculty", value: 1, isDisabled: true },
+    { label: "Student", value: 2, isDisabled: true },
+    {
+      label: "RA / TA / Lab Instructor",
+      value: 3,
+      isDisabled: true,
+    },
+    { label: "Helper", value: 4, isDisabled: true },
+  ]);
 
   const validateEmail = () => {
     return String(email)
@@ -107,6 +110,48 @@ function Register() {
                 }}
                 onChange={(e) => {
                   setEmailErrorClass("none");
+                }}
+                onBlur={(e) => {
+                  if (
+                    email.length > 8 &&
+                    email.substring(email.length - 3) === "com"
+                  ) {
+                    setDesignation([
+                      { label: "Faculty", value: 1, isDisabled: true },
+                      { label: "Student", value: 2, isDisabled: true },
+                      {
+                        label: "RA / TA / Lab Instructor",
+                        value: 3,
+                        isDisabled: true,
+                      },
+                      { label: "Helper", value: 4, isDisabled: false },
+                    ]);
+                  } else if (
+                    email.length > 13 &&
+                    email.substring(email.length - 3) === "edu"
+                  ) {
+                    setDesignation([
+                      { label: "Faculty", value: 1, isDisabled: false },
+                      { label: "Student", value: 2, isDisabled: false },
+                      {
+                        label: "RA / TA / Lab Instructor",
+                        value: 3,
+                        isDisabled: false,
+                      },
+                      { label: "Helper", value: 4, isDisabled: true },
+                    ]);
+                  } else {
+                    setDesignation([
+                      { label: "Faculty", value: 1, isDisabled: true },
+                      { label: "Student", value: 2, isDisabled: true },
+                      {
+                        label: "RA / TA / Lab Instructor",
+                        value: 3,
+                        isDisabled: true,
+                      },
+                      { label: "Helper", value: 4, isDisabled: true },
+                    ]);
+                  }
                 }}
                 type="text"
                 class="form-control"
