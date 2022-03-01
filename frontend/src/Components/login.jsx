@@ -16,7 +16,7 @@ function Login() {
     e.preventDefault();
 
     console.log(email)
-    if (validateEmail()){
+    if (!validateEmail()){
       setEmailErrorClass("block");
       return;
     }
