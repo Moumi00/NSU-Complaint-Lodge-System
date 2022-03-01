@@ -1,8 +1,12 @@
 import React, { useState } from "react";
+import axios from "axios";
 
 function Login() {
   const [email, setEmail] = useState("");
   const [emailErrorClass, setEmailErrorClass] = useState("none");
+  const [password, setPassword] = useState("");
+  const [error, setError] = useState("");
+  const [errorClass, setErrorClass] = useState("none");
 
   const validateEmail = () => {
     return String(email)
@@ -12,12 +16,23 @@ function Login() {
       );
   };
 
-  function handleLoginButtonClicked(e) {
+  async function handleLoginButtonClicked(e) {
     e.preventDefault();
 
-    console.log(email)
-    if (!validateEmail()){
+    console.log(email);
+    if (!validateEmail()) {
       setEmailErrorClass("block");
+      return;
+    }
+
+    let response = await axios.post("http://localhost:8000/login", {
+      email: email,
+      password: password,
+    });
+
+    if (response.data.error) {
+      setErrorClass("block");
+      setError(response.data.error);
       return;
     }
   }
@@ -36,10 +51,12 @@ function Login() {
                 class="form-control"
                 id="emailInput"
                 placeholder="Email"
-                onInput={(e)=>setEmail(e.target.value)}
-                onChange={(e)=>setEmailErrorClass("none")}
+                onInput={(e) => setEmail(e.target.value)}
+                onChange={(e) => setEmailErrorClass("none")}
               ></input>
-              <span class={"text-danger d-" + emailErrorClass}>Enter a valid Email</span>
+              <span class={"text-danger d-" + emailErrorClass}>
+                Enter a valid Email.
+              </span>
             </div>
             <div class="form-group mb-4">
               <input
@@ -47,10 +64,12 @@ function Login() {
                 class="form-control"
                 id="passwordInput"
                 placeholder="Password"
+                onInput={(e) => setPassword(e.target.value)}
+                onChange={(e) => setErrorClass("none")}
               ></input>
             </div>
-
             <div className="d-block">
+              <span class={"text-danger d-" + errorClass}>{error}</span>
               <button type="submit" class="btn btn-primary w-100 fw-bold">
                 Login
               </button>
