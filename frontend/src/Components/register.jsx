@@ -188,10 +188,10 @@ function Register() {
                   options={Designations}
                   placeholder={<div style={{ color: "grey" }}>Designation</div>}
                   onChange={(e)=>{
-                    setDesignation(e.target.value);
+                    setDesignation(e.label);
                     setDesignationErrorClass("none");
                   }}
-                  value={designation}
+                  // value={designation}
                 />
               </div>
               <span class={"text-danger d-" + designationErrorClass}>
