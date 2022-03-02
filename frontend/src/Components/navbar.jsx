@@ -7,7 +7,7 @@ function Navbar() {
     <div>
       <nav class="navbar navbar-expand-lg primary-color">
         <div class="container-fluid">
-          <a class="navbar-brand ms-5" href="#">
+          <a class="navbar-brand ms-5" href="/">
             <img
               src={require("../Assets/logo.png")}
               alt=""

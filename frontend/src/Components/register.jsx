@@ -1,3 +1,4 @@
+import axios from "axios";
 import React, { useState } from "react";
 import Select from "react-select";
 
@@ -14,6 +15,8 @@ function Register() {
   const [designationErrorClass, setDesignationErrorClass] = useState("none");
   const [passwordErrorClass, setPasswordErrorClass] = useState("none");
   const [confirmPassErrorClass, setConfirmPassErrorClass] = useState("none");
+  const [error, setError] = useState("");
+  const [errorClass, setErrorClass] = useState("none");
   const [Designations, setDesignations] = useState([
     { label: "Faculty", value: 1, isDisabled: true },
     { label: "Student", value: 2, isDisabled: true },
@@ -53,8 +56,8 @@ function Register() {
       setEmailErrorClass("block");
       return;
     }
-    
-    if (designation.length === 0){
+
+    if (designation.length === 0) {
       setDesignationErrorClass("block");
       return;
     }
@@ -69,16 +72,21 @@ function Register() {
       return;
     }
 
+    let response = await axios.post("http://localhost:8000/auth/register", {
+      fullName: fullName,
+      nsuId: nsuId,
+      email: email,
+      password: password,
+      userType: designation,
+    });
 
-    // let response = await axios.post("http://localhost:8000/login", {
-
-    //   fullName: fullName,
-    //   nsuId: nsuId,
-    //   email: email,
-    //   password: password,
-    // });
-
-
+    if (response.data.error) {
+      setErrorClass("block");
+      setError(response.data.error);
+      return;
+    } else {
+      alert("Registration successfull. Please check your email to verify");
+    }
   }
 
   return (
@@ -134,7 +142,7 @@ function Register() {
                 onBlur={(e) => {
                   if (
                     email.length > 8 &&
-                    email.substring(email.length - 3) === "com"
+                    email.substring(email.length - 9) === "gmail.com"
                   ) {
                     setDesignations([
                       { label: "Faculty", value: 1, isDisabled: true },
@@ -148,7 +156,7 @@ function Register() {
                     ]);
                   } else if (
                     email.length > 13 &&
-                    email.substring(email.length - 3) === "edu"
+                    email.substring(email.length - 14) === "northsouth.edu"
                   ) {
                     setDesignations([
                       { label: "Faculty", value: 1, isDisabled: false },
@@ -187,7 +195,7 @@ function Register() {
                 <Select
                   options={Designations}
                   placeholder={<div style={{ color: "grey" }}>Designation</div>}
-                  onChange={(e)=>{
+                  onChange={(e) => {
                     setDesignation(e.label);
                     setDesignationErrorClass("none");
                   }}
@@ -196,7 +204,7 @@ function Register() {
               <span class={"text-danger d-" + designationErrorClass}>
                 Please select your designation
               </span>
-            </div> 
+            </div>
             <div class="form-group mb-4">
               <input
                 onInput={(e) => {
@@ -232,6 +240,7 @@ function Register() {
               </span>
             </div>
             <div className="d-block">
+              <span class={"mb-2 text-danger d-" + errorClass}>{error}</span>
               <button type="submit" class="btn btn-primary w-100 fw-bold">
                 Register
               </button>

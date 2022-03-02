@@ -24,7 +24,7 @@ function Login() {
       return;
     }
 
-    let response = await axios.post("http://localhost:8000/login", {
+    let response = await axios.post("http://localhost:8000/auth/login", {
       email: email,
       password: password,
     });
