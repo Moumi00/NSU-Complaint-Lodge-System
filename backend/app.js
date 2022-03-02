@@ -1,7 +1,6 @@
 const express = require("express");
 const app = express();
-const login = require('./Routes/login');
-const register = require('./Routes/register');
+const auth = require('./Routes/auth');
 
 app.use(function (req, res, next) {
   res.header("Access-Control-Allow-Origin", "*");
@@ -16,11 +15,8 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 
 const db = require("./models");
-const Users = require("./models/Users");
-const userVerification = require("./models/userVerification");
-
-app.use('/', login);
-
+ 
+app.use('/auth', auth);
 
 db.sequelize.sync().then(() => {
   app.listen(8000, () => {
