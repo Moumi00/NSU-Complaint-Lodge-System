@@ -16,9 +16,11 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 
 const db = require("./models");
- 
+const Users = require("./models/Users");
+const userVerification = require("./models/userVerification");
+
 app.use('/', login);
-app.use('/', register);
+
 
 db.sequelize.sync().then(() => {
   app.listen(8000, () => {

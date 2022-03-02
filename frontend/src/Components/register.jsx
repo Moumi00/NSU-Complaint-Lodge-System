@@ -191,13 +191,12 @@ function Register() {
                     setDesignation(e.label);
                     setDesignationErrorClass("none");
                   }}
-                  // value={designation}
                 />
               </div>
               <span class={"text-danger d-" + designationErrorClass}>
                 Please select your designation
               </span>
-            </div>
+            </div> 
             <div class="form-group mb-4">
               <input
                 onInput={(e) => {
