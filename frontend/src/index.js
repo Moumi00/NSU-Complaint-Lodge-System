@@ -9,6 +9,7 @@ import Homepage from './Components/homepage';
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import Register from './Components/register';
 import Login from './Components/login';
+import ForgetPassword from './Components/forgetPassword';
 
 ReactDOM.render(
   <React.StrictMode>
@@ -18,6 +19,7 @@ ReactDOM.render(
       <Route path='/' element={<Homepage/>}/>
       <Route path='/register' element={<Register/>}/>
       <Route path='/login' element={<Login/>}/>
+      <Route path='/forget-password' element={<ForgetPassword />} />
     </Routes>
     <Footer/>
     </BrowserRouter>
