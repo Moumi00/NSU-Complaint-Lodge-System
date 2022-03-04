@@ -18,7 +18,7 @@ function emailVerification(email, verificationToken) {
     },
   });
 
-  var mailOptions = { 
+  var mailOptions = {
     from: "rentkorbo@gmail.com",
     to: email,
     subject: "Verify Email",
@@ -33,6 +33,31 @@ function emailVerification(email, verificationToken) {
     }
   });
 }
+
+function accountRecovery(email, UNID) {
+  var transporter = nodemailer.createTransport({
+    service: "gmail",
+    auth: {
+      user: "rentkorbo@gmail.com",
+      pass: "saq@1234",
+    },
+  });
+
+  var mailOptions = {
+    from: "rentkorbo@gmail.com",
+    to: email,
+    subject: "Account recovery",
+    text: "http://localhost:3000/reset-password/" + UNID,
+  };
+
+  transporter.sendMail(mailOptions, function (error, info) {
+    if (error) {
+      console.log(error);
+    } else {
+      console.log("Email sent: " + info.response);
+    }
+  });
+} 
 
 router.post("/register", async (req, res) => {
   const result = await Users.findOne({
@@ -146,6 +171,34 @@ router.post("/login", async (req, res) => {
       return res.json({
         data: "",
         error: "Credentials don't match",
+      });
+    }
+  }
+});
+
+router.post("/forget-password", async (req, res) => {
+  const result = await Users.findOne({
+    where: {
+      email: req.body.email,
+    },
+  });
+
+  if (result == null) {
+    return res.json({
+      data: "",
+      error: "Account not found!",
+    });
+  } else {
+    if (result.isVerified) {
+      accountRecovery(result.email, result.UNID);
+      return res.json({
+        data: "Please check your email to recover your account.",
+        error: "",
+      });
+    } else {
+      return res.json({
+        data: "",
+        error: "Email not verified. Please verify first.",
       });
     }
   }

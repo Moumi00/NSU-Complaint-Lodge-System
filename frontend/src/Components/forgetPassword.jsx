@@ -1,3 +1,4 @@
+import axios from "axios";
 import React, { useState } from "react";
 
 function ForgetPassword() {
@@ -20,6 +21,17 @@ function ForgetPassword() {
     if (!validateEmail()) {
       setEmailErrorClass("block");
       return;
+    }
+    
+    let response = await axios.post('http://localhost:8000/auth/forget-password', {
+      email: email
+    })
+    if(response.data.error) {
+      setErrorClass('block');
+      setError(response.data.error);
+      return;
+    } else {
+      alert(response.data.data);
     }
   }
 
