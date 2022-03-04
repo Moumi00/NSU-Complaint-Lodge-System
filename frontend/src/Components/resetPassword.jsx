@@ -1,5 +1,6 @@
+import axios from "axios";
 import React, { useState, useEffect } from "react";
-import { useParams } from "react-router-dom";
+import { Navigate, useParams } from "react-router-dom";
 
 function ResetPassword() {
   const { id } = useParams();
@@ -11,8 +12,18 @@ function ResetPassword() {
   const [errorClass, setErrorClass] = useState("none");
 
   useEffect(() => {
-    
-    
+    async function fetchData() {
+      let response = axios.post("http://localhost:8000/auth/verify-unid", {
+        UNID: id,
+      });
+      console.log(response);
+
+      if (response.data.error) {
+        // return <Navigate to="/" replace />;
+        window.location.replace("http://localhost:3000");
+      }
+    }
+    fetchData();
   }, []);
 
   async function handleUpdateButton(e) {
@@ -28,7 +39,6 @@ function ResetPassword() {
       return;
     }
   }
-
 
   return (
     <div class="flex-grow-1 background-color d-flex align-items-center justify-content-center">

@@ -8,6 +8,7 @@ const saltRounds = 10;
 const uuid = require("uuid");
 const { UserVerification } = require("../models");
 const Sequelize = require("sequelize");
+const res = require("express/lib/response");
 
 function emailVerification(email, verificationToken) {
   var transporter = nodemailer.createTransport({
@@ -203,5 +204,24 @@ router.post("/forget-password", async (req, res) => {
     }
   }
 });
+
+router.post('/verify-unid', async(req, res) => {
+  const result = await Users.findOne({
+    where: {
+      UNID: req.body.UNID
+    }
+  })
+  if(result == null) {
+    return res.json({
+      data: "", 
+      error: "Access denied."
+    })
+  } else {
+    return res.json({
+      data: "Accessible",
+      error: ""
+    })
+  }
+})
 
 module.exports = router;
