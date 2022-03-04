@@ -224,4 +224,38 @@ router.post('/verify-unid', async(req, res) => {
   }
 })
 
+router.post('/password-update', async (req, res) => {
+  const result = await Users.findOne({
+    where: {
+      UNID: req.body.UNID,
+    }
+  })
+
+  //Wont usually Happen because unid is always found in reset password
+  if(result == null) {
+    return res.json({
+      data: "", 
+      error: "Unknown Error. Contact Admin."
+    })
+  } else {
+    const password = await bcrypt.hash(req.body.password, saltRounds);
+    await Users.update(
+      {
+        password: password,
+      },
+      {
+        where: {
+          UNID: req.body.UNID,
+        },
+      }
+    );
+
+
+    return res.json({
+      data: "Password Successfully Updated",
+      error: ""
+    })
+  }
+})
+
 module.exports = router;

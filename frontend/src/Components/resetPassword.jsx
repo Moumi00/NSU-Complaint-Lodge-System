@@ -8,18 +8,15 @@ function ResetPassword() {
   const [confirmPassword, setConfirmPassword] = useState("");
   const [passwordErrorClass, setPasswordErrorClass] = useState("none");
   const [confirmPassErrorClass, setConfirmPassErrorClass] = useState("none");
-  const [error, setError] = useState("");
-  const [errorClass, setErrorClass] = useState("none");
 
   useEffect(() => {
     async function fetchData() {
-      let response = axios.post("http://localhost:8000/auth/verify-unid", {
+      let response = await axios.post("http://localhost:8000/auth/verify-unid", {
         UNID: id,
       });
       console.log(response);
 
       if (response.data.error) {
-        // return <Navigate to="/" replace />;
         window.location.replace("http://localhost:3000");
       }
     }
@@ -38,6 +35,12 @@ function ResetPassword() {
       setConfirmPassErrorClass("block");
       return;
     }
+
+    let response = await axios.post('http://localhost:8000/auth/password-update', {
+      UNID: id,
+      password: password
+    })
+    alert(response.data.data);
   }
 
   return (
@@ -83,7 +86,6 @@ function ResetPassword() {
               </span>
             </div>
             <div className="d-block">
-              <span class={"mb-2 text-danger d-" + errorClass}>{error}</span>
               <button type="submit" class="btn btn-primary w-100 fw-bold">
                 Update
               </button>
