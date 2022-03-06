@@ -111,7 +111,7 @@ function Register() {
                 placeholder="Full Name"
               ></input>
               <span class={"text-danger d-" + nameErrorClass}>
-                Full Name can't be less than 3 digits
+                Full Name can't be less than 3 characters
               </span>
             </div>
             <div class="form-group mb-4">
