@@ -205,6 +205,7 @@ router.post("/forget-password", async (req, res) => {
   }
 });
 
+
 router.post('/verify-unid', async(req, res) => {
   const result = await Users.findOne({
     where: {
@@ -259,3 +260,7 @@ router.post('/password-update', async (req, res) => {
 })
 
 module.exports = router;
+
+//TODO:
+//1. Unique Token for password change
+//2. Expiry time for password change
