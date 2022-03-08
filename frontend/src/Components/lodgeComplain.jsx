@@ -1,6 +1,4 @@
-import { faPaperclip } from "@fortawesome/free-solid-svg-icons";
 import React, { useState } from "react";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import Select from "react-select";
 
 function LodgeComplain() {
@@ -14,10 +12,36 @@ function LodgeComplain() {
     var input = document.getElementById("file");
     var output = document.getElementById("fileList");
     var children = "";
+
     for (var i = 0; i < input.files.length; ++i) {
-      children += "<li>" + input.files.item(i).name + "</li>";
+      children +=
+        "<li class='d-flex justify-content-between align-items-center'>" +
+        input.files.item(i).name +
+        "<button class='btn btn-light'> x </button> </li>";
     }
-    output.innerHTML = "<ul>" + children + "</ul>";
+    console.log(children);
+
+    if (input.files.length != 0) {
+      output.classList.add(
+        "border",
+        "rounded-3",
+        "border-3",
+        "border-light",
+        "bg-white",
+        "mt-2"
+      );
+    } else {
+      output.classList.remove(
+        "border",
+        "rounded-3",
+        "border-3",
+        "border-light",
+        "bg-white",
+        "mt-2"
+      );
+    }
+
+    output.innerHTML = "<ul class='p-2 mb-0'>" + children + "</ul>";
   };
 
   return (
