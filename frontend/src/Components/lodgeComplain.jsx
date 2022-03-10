@@ -8,41 +8,69 @@ function LodgeComplain() {
     { value: "vanilla", label: "Vanilla" },
   ];
 
-  const updateList = function () {
-    var input = document.getElementById("file");
-    var output = document.getElementById("fileList");
-    var children = "";
+  const [selectedFiles, setSelectedFiles] = useState([]);
+  const [isFilePicked, setIsFilePicked] = useState(false);
 
-    for (var i = 0; i < input.files.length; ++i) {
-      children +=
-        "<li class='d-flex justify-content-between align-items-center'>" +
-        input.files.item(i).name +
-        "<button class='btn btn-light'> x </button> </li>";
+  const updateList = function (e) {
+    e.preventDefault();
+    console.log('Hello');
+    const newFiles = selectedFiles.slice();
+    for (let i = 0; i < e.target.files.length; i++) {
+      newFiles.push(e.target.files[i]);
     }
-    console.log(children);
-
-    if (input.files.length != 0) {
-      output.classList.add(
-        "border",
-        "rounded-3",
-        "border-3",
-        "border-light",
-        "bg-white",
-        "mt-2"
-      );
-    } else {
-      output.classList.remove(
-        "border",
-        "rounded-3",
-        "border-3",
-        "border-light",
-        "bg-white",
-        "mt-2"
-      );
+    if (newFiles.length > 0){
+      setIsFilePicked(true);
     }
-
-    output.innerHTML = "<ul class='p-2 mb-0'>" + children + "</ul>";
+    setSelectedFiles(newFiles);
+    console.log(newFiles);
+    e.target.value = "";
   };
+
+  const handleCrossButton = function (e, index) {
+
+    e.preventDefault()
+    console.log(index);
+    const newFiles = selectedFiles.slice();
+    newFiles.splice(index,1);
+    setSelectedFiles(newFiles);
+    console.log(newFiles);
+  };
+
+  // const updateList = function () {
+  //   var input = document.getElementById("file");
+  //   var output = document.getElementById("fileList");
+  //   var children = "";
+
+  //   for (var i = 0; i < input.files.length; ++i) {
+  //     children +=
+  //       "<li class='d-flex justify-content-between align-items-center'>" +
+  //       input.files.item(i).name +
+  //       "<button class='btn btn-light'> x </button> </li>";
+  //   }
+  //   console.log(children);
+
+  //   if (input.files.length != 0) {
+  //     output.classList.add(
+  //       border
+  //     rounded-3
+  //      border-3
+  //       border-light
+  //       bg-white
+  //       mt-2
+  //     );
+  //   } else {
+  //     output.classList.remove(
+  //       "border",
+  //       "rounded-3",
+  //       "border-3",
+  //       "border-light",
+  //       "bg-white",
+  //       "mt-2"
+  //     );
+  //   }
+
+  //   output.innerHTML = "<ul class='p-2 mb-0'>" + children + "</ul>";
+  // };
 
   return (
     <div class="flex-grow-1 background-color d-flex align-items-center justify-content-center">
@@ -97,7 +125,20 @@ function LodgeComplain() {
                 multiple
                 onChange={updateList}
               ></input>
-              <div id="fileList"></div>
+              {isFilePicked ? (
+                <div id="fileList">
+                  <ul class="p-2 mb-0">
+                    {selectedFiles.map((k, index) => (
+                      <li class="d-flex justify-content-between align-items-center border rounded-3 border-3 border-light bg-white mt-2">
+                        {k.name}
+                        <button class="btn btn-light" onClick={(e) => handleCrossButton(e,index)}> x </button>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              ) : (
+                <p class="d-none">Select a file to show details</p>
+              )}
             </div>
             <div className="d-block">
               <button type="submit" class="btn btn-primary w-100 fw-bold">
