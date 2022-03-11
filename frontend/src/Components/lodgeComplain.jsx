@@ -1,15 +1,20 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Select from "react-select";
+import axios from "axios";
 
 function LodgeComplain() {
-  const options = [
-    { value: "chocolate", label: "Chocolate" },
-    { value: "strawberry", label: "Strawberry" },
-    { value: "vanilla", label: "Vanilla" },
-  ];
-
+  const [options, setOptions] = useState([]);
   const [selectedFiles, setSelectedFiles] = useState([]);
   const [isFilePicked, setIsFilePicked] = useState(false);
+
+  useEffect(() => {
+    async function fetchData() {
+      let response = await axios.get("http://localhost:8000/home/users");
+      console.log(response.data.data);
+      setOptions(response.data.data);
+    }
+    fetchData();
+  }, []);
 
   const updateList = function (e) {
     e.preventDefault();
@@ -17,7 +22,7 @@ function LodgeComplain() {
     for (let i = 0; i < e.target.files.length; i++) {
       newFiles.push(e.target.files[i]);
     }
-    if (newFiles.length > 0){
+    if (newFiles.length > 0) {
       setIsFilePicked(true);
     }
     setSelectedFiles(newFiles);
@@ -25,11 +30,10 @@ function LodgeComplain() {
   };
 
   const handleCrossButton = function (e, index) {
-
-    e.preventDefault()
+    e.preventDefault();
     console.log(index);
     const newFiles = selectedFiles.slice();
-    newFiles.splice(index,1);
+    newFiles.splice(index, 1);
     setSelectedFiles(newFiles);
     console.log(newFiles);
   };
@@ -62,7 +66,7 @@ function LodgeComplain() {
             <div className="form-group d-flex flex-column mb-4">
               <div className="col-12">
                 <Select
-                  options={options}
+                  options={options.fullName}
                   placeholder={
                     <div style={{ color: "grey" }}>Complain Against</div>
                   }
@@ -75,7 +79,7 @@ function LodgeComplain() {
               </div>
             </div>
             <div class="form-group mb-4">
-              <label class="button-attach" for="file">
+              <label class="button-attach ms-0" for="file">
                 <i class="bi bi-paperclip me-1"></i>
                 Evidence
               </label>
@@ -89,11 +93,17 @@ function LodgeComplain() {
               ></input>
               {isFilePicked ? (
                 <div id="fileList">
-                  <ul class="p-2 mb-0">
+                  <ul class="py-2 px-0 mb-0">
                     {selectedFiles.map((k, index) => (
-                      <li class="d-flex justify-content-between align-items-center border rounded-3 border-3 border-light bg-white mt-2">
+                      <li class="d-flex justify-content-between align-items-center border rounded-3 border-3 border-light bg-white mt-2 ps-2">
                         {k.name}
-                        <button class="btn btn-light" onClick={(e) => handleCrossButton(e,index)}> x </button>
+                        <button
+                          class="btn btn-light"
+                          onClick={(e) => handleCrossButton(e, index)}
+                        >
+                          {" "}
+                          x{" "}
+                        </button>
                       </li>
                     ))}
                   </ul>
@@ -101,6 +111,20 @@ function LodgeComplain() {
               ) : (
                 <p class="d-none">Select a file to show details</p>
               )}
+            </div>
+            <div className="form-group d-flex flex-column mb-4">
+              <div className="col-12">
+                <Select
+                  options={options}
+                  placeholder={
+                    <div style={{ color: "grey" }}>Choose Reviewer(only one)</div>
+                  }
+                  components={{
+                    DropdownIndicator: () => null, // Remove dropdown icon
+                    IndicatorSeparator: () => null, // Remove separator
+                  }}
+                />
+              </div>
             </div>
             <div className="d-block">
               <button type="submit" class="btn btn-primary w-100 fw-bold">
