@@ -13,7 +13,6 @@ function LodgeComplain() {
 
   const updateList = function (e) {
     e.preventDefault();
-    console.log('Hello');
     const newFiles = selectedFiles.slice();
     for (let i = 0; i < e.target.files.length; i++) {
       newFiles.push(e.target.files[i]);
@@ -22,7 +21,6 @@ function LodgeComplain() {
       setIsFilePicked(true);
     }
     setSelectedFiles(newFiles);
-    console.log(newFiles);
     e.target.value = "";
   };
 
@@ -35,42 +33,6 @@ function LodgeComplain() {
     setSelectedFiles(newFiles);
     console.log(newFiles);
   };
-
-  // const updateList = function () {
-  //   var input = document.getElementById("file");
-  //   var output = document.getElementById("fileList");
-  //   var children = "";
-
-  //   for (var i = 0; i < input.files.length; ++i) {
-  //     children +=
-  //       "<li class='d-flex justify-content-between align-items-center'>" +
-  //       input.files.item(i).name +
-  //       "<button class='btn btn-light'> x </button> </li>";
-  //   }
-  //   console.log(children);
-
-  //   if (input.files.length != 0) {
-  //     output.classList.add(
-  //       border
-  //     rounded-3
-  //      border-3
-  //       border-light
-  //       bg-white
-  //       mt-2
-  //     );
-  //   } else {
-  //     output.classList.remove(
-  //       "border",
-  //       "rounded-3",
-  //       "border-3",
-  //       "border-light",
-  //       "bg-white",
-  //       "mt-2"
-  //     );
-  //   }
-
-  //   output.innerHTML = "<ul class='p-2 mb-0'>" + children + "</ul>";
-  // };
 
   return (
     <div class="flex-grow-1 background-color d-flex align-items-center justify-content-center">
