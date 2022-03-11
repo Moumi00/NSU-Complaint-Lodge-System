@@ -7,10 +7,11 @@ function LodgeComplain() {
   const [selectedFiles, setSelectedFiles] = useState([]);
   const [isFilePicked, setIsFilePicked] = useState(false);
 
+  const setOptionData = function () {};
   useEffect(() => {
     async function fetchData() {
       let response = await axios.get("http://localhost:8000/home/users");
-      console.log(response.data.data);
+
       setOptions(response.data.data);
     }
     fetchData();
@@ -66,7 +67,9 @@ function LodgeComplain() {
             <div className="form-group d-flex flex-column mb-4">
               <div className="col-12">
                 <Select
-                  options={options.fullName}
+                  options={options}
+                  getOptionLabel={(option) => option.fullName}
+                  getOptionValue={(option) => option.fullName}
                   placeholder={
                     <div style={{ color: "grey" }}>Complain Against</div>
                   }
@@ -75,6 +78,9 @@ function LodgeComplain() {
                     IndicatorSeparator: () => null, // Remove separator
                   }}
                   isMulti
+                  onChange={(e) => {
+                    console.log(e.fullName);
+                  }}
                 />
               </div>
             </div>
@@ -116,8 +122,12 @@ function LodgeComplain() {
               <div className="col-12">
                 <Select
                   options={options}
+                  getOptionLabel={(option) => option.fullName}
+                  getOptionValue={(option) => option.fullName}
                   placeholder={
-                    <div style={{ color: "grey" }}>Choose Reviewer(only one)</div>
+                    <div style={{ color: "grey" }}>
+                      Choose Reviewer(only one)
+                    </div>
                   }
                   components={{
                     DropdownIndicator: () => null, // Remove dropdown icon
