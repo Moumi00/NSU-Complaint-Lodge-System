@@ -1,63 +1,14 @@
 const express = require("express");
 const { Users } = require("../models");
 const router = express.Router();
-const nodemailer = require("nodemailer");
 const bcrypt = require("bcrypt");
 const saltRounds = 10;
 const uuid = require("uuid");
 const { UserVerification } = require("../models");
 const Sequelize = require("sequelize");
 const res = require("express/lib/response");
-
-function emailVerification(email, verificationToken) {
-  var transporter = nodemailer.createTransport({
-    service: "gmail",
-    auth: {
-      user: "rentkorbo@gmail.com",
-      pass: "saq@1234",
-    },
-  });
-
-  var mailOptions = {
-    from: "rentkorbo@gmail.com",
-    to: email,
-    subject: "Verify Email",
-    text: "http://localhost:8000/auth/verify-email/" + verificationToken,
-  };
-
-  transporter.sendMail(mailOptions, function (error, info) {
-    if (error) {
-      console.log(error);
-    } else {
-      console.log("Email sent: " + info.response);
-    }
-  });
-}
-
-function accountRecovery(email, UNID) {
-  var transporter = nodemailer.createTransport({
-    service: "gmail",
-    auth: {
-      user: "rentkorbo@gmail.com",
-      pass: "saq@1234",
-    },
-  });
-
-  var mailOptions = {
-    from: "rentkorbo@gmail.com",
-    to: email,
-    subject: "Account recovery",
-    text: "http://localhost:3000/reset-password/" + UNID,
-  };
-
-  transporter.sendMail(mailOptions, function (error, info) {
-    if (error) {
-      console.log(error);
-    } else {
-      console.log("Email sent: " + info.response);
-    }
-  });
-} 
+const req = require("express/lib/request");
+const { mailSender } = require("../utilities/utilities");
 
 router.post("/register", async (req, res) => {
   const result = await Users.findOne({
@@ -86,7 +37,10 @@ router.post("/register", async (req, res) => {
       expiryDate: new Date(new Date().getTime() + 24 * 60 * 60 * 1000),
       UserUNID: UNID,
     });
-    emailVerification(req.body.email, verificationToken);
+
+    let subject = 'Verify Email';
+    let text = 'Please visit the following link to verify your email:\n' + 'http://localhost:8000/auth/verify-email/' + verificationToken; 
+    mailSender(req.body.email, subject, text);
   } else {
     res.json({
       data: "",
@@ -190,7 +144,9 @@ router.post("/forget-password", async (req, res) => {
     });
   } else {
     if (result.isVerified) {
-      accountRecovery(result.email, result.UNID);
+      let subject = 'Account recovery';
+      let text = 'Please visit the following link:\n' + 'http://localhost:3000/reset-password/' + result.UNID;
+      mailSender(result.email, subject, text);
       return res.json({
         data: "Please check your email to recover your account.",
         error: "",
@@ -263,3 +219,7 @@ module.exports = router;
 //TODO:
 //1. Unique Token for password change
 //2. Expiry time for password change
+//3. Check primarity of NSU ID
+//4. Eye of passwords dissappear
+//5. After succesfull register redirect to homepage
+//6. same for login

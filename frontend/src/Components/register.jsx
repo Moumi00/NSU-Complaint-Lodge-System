@@ -241,11 +241,43 @@ function Register() {
             </div>
             <div className="d-block">
               <span class={"mb-2 text-danger d-" + errorClass}>{error}</span>
-              <button type="submit" class="btn btn-primary w-100 fw-bold">
+              <button type="submit" class="btn btn-primary w-100 fw-bold"  data-bs-toggle="modal"
+            data-bs-target="#exampleModal">
                 Register
               </button>
             </div>
           </form>
+          <div
+            class="modal fade d-none"
+            data-bs-backdrop="static"
+            data-bs-keyboard="false"
+            id="exampleModal"
+            tabindex="-1"
+            aria-labelledby="exampleModalLabel"
+            aria-hidden="true"
+          >
+            <div class="modal-dialog modal-dialog-centered">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <h5 class="modal-title" id="exampleModalLabel">
+                    Registration Successful!
+                  </h5>
+                  <button
+                    type="button"
+                    class="btn-close"
+                    data-bs-dismiss="modal"
+                    aria-label="Close"
+                  ></button>
+                </div>
+                <div class="modal-body">Please verify your email.</div>
+                <div class="modal-footer">
+                  <button type="button" class="btn btn-primary">
+                    Ok
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
     </div>
