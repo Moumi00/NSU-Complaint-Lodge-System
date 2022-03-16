@@ -7,6 +7,11 @@ function Login() {
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
   const [errorClass, setErrorClass] = useState("none");
+  const token = localStorage.getItem("email");
+
+  if(token) {
+    window.location.replace('http://localhost:3000');
+  }
 
   const validateEmail = () => {
     return String(email)
@@ -33,6 +38,10 @@ function Login() {
       setErrorClass("block");
       setError(response.data.error);
       return;
+    } else {
+      localStorage.setItem('email', email);
+      window.location.replace('http://localhost:3000');
+      //might change to token or something else
     }
   }
 

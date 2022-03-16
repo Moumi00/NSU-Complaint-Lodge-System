@@ -12,6 +12,7 @@ import Login from './Components/login';
 import ForgetPassword from './Components/forgetPassword';
 import ResetPassword from './Components/resetPassword';
 import LodgeComplain from './Components/lodgeComplain';
+import Dashboard from './Components/dashboard';
 
 ReactDOM.render(
   <React.StrictMode>
@@ -24,6 +25,7 @@ ReactDOM.render(
       <Route path='/forget-password' element={<ForgetPassword />} />
       <Route path='/reset-password/:id' element={<ResetPassword />} />
       <Route path='/lodge-complain' element={<LodgeComplain />} />
+      <Route path='/dashboard' element={<Dashboard />} />
     </Routes>
     <Footer/>
     </BrowserRouter>

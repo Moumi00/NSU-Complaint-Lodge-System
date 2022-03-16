@@ -28,6 +28,8 @@ function Register() {
     { label: "Helper", value: 4, isDisabled: true },
   ]);
 
+  const token = localStorage.getItem("email");
+
   const validateEmail = () => {
     return String(email)
       .toLowerCase()
@@ -87,6 +89,11 @@ function Register() {
     } else {
       alert("Registration successfull. Please check your email to verify");
     }
+  }
+
+  if(token) {
+    window.location.replace('http://localhost:3000');
+    //might change to token or something else
   }
 
   return (

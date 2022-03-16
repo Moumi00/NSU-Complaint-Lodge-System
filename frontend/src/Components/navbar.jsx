@@ -1,8 +1,24 @@
 import { faBars } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import React, { useState } from "react";
+import { useEffect } from "react";
 
 function Navbar() {
+  const token = localStorage.getItem("email");
+  const [register, setRegister] = useState("none");
+  const [dashboard, setDashboard] = useState("none");
+
+  useEffect(() => {
+    async function fetchData() {
+      if(token) {
+        setDashboard("block");
+      } else {
+        setRegister("block");
+      }
+    }
+    fetchData();
+  }, []);
+
   return (
     <div>
       <nav class="navbar navbar-expand-lg primary-color">
@@ -36,13 +52,18 @@ function Navbar() {
                 </a>
               </li>
               <li className="nav-item me-2">
-                <a className="btn btn-lg btn-outline-success my-2 ms-4 me-2" href="/register">
+                <a className={"btn btn-lg btn-outline-success my-2 ms-4 me-2 d-" + register} href="/register">
                   Register
                 </a>
               </li>
               <li>
-                <a className="btn btn-lg btn-outline-success my-2 ms-4 ms-lg-0 me-5" href="/login">
+                <a className={"btn btn-lg btn-outline-success my-2 ms-4 ms-lg-0 me-5 d-" + register} href="/login">
                   Login
+                </a>
+              </li>
+              <li className="nav-item me-2">
+                <a className={"btn btn-lg btn-outline-success my-2 ms-4 ms-lg-0 me-5 d-" + dashboard} href="/dashboard">
+                  Dashboard
                 </a>
               </li>
             </ul>
