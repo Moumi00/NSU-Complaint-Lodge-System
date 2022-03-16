@@ -6,12 +6,13 @@ function LodgeComplain() {
   const [options, setOptions] = useState([]);
   const [selectedFiles, setSelectedFiles] = useState([]);
   const [isFilePicked, setIsFilePicked] = useState(false);
+  const [openCompAgainstMenu, setOpenCompAgainstMenu] = useState(false);
+  const [openCompReviewerMenu, setOpenCompReviewerMenu] = useState(false);
 
-  const setOptionData = function () {};
   useEffect(() => {
     async function fetchData() {
       let response = await axios.get("http://localhost:8000/home/users");
-
+      console.log(response);
       setOptions(response.data.data);
     }
     fetchData();
@@ -37,6 +38,14 @@ function LodgeComplain() {
     newFiles.splice(index, 1);
     setSelectedFiles(newFiles);
     console.log(newFiles);
+  };
+
+  const hideCompAgainstMenu = (e) => {
+    setOpenCompAgainstMenu(false);
+  };
+
+  const hideCompReviewerMenu = (e) => {
+    setOpenCompReviewerMenu(false);
   };
 
   return (
@@ -78,9 +87,18 @@ function LodgeComplain() {
                     IndicatorSeparator: () => null, // Remove separator
                   }}
                   isMulti
-                  onChange={(e) => {
-                    console.log(e.fullName);
+                  onChange={hideCompAgainstMenu}
+                  onBlur={hideCompAgainstMenu}
+                  onInputChange={(e, { action }) => {
+                    if (e.length === 0){
+                      setOpenCompAgainstMenu(false)
+                      return;
+                    }
+                    if (action === "input-change") {
+                      setOpenCompAgainstMenu(true);
+                    }
                   }}
+                  menuIsOpen={openCompAgainstMenu}
                 />
               </div>
             </div>
@@ -99,7 +117,7 @@ function LodgeComplain() {
               ></input>
               {isFilePicked ? (
                 <div id="fileList">
-                  <ul class="py-2 px-0 mb-0">
+                  <ul class="py-2 mb-0">
                     {selectedFiles.map((k, index) => (
                       <li class="d-flex justify-content-between align-items-center border rounded-3 border-3 border-light bg-white mt-2 ps-2">
                         {k.name}
@@ -133,12 +151,24 @@ function LodgeComplain() {
                     DropdownIndicator: () => null, // Remove dropdown icon
                     IndicatorSeparator: () => null, // Remove separator
                   }}
+                  onChange={hideCompReviewerMenu}
+                  onBlur={hideCompReviewerMenu}
+                  onInputChange={(e, { action }) => {
+                    if (e.length === 0){
+                      setOpenCompReviewerMenu(false)
+                      return;
+                    }
+                    if (action === "input-change") {
+                      setOpenCompReviewerMenu(true);
+                    }
+                  }}
+                  menuIsOpen={openCompReviewerMenu}
                 />
               </div>
             </div>
             <div className="d-block">
               <button type="submit" class="btn btn-primary w-100 fw-bold">
-                Login
+                Lodge Complain
               </button>
             </div>
           </form>

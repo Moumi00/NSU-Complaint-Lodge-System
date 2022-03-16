@@ -222,4 +222,10 @@ module.exports = router;
 //3. Check primarity of NSU ID
 //4. Eye of passwords dissappear
 //5. After succesfull register redirect to homepage
-//6. same for login
+//6. Same for login
+//7. Add videos to file type
+//8. Add ID image while registering
+//9. Add ID image to search bar
+//10. Options after typing in search bar
+//11. Send UNID along with fullname to lodge complain
+//12. What all can be updated in lodge complain
