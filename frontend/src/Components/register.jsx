@@ -1,6 +1,8 @@
 import axios from "axios";
 import React, { useState } from "react";
 import Select from "react-select";
+import { Modal } from "bootstrap";
+import { GoogleLogin } from "react-google-login";
 
 function Register() {
   const [fullName, setFullName] = useState("");
@@ -29,6 +31,8 @@ function Register() {
   ]);
 
   const token = localStorage.getItem("email");
+  const clientId =
+    "992655217366-qiu0iegl7kmotoovl1630k6283o0jsuk.apps.googleusercontent.com";
 
   const validateEmail = () => {
     return String(email)
@@ -87,14 +91,23 @@ function Register() {
       setError(response.data.error);
       return;
     } else {
-      alert("Registration successfull. Please check your email to verify");
+      let myModal = new Modal(document.getElementById("exampleModal"));
+      myModal.show();
     }
   }
 
-  if(token) {
-    window.location.replace('http://localhost:3000');
+  if (token) {
+    window.location.replace("http://localhost:3000");
     //might change to token or something else
   }
+
+  const onLoginSuccess = (res) => {
+    console.log("Login Success:", res.profileObj);
+  };
+
+  const onLoginFailure = (res) => {
+    console.log("Login Failed:", res);
+  };
 
   return (
     <div class="flex-grow-1 background-color d-flex align-items-center justify-content-center">
@@ -248,14 +261,26 @@ function Register() {
             </div>
             <div className="d-block">
               <span class={"mb-2 text-danger d-" + errorClass}>{error}</span>
-              <button type="submit" class="btn btn-primary w-100 fw-bold"  data-bs-toggle="modal"
-            data-bs-target="#exampleModal">
+              <button type="submit" class="btn btn-primary w-100 fw-bold">
                 Register
               </button>
             </div>
           </form>
+          <hr class="my-4" />
+          <div className="d-flex justify-content-center">
+            <GoogleLogin
+              clientId={clientId}
+              buttonText="Login"
+              onSuccess={onLoginSuccess}
+              onFailure={onLoginFailure}
+              cookiePolicy={"single_host_origin"}
+              isSignedIn={true}
+            />
+          </div>
+
+          {/* Modal for successful Registration */}
           <div
-            class="modal fade d-none"
+            class="modal fade"
             data-bs-backdrop="static"
             data-bs-keyboard="false"
             id="exampleModal"
@@ -278,9 +303,9 @@ function Register() {
                 </div>
                 <div class="modal-body">Please verify your email.</div>
                 <div class="modal-footer">
-                  <button type="button" class="btn btn-primary">
+                  <a className="btn btn-primary" href="/login">
                     Ok
-                  </button>
+                  </a>
                 </div>
               </div>
             </div>
