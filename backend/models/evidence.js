@@ -1,8 +1,14 @@
 module.exports = (sequelize, DataTypes) => {
+  const Evidence = sequelize.define("Evidence", {
+    evidence: DataTypes.STRING,
+  });
 
-    const Evidence = sequelize.define("Evidence", {
-        complainUNID: DataTypes.STRING,
-        evidence: DataTypes.STRING,
-    }) 
-    return Evidence
-}
+  Evidence.associate = (models) => {
+    Evidence.belongsTo(models.Complain, {
+      foreignKey: {
+        name: "ComplainUNID",
+      },
+    });
+  };
+  return Evidence;
+};

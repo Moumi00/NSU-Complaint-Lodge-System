@@ -10,6 +10,15 @@ const res = require("express/lib/response");
 const req = require("express/lib/request");
 const { mailSender } = require("../utilities/utilities");
 
+
+router.get("/all", async(req, res) => {
+  const result = await UserVerification.findAll({
+    include: Users
+  })
+  res.json(result);
+})
+
+
 router.post("/register", async (req, res) => {
   const result = await Users.findOne({
     where: {
