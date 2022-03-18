@@ -9,7 +9,9 @@ const Sequelize = require("sequelize");
 const res = require("express/lib/response");
 const req = require("express/lib/request");
 const { mailSender } = require("../utilities/utilities");
-
+const fileUpload = require('express-fileupload');
+const { append } = require("express/lib/response");
+router.use(fileUpload());
 
 router.get("/all", async(req, res) => {
   const result = await UserVerification.findAll({
@@ -30,6 +32,11 @@ router.post("/register", async (req, res) => {
       data: "Registration Successfull",
       error: "",
     });
+
+    let sampleFile;
+    let uploadPath;
+
+    console.log(req.files.file);
     const UNID = uuid.v4();
     const password = await bcrypt.hash(req.body.password, saltRounds);
     await Users.create({

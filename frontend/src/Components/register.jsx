@@ -30,6 +30,10 @@ function Register() {
     { label: "Helper", value: 4, isDisabled: true },
   ]);
 
+  const [selectedFiles, setSelectedFiles] = useState({});
+  const [isFilePicked, setIsFilePicked] = useState(false);
+  const [idPhotoErrorClass, setIdPhotoErrorClass] = useState("none");
+
   const token = localStorage.getItem("email");
   const clientId =
     "992655217366-qiu0iegl7kmotoovl1630k6283o0jsuk.apps.googleusercontent.com";
@@ -78,13 +82,27 @@ function Register() {
       return;
     }
 
-    let response = await axios.post("http://localhost:8000/auth/register", {
-      fullName: fullName,
-      nsuId: nsuId,
-      email: email,
-      password: password,
-      userType: designation,
-    });
+    console.log(selectedFiles);
+    if (!isFilePicked) {
+      console.log("shalalala");
+      return setIdPhotoErrorClass("block");
+    }
+
+    const formData = new FormData();
+    formData.append("fullName", fullName);
+    formData.append("nsuID", nsuId);
+    formData.append("email", email);
+    formData.append("password", password);
+    formData.append("userType", designation);
+    formData.append("file", selectedFiles);
+
+    let response = await axios.post(
+      "http://localhost:8000/auth/register",
+      formData,
+      {
+        headers: { "Content-Type": "multipart/form-data" },
+      }
+    );
 
     if (response.data.error) {
       setErrorClass("block");
@@ -95,6 +113,24 @@ function Register() {
       myModal.show();
     }
   }
+
+  const updateList = function (e) {
+    e.preventDefault();
+    const newFiles = e.target.files[0];
+    console.log(newFiles);
+    if (newFiles) {
+      setIsFilePicked(true);
+      setIdPhotoErrorClass("none");
+    }
+    setSelectedFiles(newFiles);
+    e.target.value = "";
+  };
+
+  const handleCrossButton = function (e) {
+    e.preventDefault();
+    setSelectedFiles({});
+    setIsFilePicked(false);
+  };
 
   if (token) {
     window.location.replace("http://localhost:3000");
@@ -116,7 +152,7 @@ function Register() {
           <div class="separator my-5 ">
             <h1 className="text-dark fw-light">Register</h1>
           </div>
-          <form onSubmit={handleSubmit}>
+          <form onSubmit={handleSubmit} encType="multipart/form-data">
             <div class="form-group mb-4">
               <input
                 onInput={(e) => {
@@ -257,6 +293,40 @@ function Register() {
               ></input>
               <span class={"text-danger d-" + confirmPassErrorClass}>
                 Password doesn't match
+              </span>
+            </div>
+            <div class="form-group mb-4">
+              <label class="button-attach ms-0" for="file">
+                <i class="bi bi-paperclip me-1"></i>
+                ID card Photo
+              </label>
+              <input
+                accept="image/*"
+                id="file"
+                type="file"
+                name="file"
+                onChange={updateList}
+              ></input>
+              {isFilePicked ? (
+                <div id="fileList">
+                  <ul class="py-2 mb-0">
+                    <li class="d-flex justify-content-between align-items-center border rounded-3 border-3 border-light bg-white mt-2 ps-2">
+                      {selectedFiles.name}
+                      <button
+                        class="btn btn-light"
+                        onClick={(e) => handleCrossButton(e)}
+                      >
+                        {" "}
+                        x{" "}
+                      </button>
+                    </li>
+                  </ul>
+                </div>
+              ) : (
+                <p class="d-none">Select a file to show details</p>
+              )}
+              <span class={"mb-2 text-danger d-" + idPhotoErrorClass}>
+                Please attach your NSU ID card photo
               </span>
             </div>
             <div className="d-block">

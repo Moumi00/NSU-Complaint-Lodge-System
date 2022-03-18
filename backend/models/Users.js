@@ -10,6 +10,7 @@ module.exports = (sequelize, DataTypes) => {
         email: DataTypes.STRING,
         password: DataTypes.STRING,
         userType: DataTypes.STRING,
+        nsuIdPhoto: DataTypes.STRING,
         isVerified: {
             type: DataTypes.BOOLEAN,
             defaultValue: false,
