@@ -34,7 +34,7 @@ function Register() {
   const [isFilePicked, setIsFilePicked] = useState(false);
   const [idPhotoErrorClass, setIdPhotoErrorClass] = useState("none");
 
-  const token = localStorage.getItem("email");
+  const token = localStorage.getItem("userUNID");
   const clientId =
     "992655217366-qiu0iegl7kmotoovl1630k6283o0jsuk.apps.googleusercontent.com";
 
@@ -90,7 +90,7 @@ function Register() {
 
     const formData = new FormData();
     formData.append("fullName", fullName);
-    formData.append("nsuID", nsuId);
+    formData.append("nsuId", nsuId);
     formData.append("email", email);
     formData.append("password", password);
     formData.append("userType", designation);

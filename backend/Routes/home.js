@@ -4,7 +4,7 @@ const router = express.Router();
 
 router.get('/users', async (req, res) => {
     const result = await Users.findAll({
-        attributes: ['fullName', 'UNID']
+        attributes: ['fullName', 'userUNID']
     });
     return res.json({
         data: result,

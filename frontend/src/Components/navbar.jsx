@@ -4,7 +4,7 @@ import React, { useState } from "react";
 import { useEffect } from "react";
 
 function Navbar() {
-  const token = localStorage.getItem("email");
+  const token = localStorage.getItem("userUNID");
   const [register, setRegister] = useState("none");
   const [dashboard, setDashboard] = useState("none");
 

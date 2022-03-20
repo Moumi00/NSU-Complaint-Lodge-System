@@ -7,7 +7,7 @@ function Login() {
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
   const [errorClass, setErrorClass] = useState("none");
-  const token = localStorage.getItem("email");
+  const token = localStorage.getItem("userUNID");
 
   if(token) {
     window.location.replace('http://localhost:3000');
@@ -39,11 +39,11 @@ function Login() {
       setError(response.data.error);
       return;
     } else {
-      localStorage.setItem('email', email);
+      console.log(response);
+      localStorage.setItem('userUNID', response.data.data.userUNID);
       window.location.replace('http://localhost:3000');
-      //might change to token or something else
     }
-  }
+  } 
 
   return (
     <div class="flex-grow-1 background-color d-flex align-items-center justify-content-center">

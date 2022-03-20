@@ -5,21 +5,15 @@ const bcrypt = require("bcrypt");
 const saltRounds = 10;
 const uuid = require("uuid");
 const { UserVerification } = require("../models");
-const Sequelize = require("sequelize");
-const res = require("express/lib/response");
-const req = require("express/lib/request");
 const { mailSender } = require("../utilities/utilities");
-const fileUpload = require('express-fileupload');
-const { append } = require("express/lib/response");
-router.use(fileUpload());
+const path = require('path');
 
-router.get("/all", async(req, res) => {
+router.get("/all", async (req, res) => {
   const result = await UserVerification.findAll({
-    include: Users
-  })
+    include: Users,
+  });
   res.json(result);
-})
-
+});
 
 router.post("/register", async (req, res) => {
   const result = await Users.findOne({
@@ -33,31 +27,44 @@ router.post("/register", async (req, res) => {
       error: "",
     });
 
-    let sampleFile;
     let uploadPath;
-
-    console.log(req.files.file);
-    const UNID = uuid.v4();
-    const password = await bcrypt.hash(req.body.password, saltRounds);
-    await Users.create({
-      UNID: UNID,
-      fullName: req.body.fullName,
-      nsuId: req.body.nsuId,
-      email: req.body.email,
-      password: password,
-      userType: req.body.userType,
-    });
-    const verificationToken = uuid.v4();
-    await UserVerification.create({
-      verificationToken: verificationToken,
-      expiryDate: new Date(new Date().getTime() + 24 * 60 * 60 * 1000),
-      UserUNID: UNID,
-    });
-
-    let subject = 'Verify Email';
-    let text = 'Please visit the following link to verify your email:\n' + 'http://localhost:8000/auth/verify-email/' + verificationToken; 
-    mailSender(req.body.email, subject, text);
-  } else {
+    const file = req.files.file;
+    uploadPath = path.join(__dirname,"..");
+    uploadPath += "/uploads/NSU IDs/" + req.body.nsuId + "." + file.name.split('.').pop();
+    console.log("Upload path:" + uploadPath);
+    file.mv(uploadPath, function (err) {
+      if (err) {
+        return res.json({
+          data: "",
+          error: "File Upload Error",
+        });
+      }
+    }); 
+      const UNID = uuid.v4();
+      const password = await bcrypt.hash(req.body.password, saltRounds);
+      await Users.create({
+        userUNID: UNID,
+        fullName: req.body.fullName,   
+        nsuId: req.body.nsuId,
+        email: req.body.email,
+        password: password,
+        userType: req.body.userType,
+        nsuIdPhoto: req.body.nsuId + "." + file.name.split('.').pop(), 
+      });
+      const verificationToken = uuid.v4();
+      await UserVerification.create({
+        verificationToken: verificationToken,
+        expiryDate: new Date(new Date().getTime() + 24 * 60 * 60 * 1000),
+        UserUNID: UNID,
+      });
+      
+      let subject = "Verify Email";
+      let text =
+      "Please visit the following link to verify your email:\n" +
+      "http://localhost:8000/auth/verify-email/" +
+      verificationToken;
+      mailSender(req.body.email, subject, text);
+    } else {
     res.json({
       data: "",
       error: "Email Already Registered",
@@ -79,7 +86,7 @@ router.get("/verify-email/:verificationToken", async (req, res) => {
         },
         {
           where: {
-            UNID: result.UserUNID,
+            userUNID: result.UserUNID,
           },
         }
       );
@@ -122,9 +129,9 @@ router.post("/login", async (req, res) => {
       if (check.isVerified) {
         if (check.active) {
           return res.json({
-            data: "Successfully logged in!",
+            data: check,
             error: "",
-          });
+          }); 
         } else {
           return res.json({
             data: "",
@@ -160,8 +167,11 @@ router.post("/forget-password", async (req, res) => {
     });
   } else {
     if (result.isVerified) {
-      let subject = 'Account recovery';
-      let text = 'Please visit the following link:\n' + 'http://localhost:3000/reset-password/' + result.UNID;
+      let subject = "Account recovery";
+      let text =
+        "Please visit the following link:\n" +
+        "http://localhost:3000/reset-password/" +
+        result.userUNID;
       mailSender(result.email, subject, text);
       return res.json({
         data: "Please check your email to recover your account.",
@@ -176,39 +186,38 @@ router.post("/forget-password", async (req, res) => {
   }
 });
 
-
-router.post('/verify-unid', async(req, res) => {
+router.post("/verify-unid", async (req, res) => {
   const result = await Users.findOne({
     where: {
-      UNID: req.body.UNID
-    }
-  })
-  if(result == null) {
+      userUNID: req.body.UNID,
+    },
+  });
+  if (result == null) {
     return res.json({
-      data: "", 
-      error: "Access denied."
-    })
+      data: "",
+      error: "Access denied.",
+    });
   } else {
     return res.json({
       data: "Accessible",
-      error: ""
-    })
+      error: "",
+    });
   }
-})
+});
 
-router.post('/password-update', async (req, res) => {
+router.post("/password-update", async (req, res) => {
   const result = await Users.findOne({
     where: {
-      UNID: req.body.UNID,
-    }
-  })
+      userUNID: req.body.UNID,
+    },
+  });
 
   //Wont usually Happen because unid is always found in reset password
-  if(result == null) {
+  if (result == null) {
     return res.json({
-      data: "", 
-      error: "Unknown Error. Contact Admin."
-    })
+      data: "",
+      error: "Unknown Error. Contact Admin.",
+    });
   } else {
     const password = await bcrypt.hash(req.body.password, saltRounds);
     await Users.update(
@@ -217,18 +226,17 @@ router.post('/password-update', async (req, res) => {
       },
       {
         where: {
-          UNID: req.body.UNID,
+          userUNID: req.body.UNID,
         },
       }
     );
 
-
     return res.json({
       data: "Password Successfully Updated",
-      error: ""
-    })
+      error: "",
+    });
   }
-})
+});
 
 module.exports = router;
 
@@ -236,12 +244,12 @@ module.exports = router;
 //1. Unique Token for password change
 //2. Expiry time for password change
 //3. Check primarity of NSU ID
-//4. Eye of passwords dissappear
-//5. After succesfull register redirect to homepage
+//4. Eye of passwords dissappear        {DONE}
+//5. After succesfull register redirect to homepage    
 //6. Same for login
 //7. Add videos to file type
-//8. Add ID image while registering
+//8. Add ID image while registering   {DONE}
 //9. Add ID image to search bar
-//10. Options after typing in search bar
+//10. Options after typing in search bar  {DONE}
 //11. Send UNID along with fullname to lodge complain
 //12. What all can be updated in lodge complain
