@@ -1,0 +1,964 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>SRS</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
+    integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous" />
+  <style>
+    .information {
+      page-break-inside: avoid;
+    }
+
+    .item {
+      display: flex;
+      justify-content: space-between;
+    }
+
+    .description {
+      /*background-color: green;*/
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    .description:after {
+      content: "..............................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................";
+    }
+
+    .page-number {
+      /*background-color: red;*/
+      flex-shrink: 0;
+    }
+
+    hr {
+      height: 4px !important;
+      background-color: black;
+      opacity: 100;
+      border: none;
+    }
+
+    table,
+    th,
+    td {
+      border: 1px solid black;
+      border-collapse: collapse;
+    }
+  </style>
+</head>
+
+<body>
+  <div>
+    <hr class="mt-5" />
+    <div class="row mt-4">
+      <div class="col-7 offset-5">
+        <h2 class="text-end">Software Requirements Specification</h2>
+      </div>
+      <div class="col-8 offset-4 my-4">
+        <h5 class="text-end">for</h5>
+      </div>
+      <div class="col-12 mb-3">
+        <h2 class="text-end">North South University Complain Lodge System</h2>
+      </div>
+      <div class="col-8 offset-4 my-4">
+        <h5 class="text-end">Version 1.0 approved</h5>
+      </div>
+      <div class="col-8 offset-4 mb-2">
+        <h5 class="text-end">Prepared by</h5>
+      </div>
+      <div class="col-8 offset-4">
+        <h5 class="text-end">Omar Mohammed Haroon - 2012007042</h5>
+      </div>
+      <div class="col-8 offset-4">
+        <h5 class="text-end">Mohsina Matin Moumi - 2012012642</h5>
+      </div>
+      <div class="col-8 offset-4 mt-4">
+        <h5 class="text-end">North South University</h5>
+      </div>
+      <div class="col-8 offset-4 mt-4">
+        <h5 class="text-end">22-03-2022</h5>
+      </div>
+    </div>
+  </div>
+  <div style="break-after: page"></div>
+  <div>
+    <p class="fw-bold" style="font-size: 18px">Table of Contents</p>
+    <div class="item">
+      <div class="description fw-bold">Table of Contents</div>
+      <div class="page-number fw-bold">2</div>
+    </div>
+    <div>
+      <div class="item">
+        <div class="description fw-bold">1.&nbsp;&nbsp;Introduction</div>
+        <div class="page-number fw-bold">3</div>
+      </div>
+      <div class="item">
+        <div class="description ms-4">1.1&nbsp;&nbsp;Purpose</div>
+        <div class="page-number fw-bold">3</div>
+      </div>
+      <div class="item">
+        <div class="description ms-4">
+          1.2&nbsp;&nbsp;Document Conventions
+        </div>
+        <div class="page-number fw-bold">3</div>
+      </div>
+      <div class="item">
+        <div class="description ms-4">
+          1.3&nbsp;&nbsp;Intended Audience and Reading Suggestions
+        </div>
+        <div class="page-number fw-bold">3</div>
+      </div>
+      <div class="item">
+        <div class="description ms-4">1.4&nbsp;&nbsp;Product Scope</div>
+        <div class="page-number fw-bold">3</div>
+      </div>
+      <div class="item">
+        <div class="description ms-4">1.5&nbsp;&nbsp;References</div>
+        <div class="page-number fw-bold">3</div>
+      </div>
+    </div>
+    <div>
+      <div class="item">
+        <div class="description fw-bold">
+          2.&nbsp;&nbsp;Overall Description
+        </div>
+        <div class="page-number fw-bold">3</div>
+      </div>
+      <div class="item">
+        <div class="description ms-4">2.1&nbsp;&nbsp;Product Perspective</div>
+        <div class="page-number fw-bold">4</div>
+      </div>
+      <div class="item">
+        <div class="description ms-4">2.2&nbsp;&nbsp;Product Functions</div>
+        <div class="page-number fw-bold">4</div>
+      </div>
+      <div class="item">
+        <div class="description ms-4">
+          2.3&nbsp;&nbsp;User Classes and Characteristics
+        </div>
+        <div class="page-number fw-bold">4</div>
+      </div>
+      <div class="item">
+        <div class="description ms-4">
+          2.4&nbsp;&nbsp;Operating Environment
+        </div>
+        <div class="page-number fw-bold">4</div>
+      </div>
+      <div class="item">
+        <div class="description ms-4">
+          2.5&nbsp;&nbsp;Design and Implementation Constraints
+        </div>
+        <div class="page-number fw-bold">4</div>
+      </div>
+      <div class="item">
+        <div class="description ms-4">2.6&nbsp;&nbsp;User Documentation</div>
+        <div class="page-number fw-bold">4</div>
+      </div>
+      <div class="item">
+        <div class="description ms-4">
+          2.7&nbsp;&nbsp;Assumptions and Dependencies
+        </div>
+        <div class="page-number fw-bold">5</div>
+      </div>
+    </div>
+    <div>
+      <div class="item">
+        <div class="description fw-bold">
+          3.&nbsp;&nbsp;External Interface Requirements
+        </div>
+        <div class="page-number fw-bold">5</div>
+      </div>
+      <div class="item">
+        <div class="description ms-4">3.1&nbsp;&nbsp;User Interfaces</div>
+        <div class="page-number fw-bold">5</div>
+      </div>
+      <div class="item">
+        <div class="description ms-4">3.2&nbsp;&nbsp;Hardware Interfaces</div>
+        <div class="page-number fw-bold">5</div>
+      </div>
+      <div class="item">
+        <div class="description ms-4">3.3&nbsp;&nbsp;Software Interfaces</div>
+        <div class="page-number fw-bold">5</div>
+      </div>
+      <div class="item">
+        <div class="description ms-4">
+          3.4&nbsp;&nbsp;Communications Interfaces
+        </div>
+        <div class="page-number fw-bold">6</div>
+      </div>
+    </div>
+    <div>
+      <div class="item">
+        <div class="description fw-bold">4.&nbsp;&nbsp;System Features</div>
+        <div class="page-number fw-bold">6</div>
+      </div>
+      <div class="item">
+        <div class="description ms-4">4.1&nbsp;&nbsp;Sign up using the Sign up page</div>
+        <div class="page-number fw-bold">6</div>
+      </div>
+      <div class="item">
+        <div class="description ms-4">4.2&nbsp;&nbsp;Sign up using Google</div>
+        <div class="page-number fw-bold">6</div>
+      </div>
+      <div class="item">
+        <div class="description ms-4">4.3&nbsp;&nbsp;Log in using Google</div>
+        <div class="page-number fw-bold">7</div>
+      </div>
+      <div class="item">
+        <div class="description ms-4">4.4&nbsp;&nbsp;Log in using Log in page</div>
+        <div class="page-number fw-bold">8</div>
+      </div>
+      <div class="item">
+        <div class="description ms-4">4.5&nbsp;&nbsp;Lodge Complain</div>
+        <div class="page-number fw-bold">8</div>
+      </div>
+      <div class="item">
+        <div class="description ms-4">4.6&nbsp;&nbsp;Edit Complain</div>
+        <div class="page-number fw-bold">9</div>
+      </div>
+      <div class="item">
+        <div class="description ms-4">4.7&nbsp;&nbsp;Review Complain</div>
+        <div class="page-number fw-bold">9</div>
+      </div>
+      <div class="item">
+        <div class="description ms-4">4.8&nbsp;&nbsp;Log out</div>
+        <div class="page-number fw-bold">10</div>
+      </div>
+    </div>
+    <div>
+      <div class="item">
+        <div class="description fw-bold">
+          5.&nbsp;&nbsp;Other Nonfunctional Requirements
+        </div>
+        <div class="page-number fw-bold">10</div>
+      </div>
+      <div class="item">
+        <div class="description ms-4">
+          5.1&nbsp;&nbsp;Performance Requirements
+        </div>
+        <div class="page-number fw-bold">10</div>
+      </div>
+      <div class="item">
+        <div class="description ms-4">5.2&nbsp;&nbsp;Safety Requirements</div>
+        <div class="page-number fw-bold">10</div>
+      </div>
+      <div class="item">
+        <div class="description ms-4">
+          5.3&nbsp;&nbsp;Security Requirements
+        </div>
+        <div class="page-number fw-bold">10</div>
+      </div>
+      <div class="item">
+        <div class="description ms-4">
+          5.4&nbsp;&nbsp;Software Quality Attributes
+        </div>
+        <div class="page-number fw-bold">10</div>
+      </div>
+      <div class="item">
+        <div class="description ms-4">5.5&nbsp;&nbsp;Business Rules</div>
+        <div class="page-number fw-bold">10</div>
+      </div>
+    </div>
+    <div>
+      <div class="item">
+        <div class="description fw-bold">
+          6.&nbsp;&nbsp;Other Requirements
+        </div>
+        <div class="page-number fw-bold">10</div>
+      </div>
+      <div class="item">
+        <div class="description ms-4">
+          6.1&nbsp;&nbsp;Appendix A: Glossary
+        </div>
+        <div class="page-number fw-bold">10</div>
+      </div>
+      <div class="item">
+        <div class="description ms-4">
+          6.2&nbsp;&nbsp;Appendix B: Analysis Models
+        </div>
+        <div class="page-number fw-bold">10</div>
+      </div>
+    </div>
+  </div>
+  <div style="break-after: page"></div>
+  <div>
+    <h2 class="my-4">1. Introduction</h2>
+    <div class="information">
+      <div class="heading fs-4 h2 my-3">1.1 Purpose</div>
+      <div class="details">
+        The main purpose of this SRS document is to provide a detailed
+        overview of our software NSUCLS, its parameters, and goals. This
+        document describes the project's target audience and its user
+        interface, hardware and software requirements. Moreover, this document
+        describes the usage of our software and required functionality lucidly
+        so that the clients and involved developers can easily comprehend the
+        project and what to do if anything needs to be changed.
+      </div>
+    </div>
+    <div class="information">
+      <div class="heading fs-4 h2 my-3">1.2 Document Conventions</div>
+      <div class="details">
+        <strong>Heading:</strong> Font Style: Bold, Font Size: 18<br />
+        <strong>Sub Heading:</strong> Font Style: Bold, Font Size: 14<br />
+        <strong>Explanations:</strong> Font Style: Normal, Font Size: 12
+      </div>
+    </div>
+    <div class="information">
+      <div class="heading fs-4 h2 my-3">
+        1.3 Intended Audience and Reading Suggestions
+      </div>
+      <div class="details">
+        This document is intended for the clients, developer team, project
+        manager, users, and documentation writers. From this SRS, readers can
+        understand finer details of the project thoroughly. For instance, the
+        clients will have clear instructions on how to handle the project
+        (website/app). Most importantly, the developer team will be able to
+        know every single detail of the software so that they can execute it
+        accurately. Moreover, from this SRS, the project manager can estimate
+        the required time and work load to finish this project, and thus plan
+        everything accordingly. Lastly, the users will be provided with
+        precise instructions on how to use the software’s applications in both
+        app and website versions. This document explains who this software is
+        for, how and where it will be used, and what it can accomplish. It is
+        suggested that the SRS be read in order using the table of content
+        provided above.
+      </div>
+    </div>
+    <div class="information">
+      <div class="heading fs-4 h2 my-3">1.4 Product Scope</div>
+      <div class="details">
+        The purpose of NSUCLS is to create an online platform for the members
+        of NSU to complain if they face any issue. NSUCLS can be used to lodge
+        a complaint against NSU staff, faculty or students. The complaint
+        lodged will then be instantly reviewed by a faculty or the system
+        admin. The main aim of NSUCLS is to ensure a faster and easier
+        approach for the members of NSU to complain and fix that issue. NSUCLS
+        is also very user friendly for the helpers as it provides special
+        features like lodging complaints by Bangla speech recognition.
+      </div>
+    </div>
+    <div class="information">
+      <div class="heading fs-4 h2 my-3">1.5 References</div>
+      <div class="details">
+        <a class="d-block" href="https://expressjs.com/">ExpressJS</a>
+        <a class="d-block" href="https://reactjs.org/">ReactJS</a>
+        <a class="d-block" href="https://dev.mysql.com/doc/">MySQL</a>
+      </div>
+    </div>
+  </div>
+  <div>
+    <h2 class="my-4">2. Overall Description</h2>
+    <div class="information">
+      <div class="heading fs-4 h2 my-3">2.1 Product Perspective</div>
+      <div class="details">
+        NSUCLS is a new self-contained product. It mainly originated from the
+        need of lodging complaints in a systematic way. This software makes
+        the whole system, from lodging a complaint to solving that case, very
+        efficient. Also, it prevents/stops false accusations as proper
+        evidence must be presented with a reviewer to review them.
+      </div>
+    </div>
+    <div class="information">
+      <div class="heading fs-4 h2 my-3">2.2 Product Functions</div>
+      <div class="details">
+        The software's function are user friendly so that it is easy for the
+        users to operate. The major functions of the software are provided
+        below.
+        <ul>
+          <li>
+            All users (Students, TA, RA, Lab Instructor, Faculty, Helper,
+            Admin) can lodge complaints.
+          </li>
+          <li>ONLY Faculty or Admin can review complaints.</li>
+          <li>Complain lodger can edit and update his/her complaint.</li>
+          <li>
+            The system admin can instantly create accounts, disable accounts,
+            lodge complaint on behalf of any user.
+          </li>
+        </ul>
+      </div>
+    </div>
+    <div class="information">
+      <div class="heading fs-4 h2 my-3">
+        2.3 User Classes and Characteristics
+      </div>
+      <div class="details">
+        All users can access the software NSUCLS from two different platforms:
+        Web and Android App.<br />
+        There are three different types of actors, they are system Admin,
+        reviewers and users. System admin can create an account in NSUCLS
+        without the verification process by email. System admin can also
+        disable an account and can lodge complaints on behalf of others. The
+        reviewers are only faculty and system admin. They can both review and
+        lodge complaints, whereas, other users can only lodge complaints but
+        cannot review.
+      </div>
+    </div>
+    <div class="information">
+      <div class="heading fs-4 h2 my-3">2.4 Operating Environment</div>
+      <div class="details">
+        The operating environment is given below:
+        <ul>
+          <li>Platform: Web and Android</li>
+          <li>
+            Web Server: Any operation system with NodeJS RTE 16 or newer
+            installed.
+          </li>
+          <li>
+            Android App: Any system with a modern web browser or for android
+            with android version 7.0+
+          </li>
+          <li>Database Configuration: MySQL</li>
+        </ul>
+      </div>
+    </div>
+    <div class="information">
+      <div class="heading fs-4 h2 my-3">
+        2.5 Design and Implementation Constraints
+      </div>
+      <div class="details">
+        Only android is supported for now and users can also lodge complain
+        using speech recognition. Users with android version less than 7
+        cannot use the app. The backend is developed using NodeJS and the
+        frontend is developed using ReactJS. The android app is developed
+        using Java.
+      </div>
+    </div>
+    <div class="information">
+      <div class="heading fs-4 h2 my-3">2.6 User Documentation</div>
+      <div class="details">
+        The product will provide users with a user manual which will contain a
+        section showing how to lodge a complain. It will also contain a
+        section for the faculty members to show them the details of reviewing
+        a complain.
+      </div>
+    </div>
+    <div class="information">
+      <div class="heading fs-4 h2 my-3">2.7 Assumptions and Dependencies</div>
+      <div class="details">
+        Users must have a working internet. Web users must have a working
+        browser to use the product. Phone users must have android version 7+
+        installed.
+      </div>
+    </div>
+  </div>
+  <div>
+    <h2 class="my-4">3. External Interface Requirements</h2>
+    <div class="information">
+      <div class="heading fs-4 h2 my-3">3.1 User Interfaces</div>
+      <div class="details">
+        The user will be taken to the home page first. Users can sign up by
+        their NSU mail and NSU ID. Only helpers can use their default mail for
+        sign-up. Then users can login either by their mail or use google-sign
+        in. After they are logged in, they can click "lodge a complaint" and
+        will be redirected to that page. However, if they are not logged in,
+        they will be redirected to the login page. Then, the users are
+        required to fill up a form giving the necessary information such as
+        attachments for evidence, selecting a proper reviewer and other users
+        against whom the complaint is lodged. Users can lodge the complaint by
+        speech (in Bangla) rather than text in the android application of the
+        software by using the Bangla Speech recognition AI. After the
+        complaint is finally lodged, an email will be sent to notify the
+        lodger, reviewer and the system admin. Lastly, the lodger can change
+        the reviewer and edit the complaint description.
+      </div>
+    </div>
+    <div class="information">
+      <div class="heading fs-4 h2 my-3">3.2 Hardware Interfaces</div>
+      <div class="details">
+        The mobile app version of the software NSUCLS needs a microphone to
+        input speech and convert it to text for lodging a complaint.
+      </div>
+    </div>
+    <div class="information">
+      <div class="heading fs-4 h2 my-3">3.3 Software Interfaces</div>
+      <div class="details">
+        NSUCLS depends on the following software components:
+        <ul>
+          <li>ExpressJS - Express.js or simply Express, is a backend web application framework for Node.js designed for
+            building web and mobile applications and APIs. The backend of NSUCLS is built using this framework.
+          </li>
+          <li>
+            ReactJS - React is a free and open-source front-end JavaScript library for building user interfaces based on
+            UI components. The frontend or UI of NSUCLS is built using this library.
+
+          </li>
+          <li>
+            MySQL - MySQL is an open-source relational database management system. The data of NSUCLS will be stored in
+            this DBMS.
+
+          </li>
+          <li>Sequelizer - Sequelize is a promise-based Node.js ORM(Object Relational Mapper) for MySQL. This is used to
+            avoid writing raw SQL queries.
+          </li>
+          <li>Android framework- The android framework is the set of API's that allows to quickly and easily write apps
+            for android phones. The mobile app version of the software will be built using this.
+
+          </li>
+        </ul>
+      </div>
+    </div>
+    <div class="information">
+      <div class="heading fs-4 h2 my-3">3.4 Communications Interfaces</div>
+      <div class="details">
+        The web application will send data to the backend using rest API. The
+        android application will also communicate through its rest API. For
+        android, an AI speech recognition will be used for Bangla speech to
+        text conversion . All these communications will happen via HTTP.
+        Authentication for google sign up is done by google and for normal
+        sign up is done using their own authentication method.
+      </div>
+    </div>
+  </div>
+  <div>
+    <h2 class="my-4">4. System Features</h2>
+    <div class="information">
+      <div class="heading fs-4 h2 my-3">
+        4.1 Sign up using the Sign up page
+      </div>
+      <div class="details">
+        <div>
+          <p class="ps-5 fw-bold d-inline">Use case name:-</p>
+          <p class="d-inline">Sign Up using the Sign up page</p>
+        </div>
+        <div>
+          <p class="ps-5 fw-bold d-inline">Actor(s):-</p>
+          <p class="d-inline">User, Reviewer</p>
+        </div>
+        <div>
+          <p class="ps-5 fw-bold d-inline">Brief Overview:-</p>
+          <p class="d-inline">
+            The user needs to sign up to lodge a complain.
+          </p>
+        </div>
+        <div class="row justify-content-center">
+          <div class="fw-bold text-center">Typical Course of Events</div>
+          <table style="width: 70%">
+            <tr>
+              <th style="width: 50%" class="text-center">Actor action</th>
+              <th class="text-center">System response</th>
+            </tr>
+            <tr>
+              <td>1. User clicks the sign up button from homepage</td>
+              <td>2. The system provides the Sign up page</td>
+            </tr>
+            <tr>
+              <td>3. User fills up the form</td>
+              <td>
+                4. The system shows a successful registration message along
+                with a text saying the user to verify the email
+              </td>
+            </tr>
+          </table>
+        </div>
+        <div class="mt-2">
+          <div class="fw-bold ps-5">Alternative Course of Events</div>
+          <div class="ps-5">
+            3.1 If the user doesnt fill up the sign up page properly, System
+            doesnt redirect and shows the error in the form
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="information">
+      <div class="heading fs-4 h2 my-3">4.2 Sign up using Google</div>
+      <div class="details">
+        <div>
+          <p class="ps-5 fw-bold d-inline">Use case name:-</p>
+          <p class="d-inline">Sign Up using Google</p>
+        </div>
+        <div>
+          <p class="ps-5 fw-bold d-inline">Actor(s):-</p>
+          <p class="d-inline">User</p>
+        </div>
+        <div>
+          <p class="ps-5 fw-bold d-inline">Brief Overview:-</p>
+          <p class="d-inline">
+            The user tries to sign up using the Google Sign up button
+          </p>
+        </div>
+        <div class="row justify-content-center">
+          <div class="fw-bold text-center">Typical Course of Events</div>
+          <table style="width: 70%">
+            <tr>
+              <th style="width: 50%" class="text-center">Actor action</th>
+              <th class="text-center">System response</th>
+            </tr>
+            <tr>
+              <td>1. User clicks the sign up button from homepage</td>
+              <td>2. The system provides the Sign up page</td>
+            </tr>
+            <tr>
+              <td>3. User clicks the "Sign up using Google" button</td>
+              <td>
+                4. System will response by verifying the credentials through
+                google API.
+              </td>
+            </tr>
+          </table>
+        </div>
+        <div class="mt-2">
+          <div class="fw-bold ps-5">Alternative Course of Events</div>
+          <div class="ps-5">
+            3.1 if the user enter incorrect google credentials, the system
+            will redirect to sign up page.
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="information">
+      <div class="heading fs-4 h2 my-3">4.3 Log in using Google</div>
+      <div class="details">
+        <div>
+          <p class="ps-5 fw-bold d-inline">Use case name:-</p>
+          <p class="d-inline">Log in using Google</p>
+        </div>
+        <div>
+          <p class="ps-5 fw-bold d-inline">Actor(s):-</p>
+          <p class="d-inline">User</p>
+        </div>
+        <div>
+          <p class="ps-5 fw-bold d-inline">Brief Overview:-</p>
+          <p class="d-inline">The user tries to log in to system using google log in.</p>
+        </div>
+        <div class="row justify-content-center">
+          <div class="fw-bold text-center">Typical Course of Events</div>
+          <table style="width: 70%">
+            <tr>
+              <th style="width: 50%" class="text-center">Actor action</th>
+              <th class="text-center">System response</th>
+            </tr>
+            <tr>
+              <td>1. User clicks the log in button from homepage</td>
+              <td>2. The system provides the log in page</td>
+            </tr>
+            <tr>
+              <td>3. User clicks the "Log in using Google" button</td>
+              <td>
+                4. System will response by verifying the credentials through
+                google API. After successful verification, it will redirect to
+                homepage
+              </td>
+            </tr>
+          </table>
+        </div>
+        <div class="mt-2">
+          <div class="fw-bold ps-5">Alternative Course of Events</div>
+          <div class="ps-5">
+            3.1 if the user enter incorrect google credentials, the system
+            will redirect to login page.
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="information">
+      <div class="heading fs-4 h2 my-3">4.4 Log in using Log in page</div>
+      <div class="details">
+        <div>
+          <p class="ps-5 fw-bold d-inline">Use case name:-</p>
+          <p class="d-inline">Log in using Log in page</p>
+        </div>
+        <div>
+          <p class="ps-5 fw-bold d-inline">Actor(s):-</p>
+          <p class="d-inline">User, Reviewer</p>
+        </div>
+        <div>
+          <p class="ps-5 fw-bold d-inline">Brief Overview:-</p>
+          <p class="d-inline">The user tries to log in to system using the login page.</p>
+        </div>
+        <div class="row justify-content-center">
+          <div class="fw-bold text-center">Typical Course of Events</div>
+          <table style="width: 70%">
+            <tr>
+              <th style="width: 50%" class="text-center">Actor action</th>
+              <th class="text-center">System response</th>
+            </tr>
+            <tr>
+              <td>1. User clicks the log in button from homepage</td>
+              <td>2. The system provides the log in page</td>
+            </tr>
+            <tr>
+              <td>3. User enters his credentials in the log in page</td>
+              <td>
+                4. If credentials are correct, system will redirect to the homepage.
+              </td>
+            </tr>
+          </table>
+        </div>
+        <div class="mt-2">
+          <div class="fw-bold ps-5">Alternative Course of Events</div>
+          <div class="ps-5">
+            3.1 if the user enter incorrect credentials, the system
+            will show an error text indicating the error.
+          </div>
+        </div>
+      </div>
+      <div class="information">
+        <div class="heading fs-4 h2 my-3">4.5 Lodge Complain</div>
+        <div class="details">
+          <div>
+            <p class="ps-5 fw-bold d-inline">Use case name:-</p>
+            <p class="d-inline">Lodge a complain</p>
+          </div>
+          <div>
+            <p class="ps-5 fw-bold d-inline">Actor(s):-</p>
+            <p class="d-inline">User, Reviewer</p>
+          </div>
+          <div>
+            <p class="ps-5 fw-bold d-inline">Brief Overview:-</p>
+            <p class="d-inline">
+              A user can lodge a complain against someone along with evidence.
+            </p>
+          </div>
+          <div class="row justify-content-center">
+            <div class="fw-bold text-center">Typical Course of Events</div>
+            <table style="width: 70%">
+              <tr>
+                <th style="width: 50%" class="text-center">Actor action</th>
+                <th class="text-center">System response</th>
+              </tr>
+              <tr>
+                <td>1. User clicks the "Lodge Complain" button in the navbar</td>
+                <td>2. The system provides the lodge complain page</td>
+              </tr>
+              <tr>
+                <td>3. User fills up the lodge complain form and clicks the "lodge complain" button</td>
+                <td>
+                  4. If the form is filled up correctly, system will show a successful complain lodge message
+                </td>
+              </tr>
+            </table>
+          </div>
+          <div class="mt-2">
+            <div class="fw-bold ps-5">Alternative Course of Events</div>
+            <div class="ps-5">
+              1.1 if the user is not logged in, the system will redirect to login page
+            </div>
+            <div class="ps-5">
+              3.1 if the user doesn't fill the form correctly, the system
+              will show an error text indicating the errors.
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="information">
+        <div class="heading fs-4 h2 my-3">4.6 Edit Complain</div>
+        <div class="details">
+          <div>
+            <p class="ps-5 fw-bold d-inline">Use case name:-</p>
+            <p class="d-inline">Edit complain</p>
+          </div>
+          <div>
+            <p class="ps-5 fw-bold d-inline">Actor(s):-</p>
+            <p class="d-inline">User</p>
+          </div>
+          <div>
+            <p class="ps-5 fw-bold d-inline">Brief Overview:-</p>
+            <p class="d-inline">
+              A user can edit a complain which he/she has lodged at past.
+            </p>
+          </div>
+          <div class="row justify-content-center">
+            <div class="fw-bold text-center">Typical Course of Events</div>
+            <table style="width: 70%">
+              <tr>
+                <th style="width: 50%" class="text-center">Actor action</th>
+                <th class="text-center">System response</th>
+              </tr>
+              <tr>
+                <td>1. User clicks the "Edit Complain" button in the complain list</td>
+                <td>2. The system provides the details of that complain</td>
+              </tr>
+              <tr>
+                <td>3. User edits the complain form and clicks the "Edit complain" button</td>
+                <td>
+                  4. If the form is filled up correctly, system will show a successful message indicating the complain
+                  has been editted
+                </td>
+              </tr>
+            </table>
+          </div>
+          <div class="mt-2">
+            <div class="fw-bold ps-5">Alternative Course of Events</div>
+            <div class="ps-5">
+              1.1 The user has not yet lodged a complain, an empty complain list is shown
+            </div>
+            <div class="ps-5">
+              3.1 if the user doesn't fill the form correctly, the system
+              will show an error text indicating the errors.
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="information">
+        <div class="heading fs-4 h2 my-3">4.7 Review Complain</div>
+        <div class="details">
+          <div>
+            <p class="ps-5 fw-bold d-inline">Use case name:-</p>
+            <p class="d-inline">Review complain</p>
+          </div>
+          <div>
+            <p class="ps-5 fw-bold d-inline">Actor(s):-</p>
+            <p class="d-inline">Reviewer</p>
+          </div>
+          <div>
+            <p class="ps-5 fw-bold d-inline">Brief Overview:-</p>
+            <p class="d-inline">
+              A reviewer will review a complain where he/she has been given the role of reviewer
+            </p>
+          </div>
+          <div class="row justify-content-center">
+            <div class="fw-bold text-center">Typical Course of Events</div>
+            <table style="width: 70%">
+              <tr>
+                <th style="width: 50%" class="text-center">Actor action</th>
+                <th class="text-center">System response</th>
+              </tr>
+              <tr>
+                <td>1. Reviewer clicks the button to show the list of complains he/she has to review</td>
+                <td>2. The system provides with the list of all complains he/she has to review</td>
+              </tr>
+              <tr>
+                <td>3. The reviewer clicks a specific complain he/she wants to review</td>
+                <td>
+                  4. The system gives the reviewer the details of the complain
+                </td>
+              </tr>
+              <tr>
+                <td>5. The reviewer will resolve the complain and click the "complain resolved" button</td>
+                <td>
+                  6. The system shows a success message indicating the complain has been resolved successfully.
+                </td>
+              </tr>
+            </table>
+          </div>
+          <div class="mt-2">
+            <div class="fw-bold ps-5">Alternative Course of Events</div>
+            <div class="ps-5">
+              1.1 The reviewer has no complains to review, an empty review list is shown
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="information">
+        <div class="heading fs-4 h2 my-3">4.8 Log out</div>
+        <div class="details">
+          <div>
+            <p class="ps-5 fw-bold d-inline">Use case name:-</p>
+            <p class="d-inline">Log out</p>
+          </div>
+          <div>
+            <p class="ps-5 fw-bold d-inline">Actor(s):-</p>
+            <p class="d-inline">User, Reviewer</p>
+          </div>
+          <div>
+            <p class="ps-5 fw-bold d-inline">Brief Overview:-</p>
+            <p class="d-inline">
+              A user can log out from the application whenever he/she wants to.
+            </p>
+          </div>
+          <div class="row justify-content-center">
+            <div class="fw-bold text-center">Typical Course of Events</div>
+            <table style="width: 70%">
+              <tr>
+                <th style="width: 50%" class="text-center">Actor action</th>
+                <th class="text-center">System response</th>
+              </tr>
+              <tr>
+                <td>1. User clicks the "Log out" button</td>
+                <td>2. The system logs out the user from the application and redirects to homepage</td>
+              </tr>
+            </table>
+          </div>
+          <div class="mt-2">
+            <div class="fw-bold ps-5">Alternative Course of Events</div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div>
+      <h2 class="my-4">5. Other Nonfunctional Requirements</h2>
+      <div class="information">
+        <div class="heading fs-4 h2 my-3">5.1 Performance Requirements</div>
+        <div class="details">
+          Lorem ipsum dolor sit amet, consectetur adipisicing elit. Illum natus
+          aperiam officiis, doloremque doloribus, facere dolore porro cum, velit
+          assumenda voluptatibus amet voluptates hic iure ullam commodi ipsam
+          rem consequuntur!
+        </div>
+      </div>
+      <div class="information">
+        <div class="heading fs-4 h2 my-3">5.2 Safety Requirements</div>
+        <div class="details">
+          All data must be stored and never deleted from the database. For instance, if a lodger edit the complaint
+          description or change reviewer, the previous data should be kept along with the new one in the database.
+
+        </div>
+      </div>
+      <div class="information">
+        <div class="heading fs-4 h2 my-3">5.3 Security Requirements</div>
+        <div class="details">
+          The complaints will be confidential to other users who are not involved with that lodged complaint. The
+          application should not be accessed by any unregistered account. Each registered account must be authorized
+          with an email-verification process while logging in for the first time. Anyone outside NSU members cannot
+          create an account. Any user other than system admin cannot access the admin page by any means. The system
+          shall not disclose any personal information about the users.
+
+        </div>
+      </div>
+      <div class="information">
+        <div class="heading fs-4 h2 my-3">5.4 Software Quality Attributes</div>
+        <div class="details">
+          <strong>User-friendliness:</strong>
+          This software is designed particularly keeping the helpers of NSU in mind. Features like lodging a complaint
+          via speech in bangla would make it easy for them to make use of this application. Since they don’t have
+          nsu-mail, google sign-in process is made available.
+          <br>
+          <strong>RELIABILITY:</strong>
+          This software is made secure so that personal information of the users won’t be disclosed. Moreover, the
+          lodged complaints are kept confidential to the general users. Thus users will feel safe to use this
+          application.
+          <br>
+          <strong>Flexibility:</strong>
+          The software has both web and mobile app versions, thus making it flexible to use. In addition, the mobile app
+          version has some special features as discussed above.
+          <br>
+          <strong>Availability:</strong>
+          It is an online system and available 24/7 to all users.
+
+        </div>
+      </div>
+      <div class="information">
+        <div class="heading fs-4 h2 my-3">5.5 Business Rules</div>
+        <div class="details">
+          The product will be free to use for all the members of NSU. No one outside NSU members can use this product.
+        </div>
+      </div>
+    </div>
+    <div>
+      <h2 class="my-4">6. Other Requirements</h2>
+      <div class="information">
+        <div class="heading fs-4 h2 my-3">Appendix A: Glossary</div>
+        <div class="details">
+          <ul>
+            <li><strong>API: </strong> It stands for Application Protocol Interface. An API is basically a software
+              intermediate that allows two applications to interact with each other.</li>
+            <li><strong>Framework: </strong> A software framework is an abstraction in which software, providing generic
+              functionality, can be selectively changed by additional user-written code, thus providing
+              application-specific software.</li>
+            <li><strong>Libary: </strong> a library is a collection of non-volatile resources used by computer programs,
+              often for software development.</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
+      integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
+      crossorigin="anonymous"></script>
+</body>
+
+</html>
