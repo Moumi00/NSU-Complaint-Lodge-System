@@ -19,6 +19,8 @@ function Register() {
   const [confirmPassErrorClass, setConfirmPassErrorClass] = useState("none");
   const [error, setError] = useState("");
   const [errorClass, setErrorClass] = useState("none");
+  const [googleDisabled, setGoogleDisabled] = useState(false);
+  const [googleID, setGoogleID] = useState("");
   const [Designations, setDesignations] = useState([
     { label: "Faculty", value: 1, isDisabled: true },
     { label: "Student", value: 2, isDisabled: true },
@@ -49,7 +51,7 @@ function Register() {
   async function handleSubmit(e) {
     e.preventDefault(); //stops the page from reloading
 
-    console.log(designation);
+    console.log(fullName);
 
     if (fullName.length < 3) {
       setNameErrorClass("block");
@@ -72,12 +74,12 @@ function Register() {
       return;
     }
 
-    if (password.length < 6) {
+    if (password.length < 6 && !googleDisabled) {
       setPasswordErrorClass("block");
       return;
     }
 
-    if (confirmPassword != password) {
+    if (confirmPassword != password && !googleDisabled) {
       setConfirmPassErrorClass("block");
       return;
     }
@@ -88,29 +90,56 @@ function Register() {
       return setIdPhotoErrorClass("block");
     }
 
-    const formData = new FormData();
-    formData.append("fullName", fullName);
-    formData.append("nsuId", nsuId);
-    formData.append("email", email);
-    formData.append("password", password);
-    formData.append("userType", designation);
-    formData.append("file", selectedFiles);
+    if (!googleDisabled) {
+      const formData = new FormData();
+      formData.append("fullName", fullName);
+      formData.append("nsuId", nsuId);
+      formData.append("email", email);
+      formData.append("password", password);
+      formData.append("userType", designation);
+      formData.append("file", selectedFiles);
 
-    let response = await axios.post(
-      "http://localhost:8000/auth/register",
-      formData,
-      {
-        headers: { "Content-Type": "multipart/form-data" },
+      let response = await axios.post(
+        "http://localhost:8000/auth/register",
+        formData,
+        {
+          headers: { "Content-Type": "multipart/form-data" },
+        }
+      );
+      if (response.data.error) {
+        setErrorClass("block");
+        setError(response.data.error);
+        return;
+      } else {
+        let myModal = new Modal(document.getElementById("exampleModal"));
+        myModal.show();
       }
-    );
-
-    if (response.data.error) {
-      setErrorClass("block");
-      setError(response.data.error);
-      return;
     } else {
-      let myModal = new Modal(document.getElementById("exampleModal"));
-      myModal.show();
+      const formData = new FormData();
+      formData.append("fullName", fullName);
+      formData.append("nsuId", nsuId);
+      formData.append("email", email);
+      formData.append("googleID", googleID);
+      formData.append("userType", designation);
+      formData.append("file", selectedFiles);
+
+      let response = await axios.post(
+        "http://localhost:8000/auth/register/google",
+        formData,
+        {
+          headers: { "Content-Type": "multipart/form-data" },
+        }
+      );
+      if (response.data.error) {
+        setErrorClass("block");
+        setError(response.data.error);
+        return;
+      } else {
+        console.log(response)
+        let myModal = new Modal(document.getElementById("exampleModal"));
+        myModal.show();
+      }
+      
     }
   }
 
@@ -134,10 +163,70 @@ function Register() {
 
   if (token) {
     window.location.replace("http://localhost:3000");
-    //might change to token or something else
   }
 
   const onLoginSuccess = (res) => {
+    setGoogleDisabled(true);
+    setNameErrorClass("none");
+    setNsuIdErrorClass("none");
+    setEmailErrorClass("none");
+    setPasswordErrorClass("none");
+    setConfirmPassErrorClass("none");
+    setFullName(res.profileObj.givenName);
+    setNsuId(res.profileObj.familyName);
+    setEmail(res.profileObj.email);
+    setGoogleID(res.getAuthResponse().id_token);
+    setDesignation("");
+    if (
+      res.profileObj.email.length > 8 &&
+      res.profileObj.email.substring(res.profileObj.email.length - 9) ===
+        "gmail.com"
+    ) {
+      setDesignations([
+        { label: "Faculty", value: 1, isDisabled: true },
+        { label: "Student", value: 2, isDisabled: true },
+        {
+          label: "RA / TA / Lab Instructor",
+          value: 3,
+          isDisabled: true,
+        },
+        { label: "Helper", value: 4, isDisabled: false },
+      ]);
+    } else if (
+      res.profileObj.email.length > 13 &&
+      res.profileObj.email.substring(res.profileObj.email.length - 14) ===
+        "northsouth.edu"
+    ) {
+      setDesignations([
+        { label: "Faculty", value: 1, isDisabled: false },
+        { label: "Student", value: 2, isDisabled: false },
+        {
+          label: "RA / TA / Lab Instructor",
+          value: 3,
+          isDisabled: false,
+        },
+        { label: "Helper", value: 4, isDisabled: true },
+      ]);
+    } else {
+      setDesignations([
+        { label: "Faculty", value: 1, isDisabled: true },
+        { label: "Student", value: 2, isDisabled: true },
+        {
+          label: "RA / TA / Lab Instructor",
+          value: 3,
+          isDisabled: true,
+        },
+        { label: "Helper", value: 4, isDisabled: true },
+      ]);
+    }
+    var profile = res.getBasicProfile();
+    console.log("ID: " + profile.getId());
+    console.log("Full Name: " + profile.getName());
+    console.log("Given Name: " + profile.getGivenName());
+    console.log("Family Name: " + profile.getFamilyName());
+    console.log("Image URL: " + profile.getImageUrl());
+    console.log("Email: " + profile.getEmail());
+
     console.log("Login Success:", res.profileObj);
   };
 
@@ -155,6 +244,8 @@ function Register() {
           <form onSubmit={handleSubmit} encType="multipart/form-data">
             <div class="form-group mb-4">
               <input
+                disabled={googleDisabled}
+                value={fullName}
                 onInput={(e) => {
                   setFullName(e.target.value);
                 }}
@@ -172,6 +263,8 @@ function Register() {
             </div>
             <div class="form-group mb-4">
               <input
+                disabled={googleDisabled}
+                value={nsuId}
                 onInput={(e) => {
                   setNsuId(e.target.value);
                 }}
@@ -189,6 +282,8 @@ function Register() {
             </div>
             <div class="form-group mb-4">
               <input
+                disabled={googleDisabled}
+                value={email}
                 onInput={(e) => {
                   setEmail(e.target.value);
                 }}
@@ -250,6 +345,7 @@ function Register() {
               <div className="col-12">
                 <Select
                   options={Designations}
+                  value={designation ? { label: designation } : null}
                   placeholder={<div style={{ color: "grey" }}>Designation</div>}
                   onChange={(e) => {
                     setDesignation(e.label);
@@ -261,7 +357,9 @@ function Register() {
                 Please select your designation
               </span>
             </div>
-            <div class="form-group mb-4">
+            <div
+              class={"form-group mb-4 d-" + (googleDisabled ? "none" : "block")}
+            >
               <input
                 onInput={(e) => {
                   setPassword(e.target.value);
@@ -278,7 +376,9 @@ function Register() {
                 Password can't be less than 6 characters
               </span>
             </div>
-            <div class="form-group mb-4">
+            <div
+              class={"form-group mb-4 d-" + (googleDisabled ? "none" : "block")}
+            >
               <input
                 onInput={(e) => {
                   setConfirmPassword(e.target.value);
@@ -340,7 +440,7 @@ function Register() {
           <div className="d-flex justify-content-center">
             <GoogleLogin
               clientId={clientId}
-              buttonText="Login"
+              buttonText="Google Signup"
               onSuccess={onLoginSuccess}
               onFailure={onLoginFailure}
               cookiePolicy={"single_host_origin"}
@@ -370,7 +470,9 @@ function Register() {
                     aria-label="Close"
                   ></button>
                 </div>
-                <div class="modal-body">Please verify your email.</div>
+                <div class="modal-body">
+                  {googleDisabled ? "Click Ok to login" : "Please verify your email."}
+                </div>
                 <div class="modal-footer">
                   <a className="btn btn-primary" href="/login">
                     Ok

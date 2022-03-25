@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import axios from "axios";
+import { GoogleLogin } from "react-google-login";
 
 function Login() {
   const [email, setEmail] = useState("");
@@ -8,9 +9,11 @@ function Login() {
   const [error, setError] = useState("");
   const [errorClass, setErrorClass] = useState("none");
   const token = localStorage.getItem("userUNID");
+  const clientId =
+    "992655217366-qiu0iegl7kmotoovl1630k6283o0jsuk.apps.googleusercontent.com";
 
-  if(token) {
-    window.location.replace('http://localhost:3000');
+  if (token) {
+    window.location.replace("http://localhost:3000");
   }
 
   const validateEmail = () => {
@@ -39,11 +42,31 @@ function Login() {
       setError(response.data.error);
       return;
     } else {
-      console.log(response);
-      localStorage.setItem('userUNID', response.data.data.userUNID);
-      window.location.replace('http://localhost:3000');
+      localStorage.setItem("userUNID", response.data.data.userUNID);
+      window.location.replace("http://localhost:3000");
     }
-  } 
+  }
+
+  async function onLoginSuccess(res) {
+    console.log("Login Success:", res.profileObj);
+    let response = await axios.post("http://localhost:8000/auth/login/google", {
+      googleID: res.getAuthResponse().id_token
+    });
+    console.log(response);
+    if (response.data.error) {
+      setErrorClass("block");
+      setError(response.data.error);
+      return;
+    } else {
+      console.log(response);
+      localStorage.setItem("userUNID", response.data.data.UserUNID);
+      window.location.replace("http://localhost:3000");
+    }
+  };
+
+  const onLoginFailure = (res) => {
+    console.log("Login Failed:", res);
+  };
 
   return (
     <div class="flex-grow-1 background-color d-flex align-items-center justify-content-center">
@@ -85,10 +108,22 @@ function Login() {
                 Login
               </button>
               <div className="d-flex mt-3 justify-content-end fw-bold text-primary">
-                <a href="/forget-password" className="text-decoration-none">Forgot Password?</a>
+                <a href="/forget-password" className="text-decoration-none">
+                  Forgot Password?
+                </a>
               </div>
             </div>
           </form>
+          <hr class="my-4" />
+          <div className="d-flex justify-content-center">
+            <GoogleLogin
+              clientId={clientId}
+              buttonText="Google SignIn"
+              onSuccess={onLoginSuccess}
+              onFailure={onLoginFailure}
+              cookiePolicy={"single_host_origin"}
+            />
+          </div>
         </div>
       </div>
     </div>

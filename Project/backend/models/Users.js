@@ -10,9 +10,12 @@ module.exports = (sequelize, DataTypes) => {
         email: DataTypes.STRING,
         password: DataTypes.STRING,
         userType: DataTypes.STRING,
+        actorType: {
+            type: DataTypes.ENUM("Reviewer", "Non-Reviewer")
+        },
         nsuIdPhoto: DataTypes.STRING,
         isVerified: {
-            type: DataTypes.BOOLEAN,
+            type: DataTypes.BOOLEAN, 
             defaultValue: false,
         },
         active: {

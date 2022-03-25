@@ -1,7 +1,8 @@
 const express = require("express");
 const app = express();
-const auth = require('./Routes/auth');
-const home = require('./Routes/home');
+const mysql = require("mysql2");
+const auth = require("./Routes/auth");
+const home = require("./Routes/home");
 const fileUpload = require("express-fileupload");
 
 app.use(function (req, res, next) {
@@ -17,13 +18,29 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 
 const db = require("./models");
- 
-app.use(fileUpload());
-app.use('/auth', auth);
-app.use('/home', home);
 
-db.sequelize.sync().then(() => {
-  app.listen(8000, () => {
-    console.log("Connected to port 8000");
-  });
-}); 
+app.use(fileUpload());
+app.use("/auth", auth);
+app.use("/home", home);
+
+const connection = mysql.createConnection({
+  host: "localhost",
+  user: "root",
+  password: "",
+});
+
+connection.query(
+  `CREATE DATABASE IF NOT EXISTS complain_system_database`,
+  function (err, results) {
+    if (!err) {
+      db.sequelize.sync().then(() => {
+        app.listen(8000, () => {
+          console.log("Connected to 8000");
+        });
+      });
+    } else {
+      console.log("KAAM KORENA");
+    }
+  }
+); 
+ 
