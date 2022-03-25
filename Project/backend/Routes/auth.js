@@ -20,8 +20,8 @@ router.get("/all", async (req, res) => {
   res.json(result);
 });
 
-router.post("/hudaai", async (req, res) => {
-  res.json(Users.getAttributes().actorType.values[0]);
+router.get("/hudaai", async (req, res) => {
+  res.json(Users.getAttributes().actorType.values[1]);
 });
 
 router.post("/login/google", async (req, res) => {
@@ -57,73 +57,72 @@ router.post("/login/google", async (req, res) => {
 });
 
 router.post("/register/google", async (req, res) => {
-  let googleID;
-  async function verify() {
+  try {
+    
+    let googleID;
     const ticket = await client.verifyIdToken({
       idToken: req.body.googleID,
       audience: CLIENT_ID,
     });
     payload = ticket.getPayload();
     googleID = payload.sub;
-  }
-  verify()
-    .then(async () => {
-      const result = await Users.findOne({
-        where: {
-          email: req.body.email,
-        },
-      });
-      if (result === null) {
-        let actorType;
-        if (req.body.userType == "Faculty" || req.body.userType == "Admin") {
-          actorType = Users.getAttributes().actorType.values[0];
-        } else {
-          actorType = Users.getAttributes().actorType.values[1];
-        }
-        let uploadPath;
-        const file = req.files.file;
-        uploadPath = path.join(__dirname, "..");
-        uploadPath +=
-          "/uploads/NSU IDs/" +
-          req.body.nsuId +
-          "." +
-          file.name.split(".").pop();
-        console.log("Upload path:" + uploadPath);
-        file.mv(uploadPath, function (err) {
-          if (err) {
-            return res.json({
-              data: "",
-              error: "File Upload Error",
-            });
-          }
-        });
-        const UNID = uuid.v4();
-        const user = await Users.create({
-          userUNID: UNID,
-          fullName: req.body.fullName,
-          nsuId: req.body.nsuId,
-          email: req.body.email,
-          actorType: actorType,
-          userType: req.body.userType,
-          isVerified: true,
-          nsuIdPhoto: req.body.nsuId + "." + file.name.split(".").pop(),
-        });
-        res.json({
-          data: user,
-          error: "",
-        });
-        await GoogleVerified.create({
-          googleID: googleID,
-          UserUNID: UNID,
-        });
+    const result = await Users.findOne({
+      where: {
+        email: req.body.email,
+      },
+    });
+    if (result === null) {
+      let actorType;
+      if (req.body.userType == "Faculty" || req.body.userType == "Admin") {
+        actorType = Users.getAttributes().actorType.values[0];
       } else {
-        res.json({
-          data: "",
-          error: "Email Already Registered",
-        });
+        actorType = Users.getAttributes().actorType.values[1];
       }
-    })
-    .catch(console.error);
+      let uploadPath;
+      const file = req.files.file;
+      uploadPath = path.join(__dirname, "..");
+      uploadPath +=
+        "/uploads/NSU IDs/" + req.body.nsuId + "." + file.name.split(".").pop();
+      console.log("Upload path:" + uploadPath);
+      file.mv(uploadPath, function (err) {
+        if (err) {
+          return res.json({
+            data: "",
+            error: "File Upload Error",
+          });
+        }
+      });
+      const UNID = uuid.v4();
+      const user = await Users.create({
+        userUNID: UNID,
+        fullName: req.body.fullName,
+        nsuId: req.body.nsuId,
+        email: req.body.email,
+        actorType: actorType,
+        userType: req.body.userType,
+        isVerified: true,
+        nsuIdPhoto: req.body.nsuId + "." + file.name.split(".").pop(),
+      });
+      res.json({
+        data: user,
+        error: "",
+      });
+      await GoogleVerified.create({
+        googleID: googleID,
+        UserUNID: UNID,
+      });
+    } else {
+      res.json({
+        data: "",
+        error: "Email Already Registered",
+      });
+    }
+  } catch (error) {
+    res.json({ 
+      data: "",
+      error: error,
+    }) 
+  }
 });
 
 router.post("/register", async (req, res) => {
@@ -138,11 +137,13 @@ router.post("/register", async (req, res) => {
       error: "",
     });
     let actorType;
+
     if (req.body.userType == "Faculty" || req.body.userType == "Admin") {
       actorType = Users.getAttributes().actorType.values[0];
     } else {
       actorType = Users.getAttributes().actorType.values[1];
     }
+
     let uploadPath;
     const file = req.files.file;
     uploadPath = path.join(__dirname, "..");
@@ -165,14 +166,14 @@ router.post("/register", async (req, res) => {
       nsuId: req.body.nsuId,
       email: req.body.email,
       actorType: actorType,
-      password: password,
+      password: password, 
       userType: req.body.userType,
-      nsuIdPhoto: req.body.nsuId + "." + file.name.split(".").pop(),
+      nsuIdPhoto: req.body.nsuId + "." + file.name.split(".").pop(), //Just the name of the file which is there in our backend server
     });
     const verificationToken = uuid.v4();
     await UserVerification.create({
       verificationToken: verificationToken,
-      expiryDate: new Date(new Date().getTime() + 24 * 60 * 60 * 1000),
+      expiryDate: new Date(new Date().getTime() + 24 * 60 * 60 * 1000), //24 hours valid to verify email
       UserUNID: UNID,
     });
 
@@ -232,26 +233,27 @@ router.get("/verify-email/:verificationToken", async (req, res) => {
 });
 
 router.post("/login", async (req, res) => {
-  const check = await Users.findOne({
+  const result = await Users.findOne({
     where: { email: req.body.email },
   });
 
-  if (check === null) {
+  if (result === null) {
     return res.json({
       data: "",
       error: "Account Not Registered.",
     });
   } else {
-    if (check.password == null) {
+    if (result.password == null) {
       return res.json({
         data: "",
         error: "Please login using google SignIn",
       });
-    } else if (await bcrypt.compare(req.body.password, check.password)) {
-      if (check.isVerified) {
-        if (check.active) {
+    } else if (await bcrypt.compare(req.body.password, result.password)) {
+      if (result.isVerified) {
+        if (result.active) {
+          //Can send user UNID only too
           return res.json({
-            data: check,
+            data: result,
             error: "",
           });
         } else {
@@ -324,12 +326,12 @@ router.post("/verify-unid", async (req, res) => {
       data: "",
       error: "Access denied.",
     });
-  } else {
-    return res.json({
-      data: "Accessible",
-      error: "",
-    });
   }
+  // } else {
+  //   return res.json({
+  //     data: "Accessible",
+  //     error: "",
+  //   });
 });
 
 router.post("/password-update", async (req, res) => {
