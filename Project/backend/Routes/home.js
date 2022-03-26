@@ -12,4 +12,8 @@ router.get('/users', async (req, res) => {
     });
 })
 
+router.post('/lodge-complain', async (req, res) => {
+    
+});
+
 module.exports = router;

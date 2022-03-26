@@ -8,6 +8,10 @@ function LodgeComplain() {
   const [isFilePicked, setIsFilePicked] = useState(false);
   const [openCompAgainstMenu, setOpenCompAgainstMenu] = useState(false);
   const [openCompReviewerMenu, setOpenCompReviewerMenu] = useState(false);
+  const [complainTitle, setComplainTitle] = useState("");
+  const [complainDescription, setComplainDescription] = useState("");
+  const [complainAgainst, setComplainAgainst] = useState([]);
+  const [reviewer, setReviewer] = useState([]);
   const token = localStorage.getItem("userUNID");
 
   if (!token) {
@@ -67,6 +71,10 @@ function LodgeComplain() {
                 class="form-control"
                 id="emailInput"
                 placeholder="Complain Title"
+                onInput={(e) => {
+                  setComplainTitle(e.target.value);
+                }}
+                //onChange={}
               ></input>
             </div>
             <div class="form-group mb-4">
@@ -76,6 +84,9 @@ function LodgeComplain() {
                 rows="6"
                 placeholder="Complain Description (upto 150 words)"
                 style={{ resize: "none" }}
+                onInput={(e) => {
+                  setComplainDescription(e.target.value);
+                }}
               ></textarea>
             </div>
             <div className="form-group d-flex flex-column mb-4">
