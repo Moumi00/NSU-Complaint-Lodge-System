@@ -20,6 +20,7 @@ function Register() {
   const [error, setError] = useState("");
   const [errorClass, setErrorClass] = useState("none");
   const [googleDisabled, setGoogleDisabled] = useState(false);
+  const [isNsuSignUp, setIsNsuSignUp] = useState(false);
   const [googleID, setGoogleID] = useState("");
   const [Designations, setDesignations] = useState([
     { label: "Faculty", value: 1, isDisabled: true },
@@ -30,6 +31,7 @@ function Register() {
       isDisabled: true,
     },
     { label: "Helper", value: 4, isDisabled: true },
+    { label: "Admin", value: 5, isDisabled: true },
   ]);
 
   const [selectedFiles, setSelectedFiles] = useState({});
@@ -135,11 +137,10 @@ function Register() {
         setError(response.data.error);
         return;
       } else {
-        console.log(response)
+        console.log(response);
         let myModal = new Modal(document.getElementById("exampleModal"));
         myModal.show();
       }
-      
     }
   }
 
@@ -172,52 +173,112 @@ function Register() {
     setEmailErrorClass("none");
     setPasswordErrorClass("none");
     setConfirmPassErrorClass("none");
-    setFullName(res.profileObj.givenName);
-    setNsuId(res.profileObj.familyName);
-    setEmail(res.profileObj.email);
-    setGoogleID(res.getAuthResponse().id_token);
-    setDesignation("");
-    if (
-      res.profileObj.email.length > 8 &&
-      res.profileObj.email.substring(res.profileObj.email.length - 9) ===
-        "gmail.com"
-    ) {
-      setDesignations([
-        { label: "Faculty", value: 1, isDisabled: true },
-        { label: "Student", value: 2, isDisabled: true },
-        {
-          label: "RA / TA / Lab Instructor",
-          value: 3,
-          isDisabled: true,
-        },
-        { label: "Helper", value: 4, isDisabled: false },
-      ]);
-    } else if (
-      res.profileObj.email.length > 13 &&
-      res.profileObj.email.substring(res.profileObj.email.length - 14) ===
-        "northsouth.edu"
-    ) {
-      setDesignations([
-        { label: "Faculty", value: 1, isDisabled: false },
-        { label: "Student", value: 2, isDisabled: false },
-        {
-          label: "RA / TA / Lab Instructor",
-          value: 3,
-          isDisabled: false,
-        },
-        { label: "Helper", value: 4, isDisabled: true },
-      ]);
+    setIsFilePicked(false);
+    setSelectedFiles({});
+    if (res.profileObj.email.includes("northsouth.edu")) {
+      setIsNsuSignUp(true);
+      setFullName(res.profileObj.givenName);
+      setNsuId(res.profileObj.familyName);
+      setEmail(res.profileObj.email);
+      setGoogleID(res.getAuthResponse().id_token);
+      setDesignation("");
+      if (
+        res.profileObj.email.length > 8 &&
+        res.profileObj.email.substring(res.profileObj.email.length - 9) ===
+          "gmail.com"
+      ) {
+        setDesignations([
+          { label: "Faculty", value: 1, isDisabled: true },
+          { label: "Student", value: 2, isDisabled: true },
+          {
+            label: "RA / TA / Lab Instructor",
+            value: 3,
+            isDisabled: true,
+          },
+          { label: "Helper", value: 4, isDisabled: false },
+          { label: "Admin", value: 5, isDisabled: true },
+        ]);
+      } else if (
+        res.profileObj.email.length > 13 &&
+        res.profileObj.email.substring(res.profileObj.email.length - 14) ===
+          "northsouth.edu"
+      ) {
+        setDesignations([
+          { label: "Faculty", value: 1, isDisabled: false },
+          { label: "Student", value: 2, isDisabled: false },
+          {
+            label: "RA / TA / Lab Instructor",
+            value: 3,
+            isDisabled: false,
+          },
+          { label: "Helper", value: 4, isDisabled: true },
+          { label: "Admin", value: 5, isDisabled: false },
+        ]);
+      } else {
+        setDesignations([
+          { label: "Faculty", value: 1, isDisabled: true },
+          { label: "Student", value: 2, isDisabled: true },
+          {
+            label: "RA / TA / Lab Instructor",
+            value: 3,
+            isDisabled: true,
+          },
+          { label: "Helper", value: 4, isDisabled: true },
+          { label: "Admin", value: 5, isDisabled: true },
+        ]);
+      }
     } else {
-      setDesignations([
-        { label: "Faculty", value: 1, isDisabled: true },
-        { label: "Student", value: 2, isDisabled: true },
-        {
-          label: "RA / TA / Lab Instructor",
-          value: 3,
-          isDisabled: true,
-        },
-        { label: "Helper", value: 4, isDisabled: true },
-      ]);
+      setIsNsuSignUp(false);
+      setNsuId("");
+      setFullName(res.profileObj.name);
+      setEmail(res.profileObj.email);
+      setGoogleID(res.getAuthResponse().id_token);
+      setDesignation("Helper");
+      if (
+        res.profileObj.email.length > 8 &&
+        res.profileObj.email.substring(res.profileObj.email.length - 9) ===
+          "gmail.com"
+      ) {
+        setDesignations([
+          { label: "Faculty", value: 1, isDisabled: true },
+          { label: "Student", value: 2, isDisabled: true },
+          {
+            label: "RA / TA / Lab Instructor",
+            value: 3,
+            isDisabled: true,
+          },
+          { label: "Helper", value: 4, isDisabled: false },
+          { label: "Admin", value: 5, isDisabled: true },
+        ]);
+      } else if (
+        res.profileObj.email.length > 13 &&
+        res.profileObj.email.substring(res.profileObj.email.length - 14) ===
+          "northsouth.edu"
+      ) {
+        setDesignations([
+          { label: "Faculty", value: 1, isDisabled: false },
+          { label: "Student", value: 2, isDisabled: false },
+          {
+            label: "RA / TA / Lab Instructor",
+            value: 3,
+            isDisabled: false,
+          },
+          { label: "Helper", value: 4, isDisabled: true },
+          { label: "Admin", value: 5, isDisabled: false },
+        ]);
+      } else {
+        setDesignations([
+          { label: "Faculty", value: 1, isDisabled: true },
+          { label: "Student", value: 2, isDisabled: true },
+          {
+            label: "RA / TA / Lab Instructor",
+            value: 3,
+            isDisabled: true,
+          },
+          { label: "Helper", value: 4, isDisabled: true },
+          { label: "Admin", value: 5, isDisabled: true },
+        ]);
+      }
     }
     var profile = res.getBasicProfile();
     console.log("ID: " + profile.getId());
@@ -263,7 +324,7 @@ function Register() {
             </div>
             <div class="form-group mb-4">
               <input
-                disabled={googleDisabled}
+                disabled={isNsuSignUp}
                 value={nsuId}
                 onInput={(e) => {
                   setNsuId(e.target.value);
@@ -304,6 +365,7 @@ function Register() {
                         isDisabled: true,
                       },
                       { label: "Helper", value: 4, isDisabled: false },
+                      { label: "Admin", value: 5, isDisabled: true },
                     ]);
                   } else if (
                     email.length > 13 &&
@@ -318,6 +380,7 @@ function Register() {
                         isDisabled: false,
                       },
                       { label: "Helper", value: 4, isDisabled: true },
+                      { label: "Admin", value: 5, isDisabled: false },
                     ]);
                   } else {
                     setDesignations([
@@ -329,6 +392,7 @@ function Register() {
                         isDisabled: true,
                       },
                       { label: "Helper", value: 4, isDisabled: true },
+                      { label: "Admin", value: 5, isDisabled: true },
                     ]);
                   }
                 }}
@@ -471,7 +535,9 @@ function Register() {
                   ></button>
                 </div>
                 <div class="modal-body">
-                  {googleDisabled ? "Click Ok to login" : "Please verify your email."}
+                  {googleDisabled
+                    ? "Click Ok to login"
+                    : "Please verify your email."}
                 </div>
                 <div class="modal-footer">
                   <a className="btn btn-primary" href="/login">

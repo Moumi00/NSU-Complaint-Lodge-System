@@ -8,6 +8,11 @@ function LodgeComplain() {
   const [isFilePicked, setIsFilePicked] = useState(false);
   const [openCompAgainstMenu, setOpenCompAgainstMenu] = useState(false);
   const [openCompReviewerMenu, setOpenCompReviewerMenu] = useState(false);
+  const token = localStorage.getItem("userUNID");
+
+  if (!token) {
+    window.location.replace("http://localhost:3000/login");
+  }
 
   useEffect(() => {
     async function fetchData() {
