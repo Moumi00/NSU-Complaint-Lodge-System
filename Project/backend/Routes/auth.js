@@ -20,6 +20,13 @@ router.get("/all", async (req, res) => {
   res.json(result);
 });
 
+router.get("/kisuEkta", async (req, res) => {
+  const result = await Users.findAll({
+    include: UserVerification,
+  });
+  res.json(result); 
+});
+
 router.get("/hudaai", async (req, res) => {
   res.json(Users.getAttributes().actorType.values[1]);
 });
