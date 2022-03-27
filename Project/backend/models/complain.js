@@ -5,16 +5,37 @@ module.exports = (sequelize, DataTypes) => {
       primaryKey: true,
     },
     complainTitle: DataTypes.STRING,
-    complainDescription: DataTypes.STRING,
-    complainReviewer: DataTypes.STRING,
-    status: DataTypes.STRING,
+    status: {
+      type: DataTypes.STRING,
+      defaultValue: "open"
+    }
   });
 
   Complain.associate = (models) => {
     Complain.belongsTo(models.Users, {
       foreignKey: {
-        name: "ComplainerUNID", 
+        name: "ComplainerUNID",
       },
+    });
+    Complain.hasMany(models.ComplainReviewer, {
+      foreignKey: {
+        name: "ComplainUNID",
+      },
+    });
+    Complain.hasMany(models.ComplainDescription, {
+      foreignKey: {
+        name: "ComplainUNID",
+      },
+    });
+    Complain.hasMany(models.ComplainAgainst, {
+      foreignKey : {
+        name: "ComplainUNID",
+      }
+    });
+    Complain.hasMany(models.Evidence, {
+      foreignKey : {
+        name: "ComplainUNID",
+      }
     });
   };
 
