@@ -4,13 +4,13 @@ function mailSender(email, subject, text) {
     var transporter = nodemailer.createTransport({
       service: "gmail",
       auth: {
-        user: "rentkorbo@gmail.com",
+        user: "nsucomplainlodgesystem@gmail.com",
         pass: "saq@1234",
       },
     });
   
     var mailOptions = {
-      from: "rentkorbo@gmail.com",
+      from: "nsucomplainlodgesystem@gmail.com",
       to: email,
       subject: subject,
       text: text
