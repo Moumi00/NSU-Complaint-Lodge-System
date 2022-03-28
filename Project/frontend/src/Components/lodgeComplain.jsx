@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
-import Select from "react-select";
+import Select from "react-select"
+import { Modal } from "bootstrap";
 import axios from "axios";
 
 function LodgeComplaint() {
@@ -125,6 +126,10 @@ function LodgeComplaint() {
       } 
     );
     console.log(response);
+    if(response.data.data){
+      let myModal = new Modal(document.getElementById("exampleModal"));
+        myModal.show();
+    }
   };
 
   return (
@@ -282,6 +287,39 @@ function LodgeComplaint() {
               </button>
             </div>
           </form>
+          <div
+            class="modal fade"
+            data-bs-backdrop="static"
+            data-bs-keyboard="false"
+            id="exampleModal"
+            tabindex="-1"
+            aria-labelledby="exampleModalLabel"
+            aria-hidden="true"
+          >
+            <div class="modal-dialog modal-dialog-centered">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <h5 class="modal-title" id="exampleModalLabel">
+                    Lodged Complaint Successfully!
+                  </h5>
+                  <button
+                    type="button"
+                    class="btn-close"
+                    data-bs-dismiss="modal"
+                    aria-label="Close"
+                  ></button>
+                </div>
+                <div class="modal-body">
+                  Click Ok to continue
+                </div>
+                <div class="modal-footer">
+                  <a className="btn btn-primary" href="/">
+                    Ok
+                  </a>
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
     </div>

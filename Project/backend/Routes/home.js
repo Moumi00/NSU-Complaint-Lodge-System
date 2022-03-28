@@ -61,7 +61,7 @@ router.post("/lodge-complaint", async (req, res) => {
 
   Array.isArray(files)
     ? files.forEach((file, idx) => move(file, idx))
-    : move(files, idx);
+    : move(files, 0);
 
   await ComplainReviewer.create({
     ComplainUNID: complainUNID,
