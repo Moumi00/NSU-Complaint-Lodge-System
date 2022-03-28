@@ -4,7 +4,7 @@ import { Modal } from "bootstrap";
 import axios from "axios";
 
 function LodgeComplaint() {
-  const [options, setOptions] = useState([]);
+  const [complainAgainstOptions, setComplainAgainstOptions] = useState([]);
   const [selectedFiles, setSelectedFiles] = useState([]);
   const [isFilePicked, setIsFilePicked] = useState(false);
   const [openCompAgainstMenu, setOpenCompAgainstMenu] = useState(false);
@@ -21,6 +21,7 @@ function LodgeComplaint() {
     useState("none");
   const [reviewerErrorClass, setReviewerErrorClass] = useState("none");
   const [evidenceErrorClass, setEvidenceErrorClass] = useState("none");
+  const [reviewerOptions, setReviewerOptions] = useState([]);
   const token = localStorage.getItem("userUNID");
 
   if (!token) {
@@ -34,9 +35,20 @@ function LodgeComplaint() {
       let temp = response.data.data.map((data) => ({
         label: data.fullName,
         value: data.userUNID,
+        isDisabled: (token == data.userUNID ? true: false)
       }));
       console.log(temp);
-      setOptions(temp);
+      setComplainAgainstOptions(temp);
+      response = await axios.get("http://localhost:8000/home/reviewers");
+      console.log(response.data.data);
+      let temp1 = response.data.data.map((data) => ({
+        label: data.fullName,
+        value: data.userUNID,
+        // isDisabled: (token == data.userUNID || complainAgainstOptions.some(e => e.userUNID == data.userUNID) ? true: false)
+      }));
+      console.log(temp1);
+      setReviewerOptions(temp1);
+
     }
     fetchData();
   }, []);
@@ -178,7 +190,7 @@ function LodgeComplaint() {
             <div className="form-group d-flex flex-column mb-4">
               <div className="col-12">
                 <Select
-                  options={options}
+                  options={complainAgainstOptions}
                   // value={complainAgainst}
                   //getOptionLabel={(option) => option.fullName}
                   //getOptionValue={(option) => option.fullName}
@@ -250,7 +262,7 @@ function LodgeComplaint() {
             <div className="form-group d-flex flex-column mb-4">
               <div className="col-12">
                 <Select
-                  options={options}
+                  options={setReviewerOptions}
                   // value={reviewer ? { label: reviewer } : null}
                   placeholder={
                     <div style={{ color: "grey" }}>

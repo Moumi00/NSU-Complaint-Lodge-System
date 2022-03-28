@@ -5,12 +5,11 @@ const {
   ComplainAgainst,
   ComplainReviewer,
   Evidence,
-  ComplainDescription
+  ComplainDescription,
 } = require("../models");
 const router = express.Router();
 const path = require("path");
 const uuid = require("uuid");
-
 
 router.get("/users", async (req, res) => {
   const result = await Users.findAll({
@@ -19,17 +18,17 @@ router.get("/users", async (req, res) => {
   return res.json({
     data: result,
     error: "",
-  }); 
-}); 
+  });
+});
 
 router.post("/lodge-complaint", async (req, res) => {
   const complainUNID = uuid.v4();
   const complainAgainstUserUNID = JSON.parse(req.body.complainAgainstUserUNID);
-//   return console.log(JSON.parse(req.body.complainAgainstUserUNID));
+  //   return console.log(JSON.parse(req.body.complainAgainstUserUNID));
   await Complain.create({
     complainUNID: complainUNID,
     complainTitle: req.body.complainTitle,
-    ComplainerUNID: req.body.complainerUNID, 
+    ComplainerUNID: req.body.complainerUNID,
   });
   for (let i = 0; i < complainAgainstUserUNID.length; i++) {
     await ComplainAgainst.create({
@@ -44,7 +43,12 @@ router.post("/lodge-complaint", async (req, res) => {
     let uploadPath;
     uploadPath = path.join(__dirname, "..");
     uploadPath +=
-      "/uploads/Evidence/" + complainUNID + "-" + idx + "." + image.name.split(".").pop();
+      "/uploads/Evidence/" +
+      complainUNID +
+      "-" +
+      idx +
+      "." +
+      image.name.split(".").pop();
     try {
       image.mv(uploadPath);
     } catch (e) {
@@ -72,9 +76,24 @@ router.post("/lodge-complaint", async (req, res) => {
     ComplainUNID: complainUNID,
     complainDescription: req.body.complainDescription,
   });
-  
+
   res.json({
     data: "Succesfully lodged a complaint",
+    error: "",
+  });
+});
+
+router.get("/reviewers", async (req, res) => {
+  const result = await Users.findAll({
+    where: {
+      actorType: Users.getAttributes().actorType.values[0],
+    },
+    attributes: [
+      "fullName", "userUNID"
+    ]
+  });
+  res.json({
+    data: result,
     error: ""
   });
 });
