@@ -47,8 +47,8 @@ function Navbar() {
           <div class="collapse navbar-collapse" id="navbarSupportedContent">
             <ul className="navbar-nav ms-auto">
               <li className="nav-item">
-                <a className="btn btn-lg btn-outline-success my-2 ms-4 ms-lg-0 me-5" href="/lodge-complain">
-                  Lodge Complain
+                <a className="btn btn-lg btn-outline-success my-2 ms-4 ms-lg-0 me-5" href="/lodge-complaint">
+                  Lodge Complaint
                 </a>
               </li>
               <li className="nav-item me-2">

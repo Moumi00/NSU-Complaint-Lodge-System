@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import Select from "react-select";
 import axios from "axios";
 
-function LodgeComplain() {
+function LodgeComplaint() {
   const [options, setOptions] = useState([]);
   const [selectedFiles, setSelectedFiles] = useState([]);
   const [isFilePicked, setIsFilePicked] = useState(false);
@@ -12,6 +12,13 @@ function LodgeComplain() {
   const [complainDescription, setComplainDescription] = useState("");
   const [complainAgainst, setComplainAgainst] = useState([]);
   const [reviewer, setReviewer] = useState([]);
+  const [complainTitleErrorClass, setComplainTitleErrorClass] =
+    useState("none");
+  const [complainDescriptionErrorClass, setComplainDescriptionErrorClass] =
+    useState("none");
+  const [complainAgainstErrorClass, setComplainAgainstErrorClass] =
+    useState("none");
+  const [reviewerErrorClass, setReviewerErrorClass] = useState("none");
   const token = localStorage.getItem("userUNID");
 
   if (!token) {
@@ -51,10 +58,27 @@ function LodgeComplain() {
 
   const hideCompAgainstMenu = (e) => {
     setOpenCompAgainstMenu(false);
+    setComplainAgainstErrorClass("none");
+    setComplainAgainst(e);
+    console.log(e);
   };
 
   const hideCompReviewerMenu = (e) => {
     setOpenCompReviewerMenu(false);
+  };
+
+  const handleLodgeComplaintButtonClicked = (e) => {
+    e.preventDefault();
+    if (!complainTitle) {
+      return setComplainTitleErrorClass("block");
+    }
+    if (!complainDescription) {
+      return setComplainDescriptionErrorClass("block");
+    }
+    console.log(complainAgainst);
+    if (complainAgainst.length === 0) {
+      return setComplainAgainstErrorClass("block");
+    }
   };
 
   return (
@@ -62,9 +86,9 @@ function LodgeComplain() {
       <div class="row justify-content-center w-100">
         <div class="col-xl-5 col-lg-7 col-md-9 col-11 my-4 primary-background-color px-lg-5 pb-5">
           <div class="separator my-5 ">
-            <h1 className="text-dark fw-light">Lodge Complain</h1>
+            <h1 className="text-dark fw-light">Lodge Complaint</h1>
           </div>
-          <form>
+          <form onSubmit={handleLodgeComplaintButtonClicked}>
             <div class="form-group mb-4">
               <input
                 type="text"
@@ -74,8 +98,13 @@ function LodgeComplain() {
                 onInput={(e) => {
                   setComplainTitle(e.target.value);
                 }}
-                //onChange={}
+                onChange={(e) => {
+                  setComplainTitleErrorClass("none");
+                }}
               ></input>
+              <span class={"text-danger d-" + complainTitleErrorClass}>
+                Enter Complaint Title.
+              </span>
             </div>
             <div class="form-group mb-4">
               <textarea
@@ -87,12 +116,19 @@ function LodgeComplain() {
                 onInput={(e) => {
                   setComplainDescription(e.target.value);
                 }}
+                onChange={(e) => {
+                  setComplainDescriptionErrorClass("none");
+                }}
               ></textarea>
+              <span class={"text-danger d-" + complainDescriptionErrorClass}>
+                Enter Complaint Description.
+              </span>
             </div>
             <div className="form-group d-flex flex-column mb-4">
               <div className="col-12">
                 <Select
                   options={options}
+                  value={options.filter(obj => complainAgainst.includes(obj.value))}
                   getOptionLabel={(option) => option.fullName}
                   getOptionValue={(option) => option.fullName}
                   placeholder={
@@ -106,8 +142,8 @@ function LodgeComplain() {
                   onChange={hideCompAgainstMenu}
                   onBlur={hideCompAgainstMenu}
                   onInputChange={(e, { action }) => {
-                    if (e.length === 0){
-                      setOpenCompAgainstMenu(false)
+                    if (e.length === 0) {
+                      setOpenCompAgainstMenu(false);
                       return;
                     }
                     if (action === "input-change") {
@@ -116,6 +152,9 @@ function LodgeComplain() {
                   }}
                   menuIsOpen={openCompAgainstMenu}
                 />
+                <span class={"text-danger d-" + complainAgainstErrorClass}>
+                  Select user(s) to complain against.
+                </span>
               </div>
             </div>
             <div class="form-group mb-4">
@@ -170,8 +209,8 @@ function LodgeComplain() {
                   onChange={hideCompReviewerMenu}
                   onBlur={hideCompReviewerMenu}
                   onInputChange={(e, { action }) => {
-                    if (e.length === 0){
-                      setOpenCompReviewerMenu(false)
+                    if (e.length === 0) {
+                      setOpenCompReviewerMenu(false);
                       return;
                     }
                     if (action === "input-change") {
@@ -184,7 +223,7 @@ function LodgeComplain() {
             </div>
             <div className="d-block">
               <button type="submit" class="btn btn-primary w-100 fw-bold">
-                Lodge Complain
+                Lodge Complaint
               </button>
             </div>
           </form>
@@ -194,4 +233,4 @@ function LodgeComplain() {
   );
 }
 
-export default LodgeComplain;
+export default LodgeComplaint;
