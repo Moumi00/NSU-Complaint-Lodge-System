@@ -23,7 +23,7 @@ module.exports = (sequelize, DataTypes) => {
       },
     });
     Complain.hasMany(models.ComplainDescription, {
-      foreignKey: {
+      foreignKey: { 
         name: "ComplainUNID",
       },
     });
