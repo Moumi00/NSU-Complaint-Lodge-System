@@ -44,11 +44,7 @@ function LodgeComplaint() {
       let temp1 = response.data.data.map((data) => ({
         label: data.fullName,
         value: data.userUNID,
-        isDisabled:
-          token == data.userUNID ||
-          complainAgainstOptions.some((e) => e.userUNID == data.userUNID)
-            ? true
-            : false,
+        isDisabled: true,
       }));
       console.log(temp1);
       setReviewerOptions(temp1);
