@@ -91,7 +91,7 @@ function Register() {
       console.log("shalalala");
       return setIdPhotoErrorClass("block");
     }
-
+    
     if (!googleDisabled) {
       const formData = new FormData();
       formData.append("fullName", fullName);

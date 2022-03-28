@@ -9,7 +9,7 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.STRING,
       defaultValue: "open"
     }
-  });
+  }); 
 
   Complain.associate = (models) => {
     Complain.belongsTo(models.Users, {

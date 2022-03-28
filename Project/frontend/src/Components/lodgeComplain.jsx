@@ -76,8 +76,8 @@ function LodgeComplaint() {
 
   const handleReviewerOnChange = (e) => {
     setOpenCompReviewerMenu(false);
-    setReviewerErrorClass("none");
-    setReviewer(e.label);
+    setReviewerErrorClass("none");  
+    setReviewer(e.value); 
   };
 
   async function handleLodgeComplaintButtonClicked(e) {
@@ -100,14 +100,25 @@ function LodgeComplaint() {
     console.log(selectedFiles);
 
     const formData = new FormData();
-    formData.append("file", selectedFiles);
+    formData.append("complainerUNID", token);
+    formData.append("complainTitle", complainTitle);
+    // formData.append("complainDescription", complainDescription);
+    // for (var i = 0; i < complainAgainst.length; i++) {
+    //   formData.append('complainAgainstUserUNID[]', complainAgainst[i]);
+    // }
+    // complainAgainst.forEach((item) => formData.append("complainAgainstUserUNID[]", item))
+    formData.append("complainAgainstUserUNID", JSON.stringify(complainAgainst));
+    formData.append("complainReviewerUserUNID", reviewer);
+    selectedFiles.forEach(file=>{
+      formData.append("file", file);
+    });
 
     for (var pair of formData.entries()) {
       console.log(pair[0]+ ' - ' + pair[1]); 
     }
 
     let response = await axios.post(
-      "http://localhost:8000/home/hudaai",
+      "http://localhost:8000/home/lodge-complaint",
       formData,
       {
         headers: { "Content-Type": "multipart/form-data" },
@@ -235,7 +246,7 @@ function LodgeComplaint() {
               <div className="col-12">
                 <Select
                   options={options}
-                  value={reviewer ? { label: reviewer } : null}
+                  // value={reviewer ? { label: reviewer } : null}
                   placeholder={
                     <div style={{ color: "grey" }}>
                       Choose Reviewer(only one)
