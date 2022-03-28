@@ -125,6 +125,10 @@ function Register() {
       formData.append("userType", designation);
       formData.append("file", selectedFiles);
 
+      for (var pair of formData.entries()) {
+        console.log(pair[0] + " - " + pair[1]);
+      }
+
       let response = await axios.post(
         "http://localhost:8000/auth/register/google",
         formData,

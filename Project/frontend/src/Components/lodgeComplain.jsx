@@ -11,7 +11,7 @@ function LodgeComplaint() {
   const [complainTitle, setComplainTitle] = useState("");
   const [complainDescription, setComplainDescription] = useState("");
   const [complainAgainst, setComplainAgainst] = useState([]);
-  const [reviewer, setReviewer] = useState([]);
+  const [reviewer, setReviewer] = useState("");
   const [complainTitleErrorClass, setComplainTitleErrorClass] =
     useState("none");
   const [complainDescriptionErrorClass, setComplainDescriptionErrorClass] =
@@ -19,6 +19,7 @@ function LodgeComplaint() {
   const [complainAgainstErrorClass, setComplainAgainstErrorClass] =
     useState("none");
   const [reviewerErrorClass, setReviewerErrorClass] = useState("none");
+  const [evidenceErrorClass, setEvidenceErrorClass] = useState("none");
   const token = localStorage.getItem("userUNID");
 
   if (!token) {
@@ -28,8 +29,13 @@ function LodgeComplaint() {
   useEffect(() => {
     async function fetchData() {
       let response = await axios.get("http://localhost:8000/home/users");
-      console.log(response);
-      setOptions(response.data.data);
+      //console.log(response);
+      let temp = response.data.data.map((data) => ({
+        label: data.fullName,
+        value: data.userUNID,
+      }));
+      console.log(temp);
+      setOptions(temp);
     }
     fetchData();
   }, []);
@@ -42,6 +48,7 @@ function LodgeComplaint() {
     }
     if (newFiles.length > 0) {
       setIsFilePicked(true);
+      setEvidenceErrorClass("none");
     }
     setSelectedFiles(newFiles);
     e.target.value = "";
@@ -56,18 +63,24 @@ function LodgeComplaint() {
     console.log(newFiles);
   };
 
-  const hideCompAgainstMenu = (e) => {
+  const handleComplainAgainstOnChange = (e) => {
     setOpenCompAgainstMenu(false);
     setComplainAgainstErrorClass("none");
-    setComplainAgainst(e);
-    console.log(e);
+    const temp = [];
+    for (let i = 0; i < e.length; i++) {
+      temp.push(e[i].value);
+    }
+    console.log(temp);
+    setComplainAgainst(temp);
   };
 
-  const hideCompReviewerMenu = (e) => {
+  const handleReviewerOnChange = (e) => {
     setOpenCompReviewerMenu(false);
+    setReviewerErrorClass("none");
+    setReviewer(e.label);
   };
 
-  const handleLodgeComplaintButtonClicked = (e) => {
+  async function handleLodgeComplaintButtonClicked(e) {
     e.preventDefault();
     if (!complainTitle) {
       return setComplainTitleErrorClass("block");
@@ -75,10 +88,32 @@ function LodgeComplaint() {
     if (!complainDescription) {
       return setComplainDescriptionErrorClass("block");
     }
-    console.log(complainAgainst);
     if (complainAgainst.length === 0) {
       return setComplainAgainstErrorClass("block");
     }
+    if (!isFilePicked) {
+      return setEvidenceErrorClass("block");
+    }
+    if (!reviewer) {
+      return setReviewerErrorClass("block");
+    }
+    console.log(selectedFiles);
+
+    const formData = new FormData();
+    formData.append("file", selectedFiles);
+
+    for (var pair of formData.entries()) {
+      console.log(pair[0]+ ' - ' + pair[1]); 
+    }
+
+    let response = await axios.post(
+      "http://localhost:8000/home/hudaai",
+      formData,
+      {
+        headers: { "Content-Type": "multipart/form-data" },
+      } 
+    );
+    console.log(response);
   };
 
   return (
@@ -128,9 +163,9 @@ function LodgeComplaint() {
               <div className="col-12">
                 <Select
                   options={options}
-                  value={options.filter(obj => complainAgainst.includes(obj.value))}
-                  getOptionLabel={(option) => option.fullName}
-                  getOptionValue={(option) => option.fullName}
+                  // value={complainAgainst}
+                  //getOptionLabel={(option) => option.fullName}
+                  //getOptionValue={(option) => option.fullName}
                   placeholder={
                     <div style={{ color: "grey" }}>Complain Against</div>
                   }
@@ -139,8 +174,10 @@ function LodgeComplaint() {
                     IndicatorSeparator: () => null, // Remove separator
                   }}
                   isMulti
-                  onChange={hideCompAgainstMenu}
-                  onBlur={hideCompAgainstMenu}
+                  onChange={handleComplainAgainstOnChange}
+                  onBlur={(e) => {
+                    setOpenCompAgainstMenu(false);
+                  }}
                   onInputChange={(e, { action }) => {
                     if (e.length === 0) {
                       setOpenCompAgainstMenu(false);
@@ -190,13 +227,15 @@ function LodgeComplaint() {
               ) : (
                 <p class="d-none">Select a file to show details</p>
               )}
+              <span class={"mb-2 text-danger d-" + evidenceErrorClass}>
+                Please attach evidence(s)
+              </span>
             </div>
             <div className="form-group d-flex flex-column mb-4">
               <div className="col-12">
                 <Select
                   options={options}
-                  getOptionLabel={(option) => option.fullName}
-                  getOptionValue={(option) => option.fullName}
+                  value={reviewer ? { label: reviewer } : null}
                   placeholder={
                     <div style={{ color: "grey" }}>
                       Choose Reviewer(only one)
@@ -206,8 +245,10 @@ function LodgeComplaint() {
                     DropdownIndicator: () => null, // Remove dropdown icon
                     IndicatorSeparator: () => null, // Remove separator
                   }}
-                  onChange={hideCompReviewerMenu}
-                  onBlur={hideCompReviewerMenu}
+                  onChange={handleReviewerOnChange}
+                  onBlur={(e) => {
+                    setOpenCompReviewerMenu(false);
+                  }}
                   onInputChange={(e, { action }) => {
                     if (e.length === 0) {
                       setOpenCompReviewerMenu(false);
@@ -219,6 +260,9 @@ function LodgeComplaint() {
                   }}
                   menuIsOpen={openCompReviewerMenu}
                 />
+                <span class={"text-danger d-" + reviewerErrorClass}>
+                  Select a complain reviewer.
+                </span>
               </div>
             </div>
             <div className="d-block">
