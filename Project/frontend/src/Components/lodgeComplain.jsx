@@ -102,7 +102,7 @@ function LodgeComplaint() {
     const formData = new FormData();
     formData.append("complainerUNID", token);
     formData.append("complainTitle", complainTitle);
-    // formData.append("complainDescription", complainDescription);
+    formData.append("complainDescription", complainDescription);
     // for (var i = 0; i < complainAgainst.length; i++) {
     //   formData.append('complainAgainstUserUNID[]', complainAgainst[i]);
     // }

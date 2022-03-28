@@ -5,6 +5,7 @@ const {
   ComplainAgainst,
   ComplainReviewer,
   Evidence,
+  ComplainDescription
 } = require("../models");
 const router = express.Router();
 const path = require("path");
