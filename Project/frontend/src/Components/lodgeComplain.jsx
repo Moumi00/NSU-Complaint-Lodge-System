@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import Select from "react-select"
+import Select from "react-select";
 import { Modal } from "bootstrap";
 import axios from "axios";
 
@@ -35,7 +35,7 @@ function LodgeComplaint() {
       let temp = response.data.data.map((data) => ({
         label: data.fullName,
         value: data.userUNID,
-        isDisabled: (token == data.userUNID ? true: false)
+        isDisabled: token == data.userUNID ? true : false,
       }));
       console.log(temp);
       setComplainAgainstOptions(temp);
@@ -44,11 +44,14 @@ function LodgeComplaint() {
       let temp1 = response.data.data.map((data) => ({
         label: data.fullName,
         value: data.userUNID,
-        // isDisabled: (token == data.userUNID || complainAgainstOptions.some(e => e.userUNID == data.userUNID) ? true: false)
+        isDisabled:
+          token == data.userUNID ||
+          complainAgainstOptions.some((e) => e.userUNID == data.userUNID)
+            ? true
+            : false,
       }));
       console.log(temp1);
       setReviewerOptions(temp1);
-
     }
     fetchData();
   }, []);
@@ -83,14 +86,24 @@ function LodgeComplaint() {
     for (let i = 0; i < e.length; i++) {
       temp.push(e[i].value);
     }
-    console.log(temp);
     setComplainAgainst(temp);
+    let temp1 = reviewerOptions;
+
+    console.log(temp);
+    temp1.map((data) =>
+       temp.some((e) => e == data.value)
+        ? (data.isDisabled = true)
+        : (data.isDisabled = false)
+      //console.log(data.value)
+    );
+    console.log(temp1);
+    setReviewerOptions(temp1);
   };
 
   const handleReviewerOnChange = (e) => {
     setOpenCompReviewerMenu(false);
-    setReviewerErrorClass("none");  
-    setReviewer(e.value); 
+    setReviewerErrorClass("none");
+    setReviewer(e.value);
   };
 
   async function handleLodgeComplaintButtonClicked(e) {
@@ -122,12 +135,12 @@ function LodgeComplaint() {
     // complainAgainst.forEach((item) => formData.append("complainAgainstUserUNID[]", item))
     formData.append("complainAgainstUserUNID", JSON.stringify(complainAgainst));
     formData.append("complainReviewerUserUNID", reviewer);
-    selectedFiles.forEach(file=>{
+    selectedFiles.forEach((file) => {
       formData.append("file", file);
     });
 
     for (var pair of formData.entries()) {
-      console.log(pair[0]+ ' - ' + pair[1]); 
+      console.log(pair[0] + " - " + pair[1]);
     }
 
     let response = await axios.post(
@@ -135,14 +148,14 @@ function LodgeComplaint() {
       formData,
       {
         headers: { "Content-Type": "multipart/form-data" },
-      } 
+      }
     );
     console.log(response);
-    if(response.data.data){
+    if (response.data.data) {
       let myModal = new Modal(document.getElementById("exampleModal"));
-        myModal.show();
+      myModal.show();
     }
-  };
+  }
 
   return (
     <div class="flex-grow-1 background-color d-flex align-items-center justify-content-center">
@@ -262,7 +275,7 @@ function LodgeComplaint() {
             <div className="form-group d-flex flex-column mb-4">
               <div className="col-12">
                 <Select
-                  options={setReviewerOptions}
+                  options={reviewerOptions}
                   // value={reviewer ? { label: reviewer } : null}
                   placeholder={
                     <div style={{ color: "grey" }}>
@@ -321,9 +334,7 @@ function LodgeComplaint() {
                     aria-label="Close"
                   ></button>
                 </div>
-                <div class="modal-body">
-                  Click Ok to continue
-                </div>
+                <div class="modal-body">Click Ok to continue</div>
                 <div class="modal-footer">
                   <a className="btn btn-primary" href="/">
                     Ok
