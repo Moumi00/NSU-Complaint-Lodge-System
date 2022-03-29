@@ -87,10 +87,11 @@ function LodgeComplaint() {
 
     console.log(temp);
     temp1.map((data) =>
-       temp.some((e) => e == data.value)
+      (temp.some((e) => e == data.value)) || (data.value == token)
         ? (data.isDisabled = true)
         : (data.isDisabled = false)
       //console.log(data.value)
+    
     );
     console.log(temp1);
     setReviewerOptions(temp1);
