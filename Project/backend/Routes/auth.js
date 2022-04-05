@@ -24,7 +24,7 @@ router.get("/kisuEkta", async (req, res) => {
   const result = await Users.findAll({
     include: UserVerification,
   });
-  res.json(result); 
+  res.json(result);
 });
 
 router.get("/hudaai", async (req, res) => {
@@ -65,7 +65,6 @@ router.post("/login/google", async (req, res) => {
 
 router.post("/register/google", async (req, res) => {
   try {
-    
     let googleID;
     const ticket = await client.verifyIdToken({
       idToken: req.body.googleID,
@@ -125,10 +124,10 @@ router.post("/register/google", async (req, res) => {
       });
     }
   } catch (error) {
-    res.json({ 
+    res.json({
       data: "",
       error: error,
-    }) 
+    });
   }
 });
 
@@ -144,6 +143,21 @@ router.post("/register", async (req, res) => {
       error: "",
     });
     let actorType;
+
+    if (
+      !(
+        req.body.userType == "Faculty" ||
+        req.body.userType == "Admin" ||
+        req.body.userType == "Student" ||
+        req.body.userType == "RA / TA / Lab Instructor" ||
+        req.body.userType == "Helper"
+      )
+    ) {
+      return res.json({
+        data: "",
+        error: "Please select your designation",
+      });
+    }
 
     if (req.body.userType == "Faculty" || req.body.userType == "Admin") {
       actorType = Users.getAttributes().actorType.values[0];
@@ -173,7 +187,7 @@ router.post("/register", async (req, res) => {
       nsuId: req.body.nsuId,
       email: req.body.email,
       actorType: actorType,
-      password: password, 
+      password: password,
       userType: req.body.userType,
       nsuIdPhoto: req.body.nsuId + "." + file.name.split(".").pop(), //Just the name of the file which is there in our backend server
     });
