@@ -47,15 +47,15 @@ function Register() {
       .toLowerCase()
       .match(
         /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
-      );
-  };
+      ) && email.length <= 320;
+  } ;
 
   async function handleSubmit(e) {
     e.preventDefault(); //stops the page from reloading
 
     console.log(fullName);
 
-    if (fullName.length < 3) {
+    if (fullName.length < 3 || fullName.length > 30) {
       setNameErrorClass("block");
       return;
     }
@@ -76,7 +76,7 @@ function Register() {
       return;
     }
 
-    if (password.length < 6 && !googleDisabled) {
+    if ((password.length < 6 || password.length > 30) && !googleDisabled) {
       setPasswordErrorClass("block");
       return;
     }
@@ -187,22 +187,6 @@ function Register() {
       setGoogleID(res.getAuthResponse().id_token);
       setDesignation("");
       if (
-        res.profileObj.email.length > 8 &&
-        res.profileObj.email.substring(res.profileObj.email.length - 9) ===
-          "gmail.com"
-      ) {
-        setDesignations([
-          { label: "Faculty", value: 1, isDisabled: true },
-          { label: "Student", value: 2, isDisabled: true },
-          {
-            label: "RA / TA / Lab Instructor",
-            value: 3,
-            isDisabled: true,
-          },
-          { label: "Helper", value: 4, isDisabled: false },
-          { label: "Admin", value: 5, isDisabled: true },
-        ]);
-      } else if (
         res.profileObj.email.length > 13 &&
         res.profileObj.email.substring(res.profileObj.email.length - 14) ===
           "northsouth.edu"
@@ -227,7 +211,7 @@ function Register() {
             value: 3,
             isDisabled: true,
           },
-          { label: "Helper", value: 4, isDisabled: true },
+          { label: "Helper", value: 4, isDisabled: false },
           { label: "Admin", value: 5, isDisabled: true },
         ]);
       }
@@ -239,22 +223,6 @@ function Register() {
       setGoogleID(res.getAuthResponse().id_token);
       setDesignation("Helper");
       if (
-        res.profileObj.email.length > 8 &&
-        res.profileObj.email.substring(res.profileObj.email.length - 9) ===
-          "gmail.com"
-      ) {
-        setDesignations([
-          { label: "Faculty", value: 1, isDisabled: true },
-          { label: "Student", value: 2, isDisabled: true },
-          {
-            label: "RA / TA / Lab Instructor",
-            value: 3,
-            isDisabled: true,
-          },
-          { label: "Helper", value: 4, isDisabled: false },
-          { label: "Admin", value: 5, isDisabled: true },
-        ]);
-      } else if (
         res.profileObj.email.length > 13 &&
         res.profileObj.email.substring(res.profileObj.email.length - 14) ===
           "northsouth.edu"
@@ -279,7 +247,7 @@ function Register() {
             value: 3,
             isDisabled: true,
           },
-          { label: "Helper", value: 4, isDisabled: true },
+          { label: "Helper", value: 4, isDisabled: false },
           { label: "Admin", value: 5, isDisabled: true },
         ]);
       }
@@ -323,7 +291,7 @@ function Register() {
                 placeholder="Full Name"
               ></input>
               <span class={"text-danger d-" + nameErrorClass}>
-                Full Name can't be less than 3 characters
+                Full Name can't be less than 3 characters or more than 30 characters
               </span>
             </div>
             <div class="form-group mb-4">
@@ -354,24 +322,10 @@ function Register() {
                 }}
                 onChange={(e) => {
                   setEmailErrorClass("none");
+                  setDesignation("");
                 }}
                 onBlur={(e) => {
-                  if (
-                    email.length > 8 &&
-                    email.substring(email.length - 9) === "gmail.com"
-                  ) {
-                    setDesignations([
-                      { label: "Faculty", value: 1, isDisabled: true },
-                      { label: "Student", value: 2, isDisabled: true },
-                      {
-                        label: "RA / TA / Lab Instructor",
-                        value: 3,
-                        isDisabled: true,
-                      },
-                      { label: "Helper", value: 4, isDisabled: false },
-                      { label: "Admin", value: 5, isDisabled: true },
-                    ]);
-                  } else if (
+                 if (
                     email.length > 13 &&
                     email.substring(email.length - 14) === "northsouth.edu"
                   ) {
@@ -395,7 +349,7 @@ function Register() {
                         value: 3,
                         isDisabled: true,
                       },
-                      { label: "Helper", value: 4, isDisabled: true },
+                      { label: "Helper", value: 4, isDisabled: false },
                       { label: "Admin", value: 5, isDisabled: true },
                     ]);
                   }
@@ -441,7 +395,7 @@ function Register() {
                 placeholder="Password"
               ></input>
               <span class={"text-danger d-" + passwordErrorClass}>
-                Password can't be less than 6 characters
+                Password can't be less than 6 characters or more than 30 characters
               </span>
             </div>
             <div
