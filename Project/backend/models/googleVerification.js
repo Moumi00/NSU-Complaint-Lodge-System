@@ -1,5 +1,5 @@
 module.exports = (sequelize, DataTypes) => {
-    const GoogleVerified = sequelize.define("GoogleVerified", {
+    const GoogleVerification = sequelize.define("GoogleVerification", {
       googleID: {
         type: DataTypes.STRING,
         primaryKey: true,
@@ -10,14 +10,14 @@ module.exports = (sequelize, DataTypes) => {
       },
     });
   
-    GoogleVerified.associate = (models) => {
-      GoogleVerified.belongsTo(models.Users, {
+    GoogleVerification.associate = (models) => {
+      GoogleVerification.belongsTo(models.Users, {
         foreignKey: {
           name: "UserUNID",
         },
       });
     }; 
    
-    return GoogleVerified;
+    return GoogleVerification;
   };
   

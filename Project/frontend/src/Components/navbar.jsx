@@ -1,5 +1,6 @@
 import { faBars } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import axios from "axios";
 import React, { useState } from "react";
 import { useEffect } from "react";
 
@@ -10,8 +11,19 @@ function Navbar() {
 
   useEffect(() => {
     async function fetchData() {
-      if(token) {
-        setDashboard("block");
+      if (token) {
+        let response = await axios.post(
+          "http://localhost:8000/auth/verify-unid",
+          {
+            UNID: token,
+          }
+        );
+        if (response.data.error) {
+          localStorage.clear();
+          setRegister("block");
+        } else {
+          setDashboard("block");
+        }
       } else {
         setRegister("block");
       }
@@ -47,22 +59,43 @@ function Navbar() {
           <div class="collapse navbar-collapse" id="navbarSupportedContent">
             <ul className="navbar-nav ms-auto">
               <li className="nav-item">
-                <a className="btn btn-lg btn-outline-success my-2 ms-4 ms-lg-0 me-5" href="/lodge-complaint">
+                <a
+                  className="btn btn-lg btn-outline-success my-2 ms-4 ms-lg-0 me-5"
+                  href="/lodge-complaint"
+                >
                   Lodge Complaint
                 </a>
               </li>
               <li className="nav-item me-2">
-                <a className={"btn btn-lg btn-outline-success my-2 ms-4 me-2 d-" + register} href="/register">
+                <a
+                  className={
+                    "btn btn-lg btn-outline-success my-2 ms-4 me-2 d-" +
+                    register
+                  }
+                  href="/register"
+                >
                   Register
                 </a>
               </li>
               <li>
-                <a className={"btn btn-lg btn-outline-success my-2 ms-4 ms-lg-0 me-5 d-" + register} href="/login">
+                <a
+                  className={
+                    "btn btn-lg btn-outline-success my-2 ms-4 ms-lg-0 me-5 d-" +
+                    register
+                  }
+                  href="/login"
+                >
                   Login
                 </a>
               </li>
               <li className="nav-item me-2">
-                <a className={"btn btn-lg btn-outline-success my-2 ms-4 ms-lg-0 me-5 d-" + dashboard} href="/dashboard">
+                <a
+                  className={
+                    "btn btn-lg btn-outline-success my-2 ms-4 ms-lg-0 me-5 d-" +
+                    dashboard
+                  }
+                  href="/dashboard"
+                >
                   Dashboard
                 </a>
               </li>

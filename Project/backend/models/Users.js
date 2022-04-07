@@ -12,6 +12,9 @@ module.exports = (sequelize, DataTypes) => {
     actorType: {
       type: DataTypes.ENUM("Reviewer", "Non-Reviewer"),
     },
+    accountType: {
+      type: DataTypes.ENUM("Google", "Default"),
+    },
     nsuIdPhoto: DataTypes.STRING,
     isVerified: {
       type: DataTypes.BOOLEAN,

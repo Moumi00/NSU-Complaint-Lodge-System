@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { GoogleLogin } from "react-google-login";
 
@@ -12,21 +12,42 @@ function Login() {
   const clientId =
     "992655217366-qiu0iegl7kmotoovl1630k6283o0jsuk.apps.googleusercontent.com";
 
+  useEffect(() => {
+    async function fetchData() {
+      if (token) {
+        let response = await axios.post(
+          "http://localhost:8000/auth/verify-unid",
+          {
+            UNID: token,
+          }
+        );
+        if (response.data.error) {
+          localStorage.clear();
+          window.location.replace("http://localhost:3000");
+        }
+      }
+    }
+    fetchData();
+  }, []);
   if (token) {
     window.location.replace("http://localhost:3000");
   }
 
   const validateEmail = () => {
-    return String(email)
-      .toLowerCase()
-      .match(
-        /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
-      );
+    return (
+      String(email)
+        .toLowerCase()
+        .match(
+          /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
+        ) && email.length <= 320
+    );
   };
 
   async function handleLoginButtonClicked(e) {
     e.preventDefault();
 
+    console.log(password);
+    console.log(password.length);
     if (!validateEmail()) {
       setEmailErrorClass("block");
       return;
@@ -50,7 +71,7 @@ function Login() {
   async function onLoginSuccess(res) {
     console.log("Login Success:", res.profileObj);
     let response = await axios.post("http://localhost:8000/auth/login/google", {
-      googleID: res.getAuthResponse().id_token
+      googleID: res.getAuthResponse().id_token,
     });
     console.log(response);
     if (response.data.error) {
@@ -62,7 +83,7 @@ function Login() {
       localStorage.setItem("userUNID", response.data.data.UserUNID);
       window.location.replace("http://localhost:3000");
     }
-  };
+  }
 
   const onLoginFailure = (res) => {
     console.log("Login Failed:", res);
@@ -89,7 +110,7 @@ function Login() {
                 }}
               ></input>
               <span class={"text-danger d-" + emailErrorClass}>
-                Enter a valid Email.
+                Enter a valid Email
               </span>
             </div>
             <div class="form-group mb-4">

@@ -1,5 +1,5 @@
 import axios from "axios";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Select from "react-select";
 import { Modal } from "bootstrap";
 import { GoogleLogin } from "react-google-login";
@@ -43,17 +43,37 @@ function Register() {
     "992655217366-qiu0iegl7kmotoovl1630k6283o0jsuk.apps.googleusercontent.com";
 
   const validateEmail = () => {
-    return String(email)
-      .toLowerCase()
-      .match(
-        /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
-      ) && email.length <= 320;
-  } ;
+    return (
+      String(email)
+        .toLowerCase()
+        .match(
+          /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
+        ) && email.length <= 320
+    );
+  };
+
+  useEffect(() => {
+    async function fetchData() {
+      if (token) {
+        let response = await axios.post(
+          "http://localhost:8000/auth/verify-unid",
+          {
+            UNID: token,
+          }
+        );
+        if (response.data.error) {
+          localStorage.clear();
+          window.location.replace("http://localhost:3000");
+        }
+      }
+    }
+    fetchData();
+  }, []);
 
   async function handleSubmit(e) {
     e.preventDefault(); //stops the page from reloading
 
-    console.log(fullName);
+    console.log(designation);
 
     if (fullName.length < 3 || fullName.length > 30) {
       setNameErrorClass("block");
@@ -91,7 +111,7 @@ function Register() {
       console.log("shalalala");
       return setIdPhotoErrorClass("block");
     }
-    
+
     if (!googleDisabled) {
       const formData = new FormData();
       formData.append("fullName", fullName);
@@ -291,7 +311,8 @@ function Register() {
                 placeholder="Full Name"
               ></input>
               <span class={"text-danger d-" + nameErrorClass}>
-                Full Name can't be less than 3 characters or more than 30 characters
+                Full Name can't be less than 3 characters or more than 30
+                characters
               </span>
             </div>
             <div class="form-group mb-4">
@@ -325,7 +346,7 @@ function Register() {
                   setDesignation("");
                 }}
                 onBlur={(e) => {
-                 if (
+                  if (
                     email.length > 13 &&
                     email.substring(email.length - 14) === "northsouth.edu"
                   ) {
@@ -340,7 +361,7 @@ function Register() {
                       { label: "Helper", value: 4, isDisabled: true },
                       { label: "Admin", value: 5, isDisabled: false },
                     ]);
-                  } else {
+                  } else if (validateEmail(email)) {
                     setDesignations([
                       { label: "Faculty", value: 1, isDisabled: true },
                       { label: "Student", value: 2, isDisabled: true },
@@ -367,9 +388,10 @@ function Register() {
               <div className="col-12">
                 <Select
                   options={Designations}
-                  value={designation ? { label: designation } : null}
+                  value={designation ? { label: designation } : ""}
                   placeholder={<div style={{ color: "grey" }}>Designation</div>}
                   onChange={(e) => {
+                    console.log(e);
                     setDesignation(e.label);
                     setDesignationErrorClass("none");
                   }}
@@ -395,7 +417,8 @@ function Register() {
                 placeholder="Password"
               ></input>
               <span class={"text-danger d-" + passwordErrorClass}>
-                Password can't be less than 6 characters or more than 30 characters
+                Password can't be less than 6 characters or more than 30
+                characters
               </span>
             </div>
             <div
