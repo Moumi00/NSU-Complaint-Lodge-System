@@ -11,7 +11,7 @@ function ResetPassword() {
 
   useEffect(() => {
     async function fetchData() {
-      let response = await axios.post("http://localhost:8000/auth/verify-unid", {
+      let response = await axios.post("http://localhost:8000/auth/verify-default-user", {
         UNID: id,
       });
       console.log(response);

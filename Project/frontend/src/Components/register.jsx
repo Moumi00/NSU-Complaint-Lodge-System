@@ -3,8 +3,11 @@ import React, { useState, useEffect } from "react";
 import Select from "react-select";
 import { Modal } from "bootstrap";
 import { GoogleLogin } from "react-google-login";
+import { useNavigate } from "react-router-dom";
 
 function Register() {
+  let navigate = useNavigate();
+
   const [fullName, setFullName] = useState("");
   const [nsuId, setNsuId] = useState("");
   const [email, setEmail] = useState("");
@@ -19,9 +22,9 @@ function Register() {
   const [confirmPassErrorClass, setConfirmPassErrorClass] = useState("none");
   const [error, setError] = useState("");
   const [errorClass, setErrorClass] = useState("none");
-  const [googleDisabled, setGoogleDisabled] = useState(false);
-  const [isNsuSignUp, setIsNsuSignUp] = useState(false);
-  const [googleID, setGoogleID] = useState("");
+  const [selectedFiles, setSelectedFiles] = useState({});
+  const [isFilePicked, setIsFilePicked] = useState(false);
+  const [idPhotoErrorClass, setIdPhotoErrorClass] = useState("none");
   const [Designations, setDesignations] = useState([
     { label: "Faculty", value: 1, isDisabled: true },
     { label: "Student", value: 2, isDisabled: true },
@@ -34,9 +37,6 @@ function Register() {
     { label: "Admin", value: 5, isDisabled: true },
   ]);
 
-  const [selectedFiles, setSelectedFiles] = useState({});
-  const [isFilePicked, setIsFilePicked] = useState(false);
-  const [idPhotoErrorClass, setIdPhotoErrorClass] = useState("none");
 
   const token = localStorage.getItem("userUNID");
   const clientId =
@@ -96,75 +96,43 @@ function Register() {
       return;
     }
 
-    if ((password.length < 6 || password.length > 30) && !googleDisabled) {
+    if ((password.length < 6 || password.length > 30)) {
       setPasswordErrorClass("block");
       return;
     }
 
-    if (confirmPassword != password && !googleDisabled) {
+    if (confirmPassword != password) {
       setConfirmPassErrorClass("block");
       return;
     }
 
     console.log(selectedFiles);
     if (!isFilePicked) {
-      console.log("shalalala");
       return setIdPhotoErrorClass("block");
     }
 
-    if (!googleDisabled) {
-      const formData = new FormData();
-      formData.append("fullName", fullName);
-      formData.append("nsuId", nsuId);
-      formData.append("email", email);
-      formData.append("password", password);
-      formData.append("userType", designation);
-      formData.append("file", selectedFiles);
+    const formData = new FormData();
+    formData.append("fullName", fullName);
+    formData.append("nsuId", nsuId);
+    formData.append("email", email);
+    formData.append("password", password);
+    formData.append("userType", designation);
+    formData.append("file", selectedFiles);
 
-      let response = await axios.post(
-        "http://localhost:8000/auth/register",
-        formData,
-        {
-          headers: { "Content-Type": "multipart/form-data" },
-        }
-      );
-      if (response.data.error) {
-        setErrorClass("block");
-        setError(response.data.error);
-        return;
-      } else {
-        let myModal = new Modal(document.getElementById("exampleModal"));
-        myModal.show();
+    let response = await axios.post(
+      "http://localhost:8000/auth/register",
+      formData,
+      {
+        headers: { "Content-Type": "multipart/form-data" },
       }
+    );
+    if (response.data.error) {
+      setErrorClass("block");
+      setError(response.data.error);
+      return;
     } else {
-      const formData = new FormData();
-      formData.append("fullName", fullName);
-      formData.append("nsuId", nsuId);
-      formData.append("email", email);
-      formData.append("googleID", googleID);
-      formData.append("userType", designation);
-      formData.append("file", selectedFiles);
-
-      for (var pair of formData.entries()) {
-        console.log(pair[0] + " - " + pair[1]);
-      }
-
-      let response = await axios.post(
-        "http://localhost:8000/auth/register/google",
-        formData,
-        {
-          headers: { "Content-Type": "multipart/form-data" },
-        }
-      );
-      if (response.data.error) {
-        setErrorClass("block");
-        setError(response.data.error);
-        return;
-      } else {
-        console.log(response);
-        let myModal = new Modal(document.getElementById("exampleModal"));
-        myModal.show();
-      }
+      let myModal = new Modal(document.getElementById("exampleModal"));
+      myModal.show();
     }
   }
 
@@ -190,98 +158,24 @@ function Register() {
     window.location.replace("http://localhost:3000");
   }
 
-  const onLoginSuccess = (res) => {
-    setGoogleDisabled(true);
-    setNameErrorClass("none");
-    setNsuIdErrorClass("none");
-    setEmailErrorClass("none");
-    setPasswordErrorClass("none");
-    setConfirmPassErrorClass("none");
-    setIsFilePicked(false);
-    setSelectedFiles({});
-    if (res.profileObj.email.includes("northsouth.edu")) {
-      setIsNsuSignUp(true);
-      setFullName(res.profileObj.givenName);
-      setNsuId(res.profileObj.familyName);
-      setEmail(res.profileObj.email);
-      setGoogleID(res.getAuthResponse().id_token);
-      setDesignation("");
-      if (
-        res.profileObj.email.length > 13 &&
-        res.profileObj.email.substring(res.profileObj.email.length - 14) ===
-          "northsouth.edu"
-      ) {
-        setDesignations([
-          { label: "Faculty", value: 1, isDisabled: false },
-          { label: "Student", value: 2, isDisabled: false },
-          {
-            label: "RA / TA / Lab Instructor",
-            value: 3,
-            isDisabled: false,
-          },
-          { label: "Helper", value: 4, isDisabled: true },
-          { label: "Admin", value: 5, isDisabled: false },
-        ]);
-      } else {
-        setDesignations([
-          { label: "Faculty", value: 1, isDisabled: true },
-          { label: "Student", value: 2, isDisabled: true },
-          {
-            label: "RA / TA / Lab Instructor",
-            value: 3,
-            isDisabled: true,
-          },
-          { label: "Helper", value: 4, isDisabled: false },
-          { label: "Admin", value: 5, isDisabled: true },
-        ]);
+  async function onLoginSuccess(res) {
+    // console.log("Login Success:", res.profileObj);
+    let response = await axios.post(
+      "http://localhost:8000/auth/google-accounts",
+      {
+        googleID: res.getAuthResponse().id_token,
       }
+    );
+    if (response.data.data) {
+      localStorage.setItem("userUNID", response.data.data.UserUNID);
+      window.location.replace("http://localhost:3000");
     } else {
-      setIsNsuSignUp(false);
-      setNsuId("");
-      setFullName(res.profileObj.name);
-      setEmail(res.profileObj.email);
-      setGoogleID(res.getAuthResponse().id_token);
-      setDesignation("Helper");
-      if (
-        res.profileObj.email.length > 13 &&
-        res.profileObj.email.substring(res.profileObj.email.length - 14) ===
-          "northsouth.edu"
-      ) {
-        setDesignations([
-          { label: "Faculty", value: 1, isDisabled: false },
-          { label: "Student", value: 2, isDisabled: false },
-          {
-            label: "RA / TA / Lab Instructor",
-            value: 3,
-            isDisabled: false,
-          },
-          { label: "Helper", value: 4, isDisabled: true },
-          { label: "Admin", value: 5, isDisabled: false },
-        ]);
-      } else {
-        setDesignations([
-          { label: "Faculty", value: 1, isDisabled: true },
-          { label: "Student", value: 2, isDisabled: true },
-          {
-            label: "RA / TA / Lab Instructor",
-            value: 3,
-            isDisabled: true,
-          },
-          { label: "Helper", value: 4, isDisabled: false },
-          { label: "Admin", value: 5, isDisabled: true },
-        ]);
-      }
+      res.profileObj.googleID = res.getAuthResponse().id_token;
+      // console.log(res.getAuthResponse().id_token);
+      console.log(res.profileObj);
+      navigate("/google-registration", { state: res.profileObj });
     }
-    var profile = res.getBasicProfile();
-    console.log("ID: " + profile.getId());
-    console.log("Full Name: " + profile.getName());
-    console.log("Given Name: " + profile.getGivenName());
-    console.log("Family Name: " + profile.getFamilyName());
-    console.log("Image URL: " + profile.getImageUrl());
-    console.log("Email: " + profile.getEmail());
-
-    console.log("Login Success:", res.profileObj);
-  };
+  }
 
   const onLoginFailure = (res) => {
     console.log("Login Failed:", res);
@@ -297,8 +191,6 @@ function Register() {
           <form onSubmit={handleSubmit} encType="multipart/form-data">
             <div class="form-group mb-4">
               <input
-                disabled={googleDisabled}
-                value={fullName}
                 onInput={(e) => {
                   setFullName(e.target.value);
                 }}
@@ -317,8 +209,6 @@ function Register() {
             </div>
             <div class="form-group mb-4">
               <input
-                disabled={isNsuSignUp}
-                value={nsuId}
                 onInput={(e) => {
                   setNsuId(e.target.value);
                 }}
@@ -336,8 +226,6 @@ function Register() {
             </div>
             <div class="form-group mb-4">
               <input
-                disabled={googleDisabled}
-                value={email}
                 onInput={(e) => {
                   setEmail(e.target.value);
                 }}
@@ -401,9 +289,7 @@ function Register() {
                 Please select your designation
               </span>
             </div>
-            <div
-              class={"form-group mb-4 d-" + (googleDisabled ? "none" : "block")}
-            >
+            <div class="form-group mb-4 d-flex">
               <input
                 onInput={(e) => {
                   setPassword(e.target.value);
@@ -421,9 +307,7 @@ function Register() {
                 characters
               </span>
             </div>
-            <div
-              class={"form-group mb-4 d-" + (googleDisabled ? "none" : "block")}
-            >
+            <div class="form-group mb-4 d-flex">
               <input
                 onInput={(e) => {
                   setConfirmPassword(e.target.value);
@@ -515,11 +399,7 @@ function Register() {
                     aria-label="Close"
                   ></button>
                 </div>
-                <div class="modal-body">
-                  {googleDisabled
-                    ? "Click Ok to login"
-                    : "Please verify your email."}
-                </div>
+                <div class="modal-body">Please verify your email.</div>
                 <div class="modal-footer">
                   <a className="btn btn-primary" href="/login">
                     Ok

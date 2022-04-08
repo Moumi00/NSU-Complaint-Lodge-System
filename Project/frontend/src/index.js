@@ -13,6 +13,7 @@ import ForgetPassword from './Components/forgetPassword';
 import ResetPassword from './Components/resetPassword';
 import LodgeComplaint from './Components/lodgeComplain';
 import Dashboard from './Components/dashboard';
+import GoogleRegistration from './Components/googleRegistration';
 
 ReactDOM.render(
   <React.StrictMode>
@@ -26,6 +27,7 @@ ReactDOM.render(
       <Route path='/reset-password/:id' element={<ResetPassword />} />
       <Route path='/lodge-complaint' element={<LodgeComplaint />} />
       <Route path='/dashboard' element={<Dashboard />} />
+      <Route path='/google-registration' element={<GoogleRegistration/>} />
     </Routes>
     <Footer/>
     </BrowserRouter>

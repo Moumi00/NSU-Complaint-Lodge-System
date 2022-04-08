@@ -31,36 +31,38 @@ router.get("/hudaai", async (req, res) => {
   res.json(Users.getAttributes().actorType.values[1]);
 });
 
-router.post("/login/google", async (req, res) => {
-  let googleID;
-  async function verify() {
+router.post("/google-accounts", async (req, res) => {
+  try {
+    let googleID;
     const ticket = await client.verifyIdToken({
       idToken: req.body.googleID,
       audience: CLIENT_ID,
     });
-    const payload = ticket.getPayload();
+    payload = ticket.getPayload();
+    console.log(payload);
     googleID = payload.sub;
-  }
-  verify()
-    .then(async () => {
-      const result = await GoogleVerified.findOne({
-        where: {
-          googleID: googleID,
-        },
+    const result = await GoogleVerification.findOne({
+      where: {
+        googleID: googleID,
+      },
+    });
+    if (result == null) {
+      return res.json({
+        data: "",
+        error: "Account Not Registered using Google Signup",
       });
-      if (result) {
-        return res.json({
-          data: result,
-          error: "",
-        });
-      } else {
-        return res.json({
-          data: "",
-          error: "Account Not Registered using Google Signup",
-        });
-      }
-    })
-    .catch(console.error);
+    } else {
+      return res.json({
+        data: result,
+        error: "",
+      });
+    }
+  } catch (error) {
+    return res.json({
+      data: "",
+      error: error,
+    });
+  }
 });
 
 router.post("/register/google", async (req, res) => {
@@ -71,6 +73,7 @@ router.post("/register/google", async (req, res) => {
       audience: CLIENT_ID,
     });
     payload = ticket.getPayload();
+    console.log(payload);
     googleID = payload.sub;
     const result = await Users.findOne({
       where: {
@@ -98,6 +101,7 @@ router.post("/register/google", async (req, res) => {
           });
         }
       });
+      console.log(Users.getAttributes().accountType.values[0]);
       const UNID = uuid.v4();
       const user = await Users.create({
         userUNID: UNID,
@@ -105,6 +109,7 @@ router.post("/register/google", async (req, res) => {
         nsuId: req.body.nsuId,
         email: req.body.email,
         actorType: actorType,
+        accountType: Users.getAttributes().accountType.values[0],
         userType: req.body.userType,
         isVerified: true,
         nsuIdPhoto: req.body.nsuId + "." + file.name.split(".").pop(),
@@ -126,78 +131,10 @@ router.post("/register/google", async (req, res) => {
   } catch (error) {
     res.json({
       data: "",
-      error: error,
+      error: "error",
     });
   }
 });
-
-router.post("/google-registration", async (req, res) => {
-  try {
-    let googleID;
-    const ticket = await client.verifyIdToken({
-      idToken: req.body.googleID,
-      audience: CLIENT_ID,
-    });
-    payload = ticket.getPayload();
-    googleID = payload.sub;
-    const result = await Users.findOne({
-      where: {
-        email: req.body.email,
-      },
-    });
-    if (result === null) {
-      let actorType;
-      if (req.body.userType == "Faculty" || req.body.userType == "Admin") {
-        actorType = Users.getAttributes().actorType.values[0];
-      } else {
-        actorType = Users.getAttributes().actorType.values[1];
-      }
-      let uploadPath;
-      const file = req.files.file;
-      uploadPath = path.join(__dirname, "..");
-      uploadPath +=
-        "/uploads/NSU IDs/" + req.body.nsuId + "." + file.name.split(".").pop();
-      console.log("Upload path:" + uploadPath);
-      file.mv(uploadPath, function (err) {
-        if (err) {
-          return res.json({
-            data: "",
-            error: "File Upload Error",
-          });
-        }
-      });
-      const UNID = uuid.v4();
-      const user = await Users.create({
-        userUNID: UNID,
-        fullName: req.body.fullName,
-        nsuId: req.body.nsuId,
-        email: req.body.email,
-        actorType: actorType,
-        userType: req.body.userType,
-        isVerified: true,
-        nsuIdPhoto: req.body.nsuId + "." + file.name.split(".").pop(),
-      });
-      res.json({
-        data: user,
-        error: "",
-      });
-      await GoogleVerification.create({
-        googleID: googleID,
-        UserUNID: UNID,
-      });
-    } else {
-      res.json({
-        data: "",
-        error: "Email Already Registered",
-      });
-    }
-  } catch (error) {
-    res.json({
-      data: "",
-      error: error,
-    });
-  }
-})
 
 router.post("/register", async (req, res) => {
   const result = await Users.findOne({
@@ -255,6 +192,7 @@ router.post("/register", async (req, res) => {
       nsuId: req.body.nsuId,
       email: req.body.email,
       actorType: actorType,
+      accountType: Users.getAttributes().accountType.values[1],
       password: password,
       userType: req.body.userType,
       nsuIdPhoto: req.body.nsuId + "." + file.name.split(".").pop(), //Just the name of the file which is there in our backend server
@@ -412,7 +350,27 @@ router.post("/verify-unid", async (req, res) => {
   });
   if (result == null) {
     return res.json({
-      data: "", 
+      data: "",
+      error: "Access denied.",
+    });
+  } else {
+    return res.json({
+      data: "Accessible",
+      error: "",
+    });
+  }
+});
+
+router.post("/verify-default-user", async (req, res) => {
+  const result = await Users.findOne({
+    where: {
+      userUNID: req.body.UNID,
+      accountType: Users.getAttributes().accountType.values[1],
+    },
+  });
+  if (result == null) {
+    return res.json({
+      data: "",
       error: "Access denied.",
     });
   } else {

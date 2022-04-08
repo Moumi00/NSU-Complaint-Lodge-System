@@ -30,24 +30,24 @@ function LodgeComplaint() {
 
   useEffect(() => {
     async function fetchData() {
-      let response = await axios.get("http://localhost:8000/home/users");
-      //console.log(response);
-      let temp = response.data.data.map((data) => ({
-        label: data.fullName,
-        value: data.userUNID,
-        isDisabled: token == data.userUNID ? true : false,
-      }));
-      console.log(temp);
-      setComplainAgainstOptions(temp);
-      response = await axios.get("http://localhost:8000/home/reviewers");
-      console.log(response.data.data);
-      let temp1 = response.data.data.map((data) => ({
-        label: data.fullName,
-        value: data.userUNID,
-        isDisabled: true,
-      }));
-      console.log(temp1);
-      setReviewerOptions(temp1);
+      // let response = await axios.get("http://localhost:8000/home/users");
+      // //console.log(response);
+      // let temp = response.data.data.map((data) => ({
+      //   label: data.fullName,
+      //   value: data.userUNID,
+      //   isDisabled: token == data.userUNID ? true : false,
+      // }));
+      // console.log(temp);
+      // setComplainAgainstOptions(temp);
+      // response = await axios.get("http://localhost:8000/home/reviewers");
+      // console.log(response.data.data);
+      // let temp1 = response.data.data.map((data) => ({
+      //   label: data.fullName,
+      //   value: data.userUNID,
+      //   isDisabled: true,
+      // }));
+      // console.log(temp1);
+      // setReviewerOptions(temp1);
     }
     fetchData();
   }, []);
@@ -201,9 +201,6 @@ function LodgeComplaint() {
               <div className="col-12">
                 <Select
                   options={complainAgainstOptions}
-                  // value={complainAgainst}
-                  //getOptionLabel={(option) => option.fullName}
-                  //getOptionValue={(option) => option.fullName}
                   placeholder={
                     <div style={{ color: "grey" }}>Complain Against</div>
                   }
@@ -331,10 +328,10 @@ function LodgeComplaint() {
                     aria-label="Close"
                   ></button>
                 </div>
-                <div class="modal-body">Click Ok to continue</div>
+                <div class="modal-body">Click OK to continue</div>
                 <div class="modal-footer">
                   <a className="btn btn-primary" href="/">
-                    Ok
+                    OK
                   </a>
                 </div>
               </div>

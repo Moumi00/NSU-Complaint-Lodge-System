@@ -1,8 +1,12 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { GoogleLogin } from "react-google-login";
+import { useNavigate } from "react-router-dom";
 
 function Login() {
+  let navigate = useNavigate();
+
+
   const [email, setEmail] = useState("");
   const [emailErrorClass, setEmailErrorClass] = useState("none");
   const [password, setPassword] = useState("");
@@ -29,6 +33,7 @@ function Login() {
     }
     fetchData();
   }, []);
+
   if (token) {
     window.location.replace("http://localhost:3000");
   }
@@ -69,19 +74,17 @@ function Login() {
   }
 
   async function onLoginSuccess(res) {
-    console.log("Login Success:", res.profileObj);
-    let response = await axios.post("http://localhost:8000/auth/login/google", {
+    // console.log("Login Success:", res.profileObj);
+    let response = await axios.post("http://localhost:8000/auth/google-accounts", {
       googleID: res.getAuthResponse().id_token,
     });
     console.log(response);
-    if (response.data.error) {
-      setErrorClass("block");
-      setError(response.data.error);
-      return;
-    } else {
-      console.log(response);
+    if (response.data.data){
       localStorage.setItem("userUNID", response.data.data.UserUNID);
       window.location.replace("http://localhost:3000");
+    } else {
+      res.profileObj.googleID = res.getAuthResponse().id_token;
+      navigate('/google-registration', {state: res.profileObj } )
     }
   }
 
