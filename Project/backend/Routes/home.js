@@ -10,6 +10,7 @@ const {
 const router = express.Router();
 const path = require("path");
 const uuid = require("uuid");
+const {Op} = require("sequelize");
 
 router.get("/users", async (req, res) => {
   const result = await Users.findAll({
@@ -20,6 +21,30 @@ router.get("/users", async (req, res) => {
     error: "",
   });
 });
+
+router.get("/complain-against", async (req, res) => {
+  const result = await Users.findAll({
+    attributes: ["fullName", "userUNID"],
+    where: {
+      [Op.and]: [{
+        fullName: {
+          [Op.substring]: req.body.query
+          }
+      },
+      {
+        userUNID: {
+          [Op.notLike]: req.body.userUNID
+        }
+      }
+    ]
+    },
+    limit: 10
+  })
+  return res.json({
+    data: result,
+    error: "",
+  });
+})
 
 router.post("/lodge-complaint", async (req, res) => {
   const complainUNID = uuid.v4();

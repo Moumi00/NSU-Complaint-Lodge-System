@@ -86,12 +86,12 @@ function LodgeComplaint() {
     let temp1 = reviewerOptions;
 
     console.log(temp);
-    temp1.map((data) =>
-      (temp.some((e) => e == data.value)) || (data.value == token)
-        ? (data.isDisabled = true)
-        : (data.isDisabled = false)
+    temp1.map(
+      (data) =>
+        temp.some((e) => e == data.value) || data.value == token
+          ? (data.isDisabled = true)
+          : (data.isDisabled = false)
       //console.log(data.value)
-    
     );
     console.log(temp1);
     setReviewerOptions(temp1);
@@ -213,7 +213,21 @@ function LodgeComplaint() {
                   onBlur={(e) => {
                     setOpenCompAgainstMenu(false);
                   }}
-                  onInputChange={(e, { action }) => {
+                  onInputChange={async (e, { action }) => {
+                    let response = await axios.get(
+                      "http://localhost:8000/home/complain-against",
+                      {
+                        query: e,
+                        userUNID: token,
+                      }
+                    );
+                    let temp = response.data.data.map((data) => ({
+                      label: data.fullName,
+                      value: data.userUNID,
+                    }));
+                    setComplainAgainstOptions(temp);
+                    console.log(e);
+                    console.log(response);
                     if (e.length === 0) {
                       setOpenCompAgainstMenu(false);
                       return;
