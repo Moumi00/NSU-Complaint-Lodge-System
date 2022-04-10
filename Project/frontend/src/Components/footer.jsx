@@ -19,7 +19,7 @@ function Footer() {
               style={{width:"300px",marginTop:"0px",marginLeft:"-10px", maxHeight:"50px"}}
             >
             </img>
-            <p>
+            <p class="text-white">
               Bashundhara, Dhaka-1229, Bangladesh
               <br />
               <FontAwesomeIcon icon={faPhone} /> +880-2-55668200
@@ -32,37 +32,37 @@ function Footer() {
           <div class="col-md-5 offset-lg-1">
             <div class="">
               <ul class="list-group list-group-horizontal mb-3">
-                <li class="border border-2 rounded border-dark me-2">
+                <li class="border border-2 rounded border-light me-2">
                   <a
                     href="https://www.facebook.com/NorthSouthUniversity"
-                    class="btn btn-default social-icon"
+                    class="btn btn-default text-white social-icon"
                     target="_blank"
                   >
                     <FontAwesomeIcon icon={faFacebook} />
                   </a>
                 </li>
-                <li class="border border-2 rounded border-dark me-2">
+                <li class="border border-2 rounded border-light me-2">
                   <a
                     href="https://twitter.com/NorthSouthU"
-                    class="btn btn-default social-icon"
+                    class="btn btn-default text-white social-icon"
                     target="_blank"
                   >
                     <FontAwesomeIcon icon={faTwitter} />
                   </a>
                 </li>
-                <li class="border border-2 rounded border-dark me-2">
+                <li class="border border-2 rounded border-light me-2">
                   <a
                     href="https://www.instagram.com/NorthSouthUniversity/"
-                    class="btn btn-default social-icon"
+                    class="btn btn-default text-white social-icon"
                     target="_blank"
                   >
                     <FontAwesomeIcon icon={faInstagram} />
                   </a>
                 </li>
-                <li class="border border-2 rounded border-dark">
+                <li class="border border-2 rounded border-light">
                   <a
                     href="https://www.youtube.com/NorthSouthUniversity"
-                    class="btn btn-default social-icon"
+                    class="btn btn-default text-white social-icon"
                     target="_blank"
                   >
                     <FontAwesomeIcon icon={faYoutube} />
@@ -71,7 +71,7 @@ function Footer() {
               </ul>
               <div class="clearfix"></div>
             </div>
-            <div>
+            <div class="text-white">
               Developed & Maintained by IT Office, NSU
               <br /> &copy; 1993-2021 North South University. All rights
               reserved.

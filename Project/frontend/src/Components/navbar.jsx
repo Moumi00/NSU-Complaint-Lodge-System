@@ -60,7 +60,7 @@ function Navbar() {
             <ul className="navbar-nav ms-auto">
               <li className="nav-item">
                 <a
-                  className="btn btn-lg btn-outline-success my-2 ms-4 ms-lg-0 me-5"
+                  className="btn btn-lg navbar-button-color my-2 ms-4 ms-lg-0 me-5"
                   href="/lodge-complaint"
                 >
                   Lodge Complaint
@@ -69,7 +69,7 @@ function Navbar() {
               <li className="nav-item me-2">
                 <a
                   className={
-                    "btn btn-lg btn-outline-success my-2 ms-4 me-2 d-" +
+                    "btn btn-lg navbar-button-color my-2 ms-4 me-2 d-" +
                     register
                   }
                   href="/register"
@@ -80,7 +80,7 @@ function Navbar() {
               <li>
                 <a
                   className={
-                    "btn btn-lg btn-outline-success my-2 ms-4 ms-lg-0 me-5 d-" +
+                    "btn btn-lg navbar-button-color my-2 ms-4 ms-lg-0 me-5 d-" +
                     register
                   }
                   href="/login"
@@ -91,7 +91,7 @@ function Navbar() {
               <li className="nav-item me-2">
                 <a
                   className={
-                    "btn btn-lg btn-outline-success my-2 ms-4 ms-lg-0 me-5 d-" +
+                    "btn btn-lg navbar-button-color my-2 ms-4 ms-lg-0 me-5 d-" +
                     dashboard
                   }
                   href="/dashboard"

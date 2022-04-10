@@ -373,6 +373,7 @@ function Register() {
               onSuccess={onLoginSuccess}
               onFailure={onLoginFailure}
               cookiePolicy={"single_host_origin"}
+              className="border border-2 border-dark rounded-2"
             />
           </div>
 
