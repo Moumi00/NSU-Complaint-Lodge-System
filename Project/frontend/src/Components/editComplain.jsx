@@ -2,9 +2,8 @@ import React, { useState, useEffect } from "react";
 import Select from "react-select";
 import { Modal } from "bootstrap";
 import axios from "axios";
-import AsyncSelect from 'react-select/async';
 
-function LodgeComplaint() {
+function EditComplaint() {
   const [complainAgainstOptions, setComplainAgainstOptions] = useState([]);
   const [selectedFiles, setSelectedFiles] = useState([]);
   const [isFilePicked, setIsFilePicked] = useState(false);
@@ -104,15 +103,6 @@ function LodgeComplaint() {
     setReviewer(e.value);
   };
 
-  const fetchData = () => {
-    setTimeout(() => {
-      let response = axios.get("http://localhost:8000/home/complain-against", {
-        query: query,
-        userUNID: token
-      })
-    })
-  }
-
   async function handleLodgeComplaintButtonClicked(e) {
     e.preventDefault();
     if (!complainTitle) {
@@ -209,9 +199,8 @@ function LodgeComplaint() {
             </div>
             <div className="form-group d-flex flex-column mb-4">
               <div className="col-12">
-                <AsyncSelect
+                <Select
                   options={complainAgainstOptions}
-                  loadOptions={fetchData}
                   placeholder={
                     <div style={{ color: "grey" }}>Complain Against</div>
                   }
@@ -368,4 +357,4 @@ function LodgeComplaint() {
   );
 }
 
-export default LodgeComplaint;
+export default EditComplaint;
