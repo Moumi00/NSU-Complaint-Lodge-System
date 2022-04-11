@@ -2,9 +2,10 @@ import React, { useState, useEffect } from "react";
 import Select from "react-select";
 import { Modal } from "bootstrap";
 import axios from "axios";
-import AsyncSelect from 'react-select/async';
+import AsyncSelect from "react-select/async";
 
 function LodgeComplaint() {
+  const [query, setQuery] = useState("");
   const [complainAgainstOptions, setComplainAgainstOptions] = useState([]);
   const [selectedFiles, setSelectedFiles] = useState([]);
   const [isFilePicked, setIsFilePicked] = useState(false);
@@ -31,6 +32,14 @@ function LodgeComplaint() {
 
   useEffect(() => {
     async function fetchData() {
+      // let response = await axios.post(
+      //   "http://localhost:8000/home/complain-against",
+      //   {
+      //     query: "omar",
+      //     userUNID: "b1b04005-be0e-4e0e-8997-ba81a8434a3b",
+      //   }
+      // );
+      // console.log(response);
       // let response = await axios.get("http://localhost:8000/home/users");
       // //console.log(response);
       // let temp = response.data.data.map((data) => ({
@@ -84,18 +93,7 @@ function LodgeComplaint() {
       temp.push(e[i].value);
     }
     setComplainAgainst(temp);
-    let temp1 = reviewerOptions;
 
-    console.log(temp);
-    temp1.map(
-      (data) =>
-        temp.some((e) => e == data.value) || data.value == token
-          ? (data.isDisabled = true)
-          : (data.isDisabled = false)
-      //console.log(data.value)
-    );
-    console.log(temp1);
-    setReviewerOptions(temp1);
   };
 
   const handleReviewerOnChange = (e) => {
@@ -104,17 +102,37 @@ function LodgeComplaint() {
     setReviewer(e.value);
   };
 
-  const fetchData = () => {
-    setTimeout(() => {
-      let response = axios.get("http://localhost:8000/home/complain-against", {
-        query: query,
-        userUNID: token
-      })
-    })
-  }
+  const fetchComplainAgainstData = async (input, callback) => {
+    let response = await axios.get(
+      "http://localhost:8000/home/complain-against",
+      {
+        params: {
+          query: input,
+          userUNID: token,
+        },
+      }
+    );
+    callback(response.data.data.map((i) => ({ label: i.fullName, value: i.userUNID, isDisabled: reviewer == i.userUNID ? true : false })));
+  };
+
+  const fetchReviewerData = async (input, callback) => {
+    let response = await axios.get(
+      "http://localhost:8000/home/reviewers",
+      {
+        params: {
+          query: input,
+          userUNID: token,
+        },
+      }
+    );
+    console.log(response);
+    callback(response.data.data.map((i) => ({ label: i.fullName, value: i.userUNID,  isDisabled: complainAgainst.some((e) => e == i.userUNID ? true : false)})));
+  };
+
 
   async function handleLodgeComplaintButtonClicked(e) {
     e.preventDefault();
+    console.log(complainAgainst)
     if (!complainTitle) {
       return setComplainTitleErrorClass("block");
     }
@@ -136,10 +154,6 @@ function LodgeComplaint() {
     formData.append("complainerUNID", token);
     formData.append("complainTitle", complainTitle);
     formData.append("complainDescription", complainDescription);
-    // for (var i = 0; i < complainAgainst.length; i++) {
-    //   formData.append('complainAgainstUserUNID[]', complainAgainst[i]);
-    // }
-    // complainAgainst.forEach((item) => formData.append("complainAgainstUserUNID[]", item))
     formData.append("complainAgainstUserUNID", JSON.stringify(complainAgainst));
     formData.append("complainReviewerUserUNID", reviewer);
     selectedFiles.forEach((file) => {
@@ -210,8 +224,7 @@ function LodgeComplaint() {
             <div className="form-group d-flex flex-column mb-4">
               <div className="col-12">
                 <AsyncSelect
-                  options={complainAgainstOptions}
-                  loadOptions={fetchData}
+                  loadOptions={fetchComplainAgainstData}
                   placeholder={
                     <div style={{ color: "grey" }}>Complain Against</div>
                   }
@@ -224,21 +237,8 @@ function LodgeComplaint() {
                   onBlur={(e) => {
                     setOpenCompAgainstMenu(false);
                   }}
-                  onInputChange={async (e, { action }) => {
-                    let response = await axios.get(
-                      "http://localhost:8000/home/complain-against",
-                      {
-                        query: e,
-                        userUNID: token,
-                      }
-                    );
-                    let temp = response.data.data.map((data) => ({
-                      label: data.fullName,
-                      value: data.userUNID,
-                    }));
-                    setComplainAgainstOptions(temp);
-                    console.log(e);
-                    console.log(response);
+                  onInputChange={(e, { action }) => {
+                    setQuery(e);
                     if (e.length === 0) {
                       setOpenCompAgainstMenu(false);
                       return;
@@ -293,9 +293,8 @@ function LodgeComplaint() {
             </div>
             <div className="form-group d-flex flex-column mb-4">
               <div className="col-12">
-                <Select
-                  options={reviewerOptions}
-                  // value={reviewer ? { label: reviewer } : null}
+                <AsyncSelect
+                  loadOptions={fetchReviewerData}
                   placeholder={
                     <div style={{ color: "grey" }}>
                       Choose Reviewer(only one)

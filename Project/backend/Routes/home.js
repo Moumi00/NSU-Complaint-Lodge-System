@@ -22,18 +22,46 @@ router.get("/users", async (req, res) => {
   });
 });
 
-router.get("/complain-against", async (req, res) => {
+router.get("/reviewers", async(req, res)=>{
   const result = await Users.findAll({
     attributes: ["fullName", "userUNID"],
     where: {
       [Op.and]: [{
         fullName: {
-          [Op.substring]: req.body.query
+          [Op.substring]: req.query.query
+          }
+      },
+      {
+        actorType: "Reviewer"
+      },
+      {
+        userUNID: {
+          [Op.notLike]: req.query.userUNID
+        }
+      },
+    ]
+    },
+    limit: 10
+  })
+  return res.json({
+    data: result,
+    error: "",
+  });
+})
+
+router.get("/complain-against", async (req, res) => {
+  // console.log(req.query);
+  const result = await Users.findAll({
+    attributes: ["fullName", "userUNID"],
+    where: {
+      [Op.and]: [{
+        fullName: {
+          [Op.substring]: req.query.query
           }
       },
       {
         userUNID: {
-          [Op.notLike]: req.body.userUNID
+          [Op.notLike]: req.query.userUNID
         }
       }
     ]
