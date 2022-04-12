@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from "react";
-import Select from "react-select";
 import { Modal } from "bootstrap";
 import axios from "axios";
+import AsyncSelect from "react-select/async";
+import { useParams } from "react-router-dom";
 
 function EditComplaint() {
-  const [complainAgainstOptions, setComplainAgainstOptions] = useState([]);
   const [selectedFiles, setSelectedFiles] = useState([]);
   const [isFilePicked, setIsFilePicked] = useState(false);
   const [openCompAgainstMenu, setOpenCompAgainstMenu] = useState(false);
@@ -21,8 +21,8 @@ function EditComplaint() {
     useState("none");
   const [reviewerErrorClass, setReviewerErrorClass] = useState("none");
   const [evidenceErrorClass, setEvidenceErrorClass] = useState("none");
-  const [reviewerOptions, setReviewerOptions] = useState([]);
   const token = localStorage.getItem("userUNID");
+  const { id } = useParams();
 
   if (!token) {
     window.location.replace("http://localhost:3000/login");
@@ -30,24 +30,13 @@ function EditComplaint() {
 
   useEffect(() => {
     async function fetchData() {
-      // let response = await axios.get("http://localhost:8000/home/users");
-      // //console.log(response);
-      // let temp = response.data.data.map((data) => ({
-      //   label: data.fullName,
-      //   value: data.userUNID,
-      //   isDisabled: token == data.userUNID ? true : false,
-      // }));
-      // console.log(temp);
-      // setComplainAgainstOptions(temp);
-      // response = await axios.get("http://localhost:8000/home/reviewers");
-      // console.log(response.data.data);
-      // let temp1 = response.data.data.map((data) => ({
-      //   label: data.fullName,
-      //   value: data.userUNID,
-      //   isDisabled: true,
-      // }));
-      // console.log(temp1);
-      // setReviewerOptions(temp1);
+      let response = await axios.get(
+        "http://localhost:8000/home/verify-complaintUNID/id"
+      );
+      if(response.data.error){
+        window.location.replace("http://localhost:3000");
+      }
+      console.log(response);
     }
     fetchData();
   }, []);
@@ -83,18 +72,6 @@ function EditComplaint() {
       temp.push(e[i].value);
     }
     setComplainAgainst(temp);
-    let temp1 = reviewerOptions;
-
-    console.log(temp);
-    temp1.map(
-      (data) =>
-        temp.some((e) => e == data.value) || data.value == token
-          ? (data.isDisabled = true)
-          : (data.isDisabled = false)
-      //console.log(data.value)
-    );
-    console.log(temp1);
-    setReviewerOptions(temp1);
   };
 
   const handleReviewerOnChange = (e) => {
@@ -103,8 +80,47 @@ function EditComplaint() {
     setReviewer(e.value);
   };
 
+  const fetchComplainAgainstData = async (input, callback) => {
+    let response = await axios.get(
+      "http://localhost:8000/home/complain-against",
+      {
+        params: {
+          query: input,
+          userUNID: token,
+        },
+      }
+    );
+    callback(
+      response.data.data.map((i) => ({
+        label: i.fullName,
+        value: i.userUNID,
+        isDisabled: reviewer == i.userUNID ? true : false,
+      }))
+    );
+  };
+
+  const fetchReviewerData = async (input, callback) => {
+    let response = await axios.get("http://localhost:8000/home/reviewers", {
+      params: {
+        query: input,
+        userUNID: token,
+      },
+    });
+    console.log(response);
+    callback(
+      response.data.data.map((i) => ({
+        label: i.fullName,
+        value: i.userUNID,
+        isDisabled: complainAgainst.some((e) =>
+          e == i.userUNID ? true : false
+        ),
+      }))
+    );
+  };
+
   async function handleLodgeComplaintButtonClicked(e) {
     e.preventDefault();
+    console.log(complainAgainst);
     if (!complainTitle) {
       return setComplainTitleErrorClass("block");
     }
@@ -126,10 +142,6 @@ function EditComplaint() {
     formData.append("complainerUNID", token);
     formData.append("complainTitle", complainTitle);
     formData.append("complainDescription", complainDescription);
-    // for (var i = 0; i < complainAgainst.length; i++) {
-    //   formData.append('complainAgainstUserUNID[]', complainAgainst[i]);
-    // }
-    // complainAgainst.forEach((item) => formData.append("complainAgainstUserUNID[]", item))
     formData.append("complainAgainstUserUNID", JSON.stringify(complainAgainst));
     formData.append("complainReviewerUserUNID", reviewer);
     selectedFiles.forEach((file) => {
@@ -199,8 +211,8 @@ function EditComplaint() {
             </div>
             <div className="form-group d-flex flex-column mb-4">
               <div className="col-12">
-                <Select
-                  options={complainAgainstOptions}
+                <AsyncSelect
+                  loadOptions={fetchComplainAgainstData}
                   placeholder={
                     <div style={{ color: "grey" }}>Complain Against</div>
                   }
@@ -213,21 +225,7 @@ function EditComplaint() {
                   onBlur={(e) => {
                     setOpenCompAgainstMenu(false);
                   }}
-                  onInputChange={async (e, { action }) => {
-                    let response = await axios.get(
-                      "http://localhost:8000/home/complain-against",
-                      {
-                        query: e,
-                        userUNID: token,
-                      }
-                    );
-                    let temp = response.data.data.map((data) => ({
-                      label: data.fullName,
-                      value: data.userUNID,
-                    }));
-                    setComplainAgainstOptions(temp);
-                    console.log(e);
-                    console.log(response);
+                  onInputChange={(e, { action }) => {
                     if (e.length === 0) {
                       setOpenCompAgainstMenu(false);
                       return;
@@ -282,9 +280,8 @@ function EditComplaint() {
             </div>
             <div className="form-group d-flex flex-column mb-4">
               <div className="col-12">
-                <Select
-                  options={reviewerOptions}
-                  // value={reviewer ? { label: reviewer } : null}
+                <AsyncSelect
+                  loadOptions={fetchReviewerData}
                   placeholder={
                     <div style={{ color: "grey" }}>
                       Choose Reviewer(only one)
