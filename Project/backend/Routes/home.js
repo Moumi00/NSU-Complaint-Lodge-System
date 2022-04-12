@@ -10,7 +10,7 @@ const {
 const router = express.Router();
 const path = require("path");
 const uuid = require("uuid");
-const { Op } = require("sequelize");
+const { Op, where } = require("sequelize");
 const { Sequelize } = require("sequelize");
 
 router.get("/users", async (req, res) => {
@@ -23,40 +23,82 @@ router.get("/users", async (req, res) => {
   });
 });
 
-router.get("/get-complain/:id", async (req, res) => {
-  // const result = await Complain.findOne({
-  //   // include: {
-  //   //   all: true
-  //   // },
-  //   include: [ComplainAgainst, ComplainDescription, ComplainReviewer],
-  //   where: {
-  //     complainUNID: req.params.id
-  //   }
-  // });
-
-  // const result = await ComplainAgainst.findAll({
-  //   attributes: [[Sequelize.fn("max", Sequelize.col("ComplainUNID")), "max"], "ComplainAgainstUserUNID"],
-  // });
-  // res.json({
-  //   data: result,
-  //   error: "",
-  // });
-
+router.post("/edit-complain", async (req, res) => {
   const temp = await Complain.findOne({
     attributes: ["edits"],
     where: {
-      complainUNID: req.params.id,
+      complainUNID: req.body.complainUNID,
     },
   });
+
+  const editNumber = temp.dataValues.edits + 1;
+
+  await Complain.update(
+    {
+      edits: editNumber,
+    },
+    {
+      where: {
+        complainUNID: req.body.complainUNID,
+      },
+    }
+  );
+
+  for (let i = 0; i < complainAgainstUserUNID.length; i++) {
+    await ComplainAgainst.create({
+      ComplainUNID: complainUNID,
+      ComplainAgainstUserUNID: complainAgainstUserUNID[i],
+      editHistory: editNumber,
+    });
+    console.log(complainAgainstUserUNID[i]);
+  }
+
+  await ComplainReviewer.Update(
+    {
+      editHistory: editNumber,
+    },
+    {
+      where: {
+        ComplainUNID: req.body.complainUNID,
+      },
+    }
+  );
+
+  await ComplainDescription.create({
+    ComplainUNID: complainUNID,
+    complainDescription: req.body.complainDescription,
+    editHistory: editNumber
+  });
+});
+
+router.get("/complain-latest-details", async (req, res) => {
+  const temp = await Complain.findOne({
+    attributes: ["edits"],
+    where: {
+      complainUNID: req.query.complainUNID,
+    },
+  });
+
+  if (temp == null) {
+    return res.json({
+      data: "",
+      error: "Invalid Complain UNID",
+    });
+  }
 
   const result = await Complain.findOne({
     include: [
       {
         model: ComplainAgainst,
-        attributes: ["ComplainAgainstUserUNID"],
         where: {
           editHistory: temp.dataValues.edits,
         },
+        include: [
+          {
+            model: Users,
+            attributes: ["fullName", "userUNID"],
+          },
+        ],
       },
       {
         model: ComplainDescription,
@@ -72,9 +114,22 @@ router.get("/get-complain/:id", async (req, res) => {
           editHistory: temp.dataValues.edits,
         },
       },
+      {
+        model: ComplainReviewer,
+        where: {
+          editHistory: temp.dataValues.edits,
+        },
+        include: [
+          {
+            model: Users,
+            attributes: ["fullName", "userUNID"],
+          },
+        ],
+      },
     ],
     where: {
-      complainUNID: req.params.id,
+      complainUNID: req.query.complainUNID,
+      ComplainerUNID: req.query.ComplainerUNID,
     },
   });
 
@@ -213,23 +268,4 @@ router.get("/reviewers", async (req, res) => {
   });
 });
 
-router.get("/verify-complaintUNID", async (req, res) => {
-  const result = await Complain.findOne({
-    where: {
-      complainUNID: req.query.complaintUNID,
-      // complainerUNID: req.query.complainerUNID
-    },
-  });
-  if (result) {
-    res.json({
-      data: result,
-      error: "",
-    });
-  } else {
-    res.json({
-      data: "",
-      error: "Invalid Complaint UNID",
-    });
-  }
-});
 module.exports = router;

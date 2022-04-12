@@ -13,16 +13,16 @@ function EditComplaint() {
   const [complainDescription, setComplainDescription] = useState("");
   const [complainAgainst, setComplainAgainst] = useState([]);
   const [reviewer, setReviewer] = useState("");
-  const [complainTitleErrorClass, setComplainTitleErrorClass] =
-    useState("none");
   const [complainDescriptionErrorClass, setComplainDescriptionErrorClass] =
     useState("none");
   const [complainAgainstErrorClass, setComplainAgainstErrorClass] =
     useState("none");
-  const [reviewerErrorClass, setReviewerErrorClass] = useState("none");
   const [evidenceErrorClass, setEvidenceErrorClass] = useState("none");
   const token = localStorage.getItem("userUNID");
   const { id } = useParams();
+
+  const [complainAgainstOptions, setComplainAgainstOptions] = useState([]);
+  const [reviewerOption, setReviewerOption] = useState({});
 
   if (!token) {
     window.location.replace("http://localhost:3000/login");
@@ -30,14 +30,34 @@ function EditComplaint() {
 
   useEffect(() => {
     async function fetchData() {
-      
       let response = await axios.get(
-        "http://localhost:8000/home/verify-complaintUNID/id"
+        "http://localhost:8000/home/complain-latest-details",
+        {
+          params: {
+            complainUNID: id,
+            ComplainerUNID: token,
+          },
+        }
       );
-      if(response.data.error){
+      if (response.data.error || response.data.data == null) {
         window.location.replace("http://localhost:3000");
       }
-      console.log(response);
+      setComplainTitle(response.data.data.complainTitle);
+      setComplainDescription(
+        response.data.data.ComplainDescriptions[0].complainDescription
+      );
+      let temp = {
+        label: response.data.data.ComplainReviewers[0].User.fullName,
+        value: response.data.data.ComplainReviewers[0].User.userUNID,
+      };
+      const temp1 = response.data.data.ComplainAgainsts.map((e)=>(
+        {label: e.User.fullName, value: e.User.userUNID}
+      ))
+      const temp2 = response.data.data.ComplainAgainsts.map((e)=>(e.User.userUNID));
+      setComplainAgainst(temp2);
+      setComplainAgainstOptions(temp1);
+      setReviewerOption(temp);
+      setReviewer(response.data.data.ComplainReviewers[0].User.userUNID)
     }
     fetchData();
   }, []);
@@ -72,12 +92,12 @@ function EditComplaint() {
     for (let i = 0; i < e.length; i++) {
       temp.push(e[i].value);
     }
+    setComplainAgainstOptions(e);
     setComplainAgainst(temp);
   };
 
   const handleReviewerOnChange = (e) => {
     setOpenCompReviewerMenu(false);
-    setReviewerErrorClass("none");
     setReviewer(e.value);
   };
 
@@ -122,9 +142,6 @@ function EditComplaint() {
   async function handleLodgeComplaintButtonClicked(e) {
     e.preventDefault();
     console.log(complainAgainst);
-    if (!complainTitle) {
-      return setComplainTitleErrorClass("block");
-    }
     if (!complainDescription) {
       return setComplainDescriptionErrorClass("block");
     }
@@ -133,9 +150,6 @@ function EditComplaint() {
     }
     if (!isFilePicked) {
       return setEvidenceErrorClass("block");
-    }
-    if (!reviewer) {
-      return setReviewerErrorClass("block");
     }
     console.log(selectedFiles);
 
@@ -172,11 +186,13 @@ function EditComplaint() {
       <div class="row justify-content-center w-100">
         <div class="col-xl-5 col-lg-7 col-md-9 col-11 my-4 primary-background-color px-lg-5 pb-5">
           <div class="separator my-5 ">
-            <h1 className="text-dark fw-light">Lodge Complaint</h1>
+            <h1 className="text-dark fw-light">Edit Complaint</h1>
           </div>
           <form onSubmit={handleLodgeComplaintButtonClicked}>
             <div class="form-group mb-4">
               <input
+                disabled
+                value={complainTitle}
                 type="text"
                 class="form-control"
                 id="emailInput"
@@ -184,16 +200,11 @@ function EditComplaint() {
                 onInput={(e) => {
                   setComplainTitle(e.target.value);
                 }}
-                onChange={(e) => {
-                  setComplainTitleErrorClass("none");
-                }}
               ></input>
-              <span class={"text-danger d-" + complainTitleErrorClass}>
-                Enter Complaint Title.
-              </span>
             </div>
             <div class="form-group mb-4">
               <textarea
+                value={complainDescription}
                 class="form-control"
                 id="form4Example3"
                 rows="6"
@@ -214,6 +225,7 @@ function EditComplaint() {
               <div className="col-12">
                 <AsyncSelect
                   loadOptions={fetchComplainAgainstData}
+                  value={complainAgainstOptions}
                   placeholder={
                     <div style={{ color: "grey" }}>Complain Against</div>
                   }
@@ -222,6 +234,7 @@ function EditComplaint() {
                     IndicatorSeparator: () => null, // Remove separator
                   }}
                   isMulti
+                  defaultValue={complainAgainst}
                   onChange={handleComplainAgainstOnChange}
                   onBlur={(e) => {
                     setOpenCompAgainstMenu(false);
@@ -283,6 +296,8 @@ function EditComplaint() {
               <div className="col-12">
                 <AsyncSelect
                   loadOptions={fetchReviewerData}
+                  isDisabled
+                  value={reviewerOption}
                   placeholder={
                     <div style={{ color: "grey" }}>
                       Choose Reviewer(only one)
@@ -307,14 +322,11 @@ function EditComplaint() {
                   }}
                   menuIsOpen={openCompReviewerMenu}
                 />
-                <span class={"text-danger d-" + reviewerErrorClass}>
-                  Select a complain reviewer.
-                </span>
               </div>
             </div>
             <div className="d-block">
               <button type="submit" class="btn btn-primary w-100 fw-bold">
-                Lodge Complaint
+                Edit Complaint
               </button>
             </div>
           </form>
@@ -331,7 +343,7 @@ function EditComplaint() {
               <div class="modal-content">
                 <div class="modal-header">
                   <h5 class="modal-title" id="exampleModalLabel">
-                    Lodged Complaint Successfully!
+                    Complaint Edited Successfully!
                   </h5>
                   <button
                     type="button"

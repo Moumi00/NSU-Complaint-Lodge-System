@@ -1,5 +1,10 @@
 module.exports = (sequelize, DataTypes) => {
-  const ComplainReviewer = sequelize.define("ComplainReviewer");
+  const ComplainReviewer = sequelize.define("ComplainReviewer", {
+    editHistory: {
+      type: DataTypes.INTEGER,
+      defaultValue: 0
+    }
+  });
 
   ComplainReviewer.associate = (models) => {
     ComplainReviewer.belongsTo(models.Complain, {
