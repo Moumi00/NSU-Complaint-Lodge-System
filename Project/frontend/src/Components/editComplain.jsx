@@ -30,24 +30,7 @@ function EditComplaint() {
 
   useEffect(() => {
     async function fetchData() {
-      // let response = await axios.get("http://localhost:8000/home/users");
-      // //console.log(response);
-      // let temp = response.data.data.map((data) => ({
-      //   label: data.fullName,
-      //   value: data.userUNID,
-      //   isDisabled: token == data.userUNID ? true : false,
-      // }));
-      // console.log(temp);
-      // setComplainAgainstOptions(temp);
-      // response = await axios.get("http://localhost:8000/home/reviewers");
-      // console.log(response.data.data);
-      // let temp1 = response.data.data.map((data) => ({
-      //   label: data.fullName,
-      //   value: data.userUNID,
-      //   isDisabled: true,
-      // }));
-      // console.log(temp1);
-      // setReviewerOptions(temp1);
+      
     }
     fetchData();
   }, []);
