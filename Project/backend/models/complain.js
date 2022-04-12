@@ -8,7 +8,12 @@ module.exports = (sequelize, DataTypes) => {
     status: {
       type: DataTypes.STRING,
       defaultValue: "open"
+    },
+    edits: {
+      type: DataTypes.INTEGER,
+      defaultValue: 0
     }
+    
   }); 
 
   Complain.associate = (models) => {

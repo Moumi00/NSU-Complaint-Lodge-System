@@ -10,7 +10,8 @@ const {
 const router = express.Router();
 const path = require("path");
 const uuid = require("uuid");
-const {Op} = require("sequelize");
+const { Op } = require("sequelize");
+const { Sequelize } = require("sequelize");
 
 router.get("/users", async (req, res) => {
   const result = await Users.findAll({
@@ -22,57 +23,120 @@ router.get("/users", async (req, res) => {
   });
 });
 
-router.get("/reviewers", async(req, res)=>{
+router.get("/get-complain/:id", async (req, res) => {
+  // const result = await Complain.findOne({
+  //   // include: {
+  //   //   all: true
+  //   // },
+  //   include: [ComplainAgainst, ComplainDescription, ComplainReviewer],
+  //   where: {
+  //     complainUNID: req.params.id
+  //   }
+  // });
+
+  // const result = await ComplainAgainst.findAll({
+  //   attributes: [[Sequelize.fn("max", Sequelize.col("ComplainUNID")), "max"], "ComplainAgainstUserUNID"],
+  // });
+  // res.json({
+  //   data: result,
+  //   error: "",
+  // });
+
+  const temp = await Complain.findOne({
+    attributes: ["edits"],
+    where: {
+      complainUNID: req.params.id,
+    },
+  });
+
+  const result = await Complain.findOne({
+    include: [
+      {
+        model: ComplainAgainst,
+        attributes: ["ComplainAgainstUserUNID"],
+        where: {
+          editHistory: temp.dataValues.edits,
+        },
+      },
+      {
+        model: ComplainDescription,
+        attributes: ["complainDescription"],
+        where: {
+          editHistory: temp.dataValues.edits,
+        },
+      },
+      {
+        model: Evidence,
+        attributes: ["evidence"],
+        where: {
+          editHistory: temp.dataValues.edits,
+        },
+      },
+    ],
+    where: {
+      complainUNID: req.params.id,
+    },
+  });
+
+  res.json({
+    data: result,
+    error: "",
+  });
+});
+
+router.get("/reviewers", async (req, res) => {
   const result = await Users.findAll({
     attributes: ["fullName", "userUNID"],
     where: {
-      [Op.and]: [{
-        fullName: {
-          [Op.substring]: req.query.query
-          }
-      },
-      {
-        actorType: "Reviewer"
-      },
-      {
-        userUNID: {
-          [Op.notLike]: req.query.userUNID
-        }
-      },
-    ]
+      [Op.and]: [
+        {
+          fullName: {
+            [Op.substring]: req.query.query,
+          },
+        },
+        {
+          actorType: "Reviewer",
+        },
+        {
+          userUNID: {
+            [Op.notLike]: req.query.userUNID,
+          },
+        },
+      ],
     },
-    limit: 10
-  })
+    limit: 10,
+  });
   return res.json({
     data: result,
     error: "",
   });
-})
+});
 
 router.get("/complain-against", async (req, res) => {
   // console.log(req.query);
   const result = await Users.findAll({
     attributes: ["fullName", "userUNID"],
     where: {
-      [Op.and]: [{
-        fullName: {
-          [Op.substring]: req.query.query
-          }
-      },
-      {
-        userUNID: {
-          [Op.notLike]: req.query.userUNID
-        }
-      }
-    ]
+      [Op.and]: [
+        {
+          fullName: {
+            [Op.substring]: req.query.query,
+          },
+        },
+        {
+          userUNID: {
+            [Op.notLike]: req.query.userUNID,
+          },
+        },
+      ],
     },
-    limit: 10
-  })
+    limit: 10,
+  });
   return res.json({
     data: result,
     error: "",
   });
-})
+});
 
 router.post("/lodge-complaint", async (req, res) => {
   const complainUNID = uuid.v4();
@@ -141,13 +205,11 @@ router.get("/reviewers", async (req, res) => {
     where: {
       actorType: Users.getAttributes().actorType.values[0],
     },
-    attributes: [
-      "fullName", "userUNID"
-    ]
+    attributes: ["fullName", "userUNID"],
   });
   res.json({
     data: result,
-    error: ""
+    error: "",
   });
 });
 
