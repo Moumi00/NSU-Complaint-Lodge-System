@@ -213,4 +213,23 @@ router.get("/reviewers", async (req, res) => {
   });
 });
 
+router.get("/verify-complaintUNID", async (req, res) => {
+  const result = await Complain.findOne({
+    where: {
+      complainUNID: req.query.complaintUNID,
+      // complainerUNID: req.query.complainerUNID
+    },
+  });
+  if (result) {
+    res.json({
+      data: result,
+      error: "",
+    });
+  } else {
+    res.json({
+      data: "",
+      error: "Invalid Complaint UNID",
+    });
+  }
+});
 module.exports = router;

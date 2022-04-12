@@ -5,8 +5,6 @@ import axios from "axios";
 import AsyncSelect from "react-select/async";
 
 function LodgeComplaint() {
-  const [query, setQuery] = useState("");
-  const [complainAgainstOptions, setComplainAgainstOptions] = useState([]);
   const [selectedFiles, setSelectedFiles] = useState([]);
   const [isFilePicked, setIsFilePicked] = useState(false);
   const [openCompAgainstMenu, setOpenCompAgainstMenu] = useState(false);
@@ -23,44 +21,11 @@ function LodgeComplaint() {
     useState("none");
   const [reviewerErrorClass, setReviewerErrorClass] = useState("none");
   const [evidenceErrorClass, setEvidenceErrorClass] = useState("none");
-  const [reviewerOptions, setReviewerOptions] = useState([]);
   const token = localStorage.getItem("userUNID");
 
   if (!token) {
     window.location.replace("http://localhost:3000/login");
   }
-
-  useEffect(() => {
-    async function fetchData() {
-      // let response = await axios.post(
-      //   "http://localhost:8000/home/complain-against",
-      //   {
-      //     query: "omar",
-      //     userUNID: "b1b04005-be0e-4e0e-8997-ba81a8434a3b",
-      //   }
-      // );
-      // console.log(response);
-      // let response = await axios.get("http://localhost:8000/home/users");
-      // //console.log(response);
-      // let temp = response.data.data.map((data) => ({
-      //   label: data.fullName,
-      //   value: data.userUNID,
-      //   isDisabled: token == data.userUNID ? true : false,
-      // }));
-      // console.log(temp);
-      // setComplainAgainstOptions(temp);
-      // response = await axios.get("http://localhost:8000/home/reviewers");
-      // console.log(response.data.data);
-      // let temp1 = response.data.data.map((data) => ({
-      //   label: data.fullName,
-      //   value: data.userUNID,
-      //   isDisabled: true,
-      // }));
-      // console.log(temp1);
-      // setReviewerOptions(temp1);
-    }
-    fetchData();
-  }, []);
 
   const updateList = function (e) {
     e.preventDefault();
@@ -93,7 +58,6 @@ function LodgeComplaint() {
       temp.push(e[i].value);
     }
     setComplainAgainst(temp);
-
   };
 
   const handleReviewerOnChange = (e) => {
@@ -112,27 +76,37 @@ function LodgeComplaint() {
         },
       }
     );
-    callback(response.data.data.map((i) => ({ label: i.fullName, value: i.userUNID, isDisabled: reviewer == i.userUNID ? true : false })));
+    callback(
+      response.data.data.map((i) => ({
+        label: i.fullName,
+        value: i.userUNID,
+        isDisabled: reviewer == i.userUNID ? true : false,
+      }))
+    );
   };
 
   const fetchReviewerData = async (input, callback) => {
-    let response = await axios.get(
-      "http://localhost:8000/home/reviewers",
-      {
-        params: {
-          query: input,
-          userUNID: token,
-        },
-      }
-    );
+    let response = await axios.get("http://localhost:8000/home/reviewers", {
+      params: {
+        query: input,
+        userUNID: token,
+      },
+    });
     console.log(response);
-    callback(response.data.data.map((i) => ({ label: i.fullName, value: i.userUNID,  isDisabled: complainAgainst.some((e) => e == i.userUNID ? true : false)})));
+    callback(
+      response.data.data.map((i) => ({
+        label: i.fullName,
+        value: i.userUNID,
+        isDisabled: complainAgainst.some((e) =>
+          e == i.userUNID ? true : false
+        ),
+      }))
+    );
   };
-
 
   async function handleLodgeComplaintButtonClicked(e) {
     e.preventDefault();
-    console.log(complainAgainst)
+    console.log(complainAgainst);
     if (!complainTitle) {
       return setComplainTitleErrorClass("block");
     }
@@ -238,7 +212,6 @@ function LodgeComplaint() {
                     setOpenCompAgainstMenu(false);
                   }}
                   onInputChange={(e, { action }) => {
-                    setQuery(e);
                     if (e.length === 0) {
                       setOpenCompAgainstMenu(false);
                       return;

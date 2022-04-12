@@ -14,6 +14,7 @@ import ResetPassword from './Components/resetPassword';
 import LodgeComplaint from './Components/lodgeComplain';
 import Dashboard from './Components/dashboard';
 import GoogleRegistration from './Components/googleRegistration';
+import EditComplaint from './Components/editComplain';
 
 ReactDOM.render(
   <React.StrictMode>
@@ -28,6 +29,7 @@ ReactDOM.render(
       <Route path='/lodge-complaint' element={<LodgeComplaint />} />
       <Route path='/dashboard' element={<Dashboard />} />
       <Route path='/google-registration' element={<GoogleRegistration/>} />
+      <Route path='/edit-complaint/:id' element={<EditComplaint />} />
     </Routes>
     <Footer/>
     </BrowserRouter>
