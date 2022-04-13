@@ -13,9 +13,16 @@ const uuid = require("uuid");
 const { Op, where } = require("sequelize");
 const { Sequelize } = require("sequelize");
 
-router.get("/users", async (req, res) => {
-  const result = await Users.findAll({
-    attributes: ["fullName", "userUNID"],
+router.get("/user-details", async (req, res) => {
+  const result = await Users.findOne({
+    attributes: ["fullName", "email", "nsuId", "userType"],
+    where: {
+      userUNID: req.query.userUNID
+    },
+    include:[{
+      model: Complain,
+      attributes: ["complainUNID", "complainTitle", "status"]
+    }]
   });
   return res.json({
     data: result,
