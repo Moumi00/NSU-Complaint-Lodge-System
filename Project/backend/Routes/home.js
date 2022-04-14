@@ -141,6 +141,10 @@ router.get("/complain-latest-details", async (req, res) => {
         },
       },
       {
+        model: Users,
+        attributes: ["fullName", "nsuId", "email", "userType"]
+      },
+      {
         model: ComplainReviewer,
         where: {
           currentReviewer: "Yes",

@@ -7,6 +7,13 @@ import { useParams } from "react-router-dom";
 function ComplaintDetails() {
   const { id } = useParams();
   const token = localStorage.getItem("userUNID");
+  const [complainTitle, setComplainTitle] = useState("");
+  const [complainDescription, setComplainDescription] = useState("");
+  const [complainAgainst, setComplainAgainst] = useState([]);
+  const [lodgerName, setLodgerName] = useState("");
+  const [lodgerNsuId, setLodgerNsuId] = useState("");
+  const [lodgerEmail, setLodgerEmail] = useState("");
+  const [lodgerDesignation, setLodgerDesignation] = useState("");
 
   useEffect(() => {
     async function fetchData() {
@@ -22,6 +29,14 @@ function ComplaintDetails() {
       if (response.data.error || response.data.data == null) {
         window.location.replace("http://localhost:3000");
       }
+
+      setComplainTitle(response.data.data.complainTitle);
+      setComplainDescription(response.data.data.ComplainDescriptions[0].complainDescription);
+      setComplainAgainst(response.data.data.ComplainAgainsts.map((e)=>(e.User.fullName)));
+      setLodgerName(response.data.data.User.fullName);
+      setLodgerNsuId(response.data.data.User.nsuId);
+      setLodgerEmail(response.data.data.User.email);
+      setLodgerDesignation(response.data.data.User.userType);
     }
     fetchData();
   }, []);
@@ -40,7 +55,7 @@ function ComplaintDetails() {
                 </div>
               </div>
               <div className="col-9">
-                <h5>Lale lal jalal</h5>
+                <h5>{complainTitle}</h5>
               </div>
             </div>
             <div className="row mt-3">
@@ -51,12 +66,7 @@ function ComplaintDetails() {
                 </div>
               </div>
               <div className="col-9">
-                <h5>
-                  Lorem ipsum dolor sit amet consectetur adipisicing elit. Odit
-                  incidunt, nisi quam doloremque nostrum corrupti labore
-                  distinctio repellendus! Obcaecati quae ipsa exercitationem
-                  numquam ut? Totam sint similique aperiam ratione! Unde.
-                </h5>
+                <h5>{complainDescription}</h5>
               </div>
             </div>
             <div className="row mt-3">
@@ -67,9 +77,11 @@ function ComplaintDetails() {
                 </div>
               </div>
               <div className="col-9">
-                <h5>Omar Haroon</h5>
-                <h5>Abdullah hoga</h5>
-                <h5>Omar er pasa pink</h5>
+                {complainAgainst.length != 0 ? (
+                  complainAgainst.map((e) => <h5>{e}</h5>)
+                ) : (
+                  <h1></h1>
+                )}
               </div>
             </div>
           </div>
@@ -83,10 +95,10 @@ function ComplaintDetails() {
                 class="d-inline-block align-text-top mt-1 align-items-center justify-content-center"
               ></img>
             </div>
-            <h6 class="mt-3">Name: Omar Mohammad Haroon</h6>
-            <h6 class="mt-3">NSU ID: 2012012642</h6>
-            <h6 class="mt-3">Email: omarharoon@gmail.com</h6>
-            <h6 class="mt-3">Designation: TA</h6>
+            <h6 class="mt-3">Name: {lodgerName}</h6>
+            <h6 class="mt-3">NSU ID: {lodgerNsuId}</h6>
+            <h6 class="mt-3">Email: {lodgerEmail}</h6>
+            <h6 class="mt-3">Designation: {lodgerDesignation}</h6>
           </div>
         </div>
       </div>
