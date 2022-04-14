@@ -30,11 +30,16 @@ module.exports = (sequelize, DataTypes) => {
     Users.hasMany(models.UserVerification, {
       foreignKey: {
         name: "UserUNID",
-      }, 
+      },
     });
     Users.hasMany(models.Complain, {
       foreignKey: {
         name: "ComplainerUNID",
+      },
+    });
+    Users.hasMany(models.ComplainReviewer, {
+      foreignKey: {
+        name: "ComplainReviewerUserUNID",
       },
     });
   };

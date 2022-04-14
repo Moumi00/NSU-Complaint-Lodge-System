@@ -22,6 +22,23 @@ router.get("/user-details", async (req, res) => {
     include:[{
       model: Complain,
       attributes: ["complainUNID", "complainTitle", "status"]
+    },{
+      model: ComplainReviewer,
+      attributes: ["complainUNID"],
+      where: {
+        currentReviewer: ComplainReviewer.getAttributes().currentReviewer.values[0]
+      },
+      include: [{
+        model: Complain,
+        attributes: ["complainTitle"],
+        where: {
+          status: "open"
+        },
+        include: [{
+          model: Users,
+          attributes: ["fullName", "userUNID"]
+        }]
+      }]
     }]
   });
   return res.json({
@@ -60,16 +77,16 @@ router.post("/edit-complain", async (req, res) => {
     console.log(complainAgainstUserUNID[i]);
   }
 
-  await ComplainReviewer.Update(
-    {
-      editHistory: editNumber,
-    },
-    {
-      where: {
-        ComplainUNID: req.body.complainUNID,
-      },
-    }
-  );
+  // await ComplainReviewer.Update(
+  //   {
+  //     editHistory: editNumber,
+  //   },
+  //   {
+  //     where: {
+  //       ComplainUNID: req.body.complainUNID,
+  //     },
+  //   }
+  // );
 
   await ComplainDescription.create({
     ComplainUNID: complainUNID,
@@ -124,7 +141,7 @@ router.get("/complain-latest-details", async (req, res) => {
       {
         model: ComplainReviewer,
         where: {
-          editHistory: temp.dataValues.edits,
+          currentReviewer: "Yes",
         },
         include: [
           {
@@ -249,6 +266,7 @@ router.post("/lodge-complaint", async (req, res) => {
   await ComplainReviewer.create({
     ComplainUNID: complainUNID,
     ComplainReviewerUserUNID: req.body.complainReviewerUserUNID,
+    currentReviewer: ComplainReviewer.getAttributes().currentReviewer.values[0]
   });
 
   await ComplainDescription.create({

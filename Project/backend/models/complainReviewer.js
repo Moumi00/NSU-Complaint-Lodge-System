@@ -1,8 +1,7 @@
 module.exports = (sequelize, DataTypes) => {
   const ComplainReviewer = sequelize.define("ComplainReviewer", {
-    editHistory: {
-      type: DataTypes.INTEGER,
-      defaultValue: 0
+    currentReviewer: {
+      type: DataTypes.ENUM("Yes", "No"),
     }
   });
 

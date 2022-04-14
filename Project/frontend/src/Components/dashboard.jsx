@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import ComplainRow from "./complainRow";
+import ReviewComplainRow from "./reviewComplainRow";
 
 function Dashboard() {
   const token = localStorage.getItem("userUNID");
@@ -10,8 +11,12 @@ function Dashboard() {
   const [email, setEmail] = useState("");
   const [designation, setDesignation] = useState("");
   const [complainList, setComplainList] = useState([]);
-  const [myComplainsSelectedClass, setMyComplainSelectedClass] = useState("btn-light card-shadow");
-  const [reviewComplainSelectedClass, setReviewComplainSelectedClass] = useState("");
+  const [reviewComplainList, setReviewComplainList] = useState([]);
+  const [myComplainsSelectedClass, setMyComplainSelectedClass] = useState(
+    "btn-light card-shadow"
+  );
+  const [reviewComplainSelectedClass, setReviewComplainSelectedClass] =
+    useState("");
 
   useEffect(() => {
     async function fetchData() {
@@ -19,8 +24,8 @@ function Dashboard() {
         "http://localhost:8000/home/user-details",
         {
           params: {
-            userUNID: token
-          }
+            userUNID: token,
+          },
         }
       );
 
@@ -29,7 +34,8 @@ function Dashboard() {
       setEmail(response.data.data.email);
       setDesignation(response.data.data.userType);
       setComplainList(response.data.data.Complains);
-      console.log(response.data.data.Complains)
+      setReviewComplainList(response.data.data.ComplainReviewers)
+      console.log(response.data.data);
     }
     fetchData();
   }, []);
@@ -46,12 +52,12 @@ function Dashboard() {
   const myComplainsButtonClicked = () => {
     setMyComplainSelectedClass("btn-light card-shadow");
     setReviewComplainSelectedClass("");
-  }
+  };
 
   const reviewComplainButtonClicked = () => {
     setMyComplainSelectedClass("");
     setReviewComplainSelectedClass("btn-light card-shadow");
-  }
+  };
   return (
     <>
       <div class="flex-grow-1 background-color d-flex">
@@ -65,7 +71,6 @@ function Dashboard() {
                   height="150"
                   class="d-inline-block align-text-top mt-5 align-items-center justify-content-center"
                 ></img>
-
               </div>
               <h5 class="mt-3">Name: {name}</h5>
               <h5 class="mt-3">NSU ID: {nsuId}</h5>
@@ -79,18 +84,39 @@ function Dashboard() {
                   Log out
                 </button>
               </div>
-
             </div>
             <div class="col-7 my-4 ms-4">
-              <button type="button" class={"btn " + myComplainsSelectedClass} onClick={myComplainsButtonClicked}>My Complain(s)</button>
-              <button type="button" class={"btn " + reviewComplainSelectedClass} onClick={reviewComplainButtonClicked}>Review Complain(s)</button>
-              {complainList.map((e) => (
-                  <ComplainRow complain={e} />
-              ))}
+              <button
+                type="button"
+                class={"btn btn-lg " + myComplainsSelectedClass}
+                onClick={myComplainsButtonClicked}
+              >
+                My Complain(s)
+              </button>
+              <button
+                type="button"
+                class={"btn btn-lg " + reviewComplainSelectedClass}
+                onClick={reviewComplainButtonClicked}
+              >
+                Review Complain(s)
+              </button>
+              <div className={"h-100 flex-column d-" + (!reviewComplainSelectedClass ? "flex" : "none")}>
+                {complainList.length != 0 ? (
+                  complainList.map((e) => <ComplainRow complain={e} />)
+                ) : (
+                  <h1 class="pt-4 ">No Complain Lodged</h1>
+                )}
+              </div>
+              <div className={"h-100 flex-column d-" + (!reviewComplainSelectedClass ? "none" : "flex")}>
+                {reviewComplainList.length != 0 ? (
+                  reviewComplainList.map((e) => <ReviewComplainRow complain={e} />)
+                ) : (
+                  <h1 class="pt-4 ">No Complain to Review</h1>
+                )}
+              </div>
             </div>
           </div>
         </div>
-
       </div>
     </>
   );
