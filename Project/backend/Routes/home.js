@@ -25,12 +25,14 @@ router.get("/user-details", async (req, res) => {
     },{
       model: ComplainReviewer,
       attributes: ["complainUNID"],
+      required: false,
       where: {
         currentReviewer: ComplainReviewer.getAttributes().currentReviewer.values[0]
       },
       include: [{
         model: Complain,
         attributes: ["complainTitle"],
+        required: false,
         where: {
           status: "open"
         },

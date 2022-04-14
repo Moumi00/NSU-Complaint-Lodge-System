@@ -28,14 +28,15 @@ function Dashboard() {
           },
         }
       );
-
+      
+      console.log(response.data.data);
+      console.log(token);
       setName(response.data.data.fullName);
       setNsuId(response.data.data.nsuId);
       setEmail(response.data.data.email);
       setDesignation(response.data.data.userType);
       setComplainList(response.data.data.Complains);
       setReviewComplainList(response.data.data.ComplainReviewers)
-      console.log(response.data.data);
     }
     fetchData();
   }, []);
