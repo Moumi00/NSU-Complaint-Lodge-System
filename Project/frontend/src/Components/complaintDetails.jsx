@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback  } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import axios from "axios";
 import { useParams } from "react-router-dom";
 import { useLocation } from "react-router-dom";
@@ -13,11 +13,12 @@ function ComplaintDetails() {
   const [complainAgainst, setComplainAgainst] = useState([]);
   const [lodgerName, setLodgerName] = useState("");
   const [lodgerNsuId, setLodgerNsuId] = useState("");
-  const [lodgerEmail, setLodgerEmail] = useState(""); 
+  const [lodgerEmail, setLodgerEmail] = useState("");
   const [lodgerDesignation, setLodgerDesignation] = useState("");
   const [evidence, setEvidence] = useState([]);
   const [currentImage, setCurrentImage] = useState(0);
   const [isViewerOpen, setIsViewerOpen] = useState(false);
+  const [reviewer, setReviewer] = useState("")
 
   useEffect(() => {
     async function fetchData() {
@@ -50,7 +51,7 @@ function ComplaintDetails() {
         "http://localhost:8000/uploads/Evidence/2cdeaf0a-c7f2-4fd0-8773-68e02d854e8d-0.jpg",
         "http://localhost:8000/uploads/Evidence/2cdeaf0a-c7f2-4fd0-8773-68e02d854e8d-0.jpg",
       ]);
-      
+      setReviewer(response.data.data.ComplainReviewers[0].User.fullName)
     }
     fetchData();
   }, []);
@@ -70,7 +71,19 @@ function ComplaintDetails() {
       <div className="container-fluid">
         <div className="row">
           <div class="col-7 my-4 ms-2">
-            <h2 className="my-3">Complaint Details</h2>
+            <div className="row">
+              <div className="col-7">
+                <h2 className="my-3 d-block">Complaint Details</h2>
+              </div>
+              <div className="col-5">
+                <div className="d-flex justify-content-end">
+                  <button class="btn btn-primary my-3 me-2">Add comment</button>
+                  <button class="btn btn-primary my-3 ms-2">
+                    Update status
+                  </button>
+                </div>
+              </div>
+            </div>
             <div className="row">
               <div className="col-3">
                 <div className="d-flex justify-content-between">
@@ -116,12 +129,6 @@ function ComplaintDetails() {
                 </div>
               </div>
               <div className="col-9">
-                {/* <img
-                  src={evidence}
-                  alt=""
-                  height="70"
-                  class="d-inline-block align-text-top"
-                ></img> */}
                 {evidence.map((src, index) => (
                   <img
                     src={src}
@@ -142,10 +149,17 @@ function ComplaintDetails() {
                     onClose={closeImageViewer}
                   />
                 )}
-
-                <h2>Evidence 1</h2>
-                <h2>Evidence 2</h2>
-                <h2>Evidence 3</h2>
+              </div>
+            </div>
+            <div className="row mt-3">
+              <div className="col-3">
+                <div className="d-flex justify-content-between">
+                  <div className="h5">Complain Reviewer</div>
+                  <div className="h5">:</div>
+                </div>
+              </div>
+              <div className="col-9">
+                <h5>{reviewer}</h5>
               </div>
             </div>
           </div>
