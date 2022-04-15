@@ -23,6 +23,7 @@ app.use(express.urlencoded({ extended: false }));
 const db = require("./models");
 
 app.use(fileUpload());
+app.use('/uploads/Evidence', express.static(__dirname + '/uploads/Evidence'));
 app.use("/auth", auth);
 app.use("/home", home);
 

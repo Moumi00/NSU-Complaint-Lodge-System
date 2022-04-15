@@ -21,7 +21,7 @@ router.get("/user-details", async (req, res) => {
     },
     include:[{
       model: Complain,
-      attributes: ["complainUNID", "complainTitle", "status"]
+      attributes: ["complainUNID", "complainTitle", "status", "complainerUNID"]
     },{
       model: ComplainReviewer,
       attributes: ["complainUNID"],

@@ -1,10 +1,11 @@
-import React, { useState, useEffect } from "react";
-import { Modal } from "bootstrap";
+import React, { useState, useEffect, useCallback  } from "react";
 import axios from "axios";
-import AsyncSelect from "react-select/async";
 import { useParams } from "react-router-dom";
+import { useLocation } from "react-router-dom";
+import ImageViewer from "react-simple-image-viewer";
 
 function ComplaintDetails() {
+  const location = useLocation();
   const { id } = useParams();
   const token = localStorage.getItem("userUNID");
   const [complainTitle, setComplainTitle] = useState("");
@@ -12,8 +13,11 @@ function ComplaintDetails() {
   const [complainAgainst, setComplainAgainst] = useState([]);
   const [lodgerName, setLodgerName] = useState("");
   const [lodgerNsuId, setLodgerNsuId] = useState("");
-  const [lodgerEmail, setLodgerEmail] = useState("");
+  const [lodgerEmail, setLodgerEmail] = useState(""); 
   const [lodgerDesignation, setLodgerDesignation] = useState("");
+  const [evidence, setEvidence] = useState([]);
+  const [currentImage, setCurrentImage] = useState(0);
+  const [isViewerOpen, setIsViewerOpen] = useState(false);
 
   useEffect(() => {
     async function fetchData() {
@@ -22,24 +26,44 @@ function ComplaintDetails() {
         {
           params: {
             complainUNID: id,
-            ComplainerUNID: token,
+            ComplainerUNID: location.state,
           },
         }
       );
-      if (response.data.error || response.data.data == null) {
-        window.location.replace("http://localhost:3000");
-      }
+      console.log(response);
+      // if (response.data.error || response.data.data == null) {
+      //   window.location.replace("http://localhost:3000");
+      // }
 
       setComplainTitle(response.data.data.complainTitle);
-      setComplainDescription(response.data.data.ComplainDescriptions[0].complainDescription);
-      setComplainAgainst(response.data.data.ComplainAgainsts.map((e)=>(e.User.fullName)));
+      setComplainDescription(
+        response.data.data.ComplainDescriptions[0].complainDescription
+      );
+      setComplainAgainst(
+        response.data.data.ComplainAgainsts.map((e) => e.User.fullName)
+      );
       setLodgerName(response.data.data.User.fullName);
       setLodgerNsuId(response.data.data.User.nsuId);
       setLodgerEmail(response.data.data.User.email);
       setLodgerDesignation(response.data.data.User.userType);
+      setEvidence([
+        "http://localhost:8000/uploads/Evidence/2cdeaf0a-c7f2-4fd0-8773-68e02d854e8d-0.jpg",
+        "http://localhost:8000/uploads/Evidence/2cdeaf0a-c7f2-4fd0-8773-68e02d854e8d-0.jpg",
+      ]);
+      
     }
     fetchData();
   }, []);
+
+  const openImageViewer = useCallback((index) => {
+    setCurrentImage(index);
+    setIsViewerOpen(true);
+  }, []);
+
+  const closeImageViewer = () => {
+    setCurrentImage(0);
+    setIsViewerOpen(false);
+  };
 
   return (
     <div class="flex-grow-1 background-color d-flex">
@@ -82,6 +106,46 @@ function ComplaintDetails() {
                 ) : (
                   <h1></h1>
                 )}
+              </div>
+            </div>
+            <div className="row mt-3">
+              <div className="col-3">
+                <div className="d-flex justify-content-between">
+                  <div className="h5">Evidence</div>
+                  <div className="h5">:</div>
+                </div>
+              </div>
+              <div className="col-9">
+                {/* <img
+                  src={evidence}
+                  alt=""
+                  height="70"
+                  class="d-inline-block align-text-top"
+                ></img> */}
+                {evidence.map((src, index) => (
+                  <img
+                    src={src}
+                    onClick={() => openImageViewer(index)}
+                    width="100"
+                    key={index}
+                    style={{ margin: "10px" }}
+                    alt=""
+                  />
+                ))}
+
+                {isViewerOpen && (
+                  <ImageViewer
+                    src={evidence}
+                    currentIndex={currentImage}
+                    disableScroll={false}
+                    closeOnClickOutside={true}
+                    onClose={closeImageViewer}
+                  />
+                )}
+
+                <h2>Evidence 1</h2>
+                <h2>Evidence 2</h2>
+                <h2>Evidence 3</h2>
               </div>
             </div>
           </div>
