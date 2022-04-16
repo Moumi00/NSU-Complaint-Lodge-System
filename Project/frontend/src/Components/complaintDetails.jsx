@@ -208,7 +208,7 @@ function ComplaintDetails() {
                     </div>)
                   })
                 ) : (
-                  <h5 class="pt-4 ">No Comments yet</h5>
+                  <h5 class="mt-2">No Comments yet</h5>
                 )}
               </div>
             </div>
