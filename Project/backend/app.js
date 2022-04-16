@@ -4,7 +4,7 @@ const mysql = require("mysql2");
 const auth = require("./Routes/auth");
 const home = require("./Routes/home");
 const fileUpload = require("express-fileupload");
-const cors = require("cors"); 
+const cors = require("cors");  
 
 app.use(cors());
 

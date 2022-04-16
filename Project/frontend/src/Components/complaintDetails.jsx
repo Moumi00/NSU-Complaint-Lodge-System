@@ -5,6 +5,7 @@ import { useLocation } from "react-router-dom";
 import ImageViewer from "react-simple-image-viewer";
 
 function ComplaintDetails() {
+  const [complainUNID, setComplainUNID] = useState("")
   const location = useLocation();
   const { id } = useParams();
   const token = localStorage.getItem("userUNID");
@@ -19,8 +20,12 @@ function ComplaintDetails() {
   const [currentImage, setCurrentImage] = useState(0);
   const [isViewerOpen, setIsViewerOpen] = useState(false);
   const [reviewer, setReviewer] = useState("")
+  const [comment, setComment] = useState("");
+  const [commentList, setCommentList] = useState([]);
+  const [commentErrorClass, setCommentErrorClass] = useState("none");
 
   useEffect(() => {
+
     async function fetchData() {
       let response = await axios.get(
         "http://localhost:8000/home/complain-latest-details",
@@ -47,11 +52,13 @@ function ComplaintDetails() {
       setLodgerNsuId(response.data.data.User.nsuId);
       setLodgerEmail(response.data.data.User.email);
       setLodgerDesignation(response.data.data.User.userType);
-      setEvidence([
-        "http://localhost:8000/uploads/Evidence/2cdeaf0a-c7f2-4fd0-8773-68e02d854e8d-0.jpg",
-        "http://localhost:8000/uploads/Evidence/2cdeaf0a-c7f2-4fd0-8773-68e02d854e8d-0.jpg",
-      ]);
+      setComplainUNID(response.data.data.complainUNID)
+      // setEvidence([
+      //   "http://localhost:8000/uploads/Evidence/2cdeaf0a-c7f2-4fd0-8773-68e02d854e8d-0.jpg",
+      //   "http://localhost:8000/uploads/Evidence/2cdeaf0a-c7f2-4fd0-8773-68e02d854e8d-0.jpg",
+      // ]);
       setReviewer(response.data.data.ComplainReviewers[0].User.fullName)
+      setCommentList(response.data.data.Comments.map((e) => (e.comment)))
     }
     fetchData();
   }, []);
@@ -65,6 +72,30 @@ function ComplaintDetails() {
     setCurrentImage(0);
     setIsViewerOpen(false);
   };
+
+  const addCommentButtonClicked = async (e) => {
+    e.preventDefault()
+
+    console.log("aise0");
+    if (!comment) {
+      return setCommentErrorClass("block");
+    }
+
+    let response = await axios.post(
+      "http://localhost:8000/home/add-comment",
+      {
+        complainUNID: complainUNID,
+        comment: comment,
+      }
+    );
+
+    console.log(response);
+
+    if (response.data.data) {
+      window.location.reload();
+    }
+
+  }
 
   return (
     <div class="flex-grow-1 background-color d-flex">
@@ -160,6 +191,53 @@ function ComplaintDetails() {
               </div>
               <div className="col-9">
                 <h5>{reviewer}</h5>
+              </div>
+            </div>
+            <div className="row mt-3">
+              <div className="col-3">
+                <div className="d-flex justify-content-between">
+                  <div className="h5">Comments</div>
+                </div>
+              </div>
+            </div>
+            <div>
+              {commentList.length != 0 ? (
+                commentList.map((e) => {
+                  return (<div className="row mt-3">
+                    <h5>{e}</h5>
+                  </div>)
+                })
+              ) : (
+                <h5 class="pt-4 ">No Comments yet</h5>
+              )}
+            </div>
+            <div className="row mt-3">
+              <div className="col-9">
+                <form onSubmit={addCommentButtonClicked}>
+                  <div class="form-group mb-4">
+                    <textarea
+                      class="form-control"
+                      id="form4Example3"
+                      rows="4"
+                      placeholder="Add a comment (upto 150 words)"
+                      style={{ resize: "none" }}
+                      onInput={(e) => {
+                        setComment(e.target.value);
+                      }}
+                      onChange={(e) => {
+                        setCommentErrorClass("none");
+                      }}
+                    ></textarea>
+                    <span class={"text-danger d-" + commentErrorClass}>
+                      Add a comment first.
+                    </span>
+                  </div>
+                  <div className="d-flex justify-content-end">
+                    <button type="submit" class="btn btn-primary fw-bold">
+                      Add comment
+                    </button>
+                  </div>
+                </form>
               </div>
             </div>
           </div>

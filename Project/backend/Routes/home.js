@@ -6,12 +6,43 @@ const {
   ComplainReviewer,
   Evidence,
   ComplainDescription,
+  Comment
 } = require("../models");
 const router = express.Router();
 const path = require("path");
 const uuid = require("uuid");
 const { Op, where } = require("sequelize");
 const { Sequelize } = require("sequelize");
+
+
+router.post("/add-comment", async (req, res) => {
+
+  const temp = await Comment.findOne({
+    attributes: ["commentNumber"],
+    where: {
+      complainUNID: req.body.complainUNID,
+    },
+  });
+
+  let commentNumber = 0;
+
+  if (temp != null){
+    commentNumber = temp.dataValues.commentNumber + 1;
+  }
+
+
+  await Comment.create({
+    ComplainUNID: req.body.complainUNID,
+    comment: req.body.comment,
+    commentNumber: commentNumber
+  });
+
+  res.json({
+    data: "Comment Added Successfully",
+    error: ""
+  })
+})
+
 
 router.get("/user-details", async (req, res) => {
   const result = await Users.findOne({
@@ -156,11 +187,15 @@ router.get("/complain-latest-details", async (req, res) => {
           },
         ],
       },
+      {
+        model: Comment,
+        attributes: ["comment", "commentNumber"]
+      }
     ],
     where: {
       complainUNID: req.query.complainUNID,
       ComplainerUNID: req.query.ComplainerUNID,
-    },
+    }, 
   });
 
   res.json({

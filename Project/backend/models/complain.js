@@ -42,6 +42,11 @@ module.exports = (sequelize, DataTypes) => {
         name: "ComplainUNID",
       }
     });
+    Complain.hasMany(models.Comment, {
+      foreignKey : {
+        name: "ComplainUNID",
+      }
+    });
   };
 
   return Complain;
