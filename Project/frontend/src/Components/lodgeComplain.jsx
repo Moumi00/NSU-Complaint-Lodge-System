@@ -22,6 +22,7 @@ function LodgeComplaint() {
   const [reviewerErrorClass, setReviewerErrorClass] = useState("none");
   const [evidenceErrorClass, setEvidenceErrorClass] = useState("none");
   const token = localStorage.getItem("userUNID");
+  const max = 255;
 
   if (!token) {
     window.location.replace("http://localhost:3000/login");
@@ -107,10 +108,10 @@ function LodgeComplaint() {
   async function handleLodgeComplaintButtonClicked(e) {
     e.preventDefault();
     console.log(complainAgainst);
-    if (!complainTitle) {
+    if (!complainTitle && complainTitle > max) {
       return setComplainTitleErrorClass("block");
     }
-    if (!complainDescription) {
+    if (!complainDescription && complainDescription > max) {
       return setComplainDescriptionErrorClass("block");
     }
     if (complainAgainst.length === 0) {
@@ -122,6 +123,7 @@ function LodgeComplaint() {
     if (!reviewer) {
       return setReviewerErrorClass("block");
     }
+    
     console.log(selectedFiles);
 
     const formData = new FormData();
