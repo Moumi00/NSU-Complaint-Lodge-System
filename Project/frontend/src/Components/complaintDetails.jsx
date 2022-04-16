@@ -99,7 +99,7 @@ function ComplaintDetails() {
 
   return (
     <div class="flex-grow-1 background-color d-flex">
-      <div className="container-fluid">
+      <div className="container-fluid ms-5">
         <div className="row">
           <div class="col-7 my-4 ms-2">
             <div className="row">
@@ -108,7 +108,7 @@ function ComplaintDetails() {
               </div>
               <div className="col-5">
                 <div className="d-flex justify-content-end">
-                  <button class="btn btn-primary my-3 me-2">Add comment</button>
+                  <button class="btn btn-primary my-3 me-2">Change reviewer</button>
                   <button class="btn btn-primary my-3 ms-2">
                     Update status
                   </button>
@@ -194,25 +194,26 @@ function ComplaintDetails() {
               </div>
             </div>
             <div className="row mt-3">
-              <div className="col-3">
+              <div className="col-3 mt-2">
                 <div className="d-flex justify-content-between">
-                  <div className="h5">Comments</div>
+                  <div className="h5">Comment(s)</div>
+                  <div className="h5">:</div>
                 </div>
               </div>
-            </div>
-            <div>
-              {commentList.length != 0 ? (
-                commentList.map((e) => {
-                  return (<div className="row mt-3">
-                    <h5>{e}</h5>
-                  </div>)
-                })
-              ) : (
-                <h5 class="pt-4 ">No Comments yet</h5>
-              )}
+              <div className="col-9">
+                {commentList.length != 0 ? (
+                  commentList.map((e) => {
+                    return (<div className="row border border-4 bg-white border-white my-2 ">
+                      <h6 class="fw-normal my-1">{e}</h6>
+                    </div>)
+                  })
+                ) : (
+                  <h5 class="pt-4 ">No Comments yet</h5>
+                )}
+              </div>
             </div>
             <div className="row mt-3">
-              <div className="col-9">
+              <div className="col-9 offset-3 p-0">
                 <form onSubmit={addCommentButtonClicked}>
                   <div class="form-group mb-4">
                     <textarea
@@ -234,27 +235,29 @@ function ComplaintDetails() {
                   </div>
                   <div className="d-flex justify-content-end">
                     <button type="submit" class="btn btn-primary fw-bold">
-                      Add comment
+                      Add new comment
                     </button>
                   </div>
                 </form>
               </div>
             </div>
           </div>
-          <div className="col-4 border border-5 border-white rounded-3 my-4 ms-4 card-shadow">
-            <h5 className="text-center mt-3">LODGER DETAILS</h5>
-            <div class="d-flex flex-column align-items-center">
-              <img
-                src={require("../Assets/User-Profile.png")}
-                alt=""
-                height="150"
-                class="d-inline-block align-text-top mt-1 align-items-center justify-content-center"
-              ></img>
+          <div className="col-4 my-4 ms-4">
+            <div className="d-flex flex-column border border-5 border-white rounded-3 card-shadow p-4">
+              <h5 className="text-center mt-3">LODGER DETAILS</h5>
+              <div class="d-flex flex-column align-items-center">
+                <img
+                  src={require("../Assets/User-Profile.png")}
+                  alt=""
+                  height="150"
+                  class="d-inline-block align-text-top mt-1 align-items-center justify-content-center"
+                ></img>
+              </div>
+              <h6 class="mt-3">Name: {lodgerName}</h6>
+              <h6 class="mt-3">NSU ID: {lodgerNsuId}</h6>
+              <h6 class="mt-3">Email: {lodgerEmail}</h6>
+              <h6 class="mt-3">Designation: {lodgerDesignation}</h6>
             </div>
-            <h6 class="mt-3">Name: {lodgerName}</h6>
-            <h6 class="mt-3">NSU ID: {lodgerNsuId}</h6>
-            <h6 class="mt-3">Email: {lodgerEmail}</h6>
-            <h6 class="mt-3">Designation: {lodgerDesignation}</h6>
           </div>
         </div>
       </div>
