@@ -2,7 +2,7 @@ module.exports = (sequelize, DataTypes) => {
   const Comment = sequelize.define("Comment", {
     comment: DataTypes.STRING,
     commentNumber: {
-      type: DataTypes.INTEGER,
+      type: DataTypes.INTEGER, 
       defaultValue: 0,
     },
   });
@@ -10,7 +10,7 @@ module.exports = (sequelize, DataTypes) => {
   Comment.associate = (models) => {
     Comment.belongsTo(models.Complain, {
       foreignKey: {
-        name: "ComplainUNID",
+        name: "ComplainUNID",  
       },
     });
   };

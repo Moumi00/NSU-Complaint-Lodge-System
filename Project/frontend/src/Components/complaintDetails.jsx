@@ -3,9 +3,10 @@ import axios from "axios";
 import { useParams } from "react-router-dom";
 import { useLocation } from "react-router-dom";
 import ImageViewer from "react-simple-image-viewer";
+import AsyncSelect from "react-select/async";
 
 function ComplaintDetails() {
-  const [complainUNID, setComplainUNID] = useState("")
+  const [complainUNID, setComplainUNID] = useState("");
   const location = useLocation();
   const { id } = useParams();
   const token = localStorage.getItem("userUNID");
@@ -15,50 +16,74 @@ function ComplaintDetails() {
   const [lodgerName, setLodgerName] = useState("");
   const [lodgerNsuId, setLodgerNsuId] = useState("");
   const [lodgerEmail, setLodgerEmail] = useState("");
+  const [lodgerUserUNID, setLodgerUserUNID] = useState("");
   const [lodgerDesignation, setLodgerDesignation] = useState("");
   const [evidence, setEvidence] = useState([]);
   const [currentImage, setCurrentImage] = useState(0);
   const [isViewerOpen, setIsViewerOpen] = useState(false);
-  const [reviewer, setReviewer] = useState("")
+  const [reviewer, setReviewer] = useState("");
   const [comment, setComment] = useState("");
   const [commentList, setCommentList] = useState([]);
   const [commentErrorClass, setCommentErrorClass] = useState("none");
+  const [isReviewer, setIsReviewer] = useState("");
+  const [openCompReviewerMenu, setOpenCompReviewerMenu] = useState(false);
+
+  const [newReviewer, setNewReviewer] = useState("");
+  const [newReviewerErrorClass, setNewReviewerErrorClass] = useState("none");
 
   useEffect(() => {
-
     async function fetchData() {
+      if (!location.state) {
+        return window.location.replace("http://localhost:3000");
+      }
       let response = await axios.get(
         "http://localhost:8000/home/complain-latest-details",
         {
           params: {
             complainUNID: id,
-            ComplainerUNID: location.state,
           },
         }
       );
       console.log(response);
-      // if (response.data.error || response.data.data == null) {
-      //   window.location.replace("http://localhost:3000");
-      // }
-
+      if (
+        !(
+          token == response.data.data.ComplainerUNID ||
+          token ==
+            response.data.data.ComplainReviewers[0].ComplainReviewerUserUNID
+        )
+      ) {
+        window.location.replace("http://localhost:3000");
+      }
       setComplainTitle(response.data.data.complainTitle);
       setComplainDescription(
         response.data.data.ComplainDescriptions[0].complainDescription
       );
       setComplainAgainst(
-        response.data.data.ComplainAgainsts.map((e) => e.User.fullName)
+        response.data.data.ComplainAgainsts.map((e) => ({
+          fullName: e.User.fullName,
+          userUNID: e.User.userUNID,
+        }))
       );
       setLodgerName(response.data.data.User.fullName);
       setLodgerNsuId(response.data.data.User.nsuId);
       setLodgerEmail(response.data.data.User.email);
       setLodgerDesignation(response.data.data.User.userType);
-      setComplainUNID(response.data.data.complainUNID)
+      setLodgerUserUNID(response.data.data.ComplainerUNID);
+      setComplainUNID(response.data.data.complainUNID);
       // setEvidence([
       //   "http://localhost:8000/uploads/Evidence/2cdeaf0a-c7f2-4fd0-8773-68e02d854e8d-0.jpg",
       //   "http://localhost:8000/uploads/Evidence/2cdeaf0a-c7f2-4fd0-8773-68e02d854e8d-0.jpg",
       // ]);
-      setReviewer(response.data.data.ComplainReviewers[0].User.fullName)
-      setCommentList(response.data.data.Comments.map((e) => (e.comment)))
+      setReviewer(response.data.data.ComplainReviewers[0].User.fullName);
+      setCommentList(response.data.data.Comments.map((e) => e.comment));
+      if (
+        token ==
+        response.data.data.ComplainReviewers[0].ComplainReviewerUserUNID
+      ) {
+        setIsReviewer(true);
+      } else {
+        setIsReviewer(false);
+      }
     }
     fetchData();
   }, []);
@@ -68,32 +93,82 @@ function ComplaintDetails() {
     setIsViewerOpen(true);
   }, []);
 
+  const handleReviewerOnChange = (e) => {
+    setOpenCompReviewerMenu(false);
+    setNewReviewerErrorClass("none");
+    setNewReviewer(e.value);
+  };
+
+  const changeReviewerButtonClicked = async (e) => {
+    console.log(newReviewer);
+    console.log(lodgerUserUNID);
+    let response = await axios.post(
+      "http://localhost:8000/home/change-reviewer",
+      {
+        complainUNID: id,
+        complainReviewerUserUNID: newReviewer,
+      }
+    );
+  };
+
   const closeImageViewer = () => {
     setCurrentImage(0);
     setIsViewerOpen(false);
   };
 
+  const handleOkayButton = () => {
+    window.location.replace("http://localhost:3000");
+  };
+
+  const handleCloseButton = () => {
+    window.location.replace("http://localhost:3000");
+  }
+
   const addCommentButtonClicked = async (e) => {
-    e.preventDefault()
+    e.preventDefault();
 
     console.log("aise0");
     if (!comment) {
       return setCommentErrorClass("block");
     }
 
-    let response = await axios.post(
-      "http://localhost:8000/home/add-comment",
-      {
-        complainUNID: complainUNID,
-        comment: comment,
-      }
-    );
+    let response = await axios.post("http://localhost:8000/home/add-comment", {
+      complainUNID: complainUNID,
+      comment: comment,
+    });
 
     console.log(response);
 
     if (response.data.data) {
       window.location.reload();
     }
+  };
+
+  const fetchReviewerData = async (input, callback) => {
+    let response = await axios.get("http://localhost:8000/home/reviewers", {
+      params: {
+        query: input,
+        userUNID: token,
+      },
+    });
+    callback(
+      response.data.data.map((i) => ({
+        label: i.fullName,
+        value: i.userUNID,
+        isDisabled:
+          complainAgainst.some((e) =>
+            e.userUNID == i.userUNID ? true : false
+          ) || (lodgerUserUNID == i.userUNID ? true : false),
+      }))
+    );
+  };
+
+  const handleMarkAsClosedButtonClicked = async () => {
+    let response = await axios.post("http://localhost:8000/home/change-status", {
+      complainUNID: id,
+    });
+
+    console.log(response)
 
   }
 
@@ -107,10 +182,25 @@ function ComplaintDetails() {
                 <h2 className="my-3 d-block">Complaint Details</h2>
               </div>
               <div className="col-5">
-                <div className="d-flex justify-content-end">
-                  <button class="btn btn-primary my-3 me-2">Change reviewer</button>
-                  <button class="btn btn-primary my-3 ms-2">
-                    Update status
+                <div
+                  className={
+                    "justify-content-end " + (isReviewer ? "d-flex" : "d-none")
+                  }
+                >
+                  <button
+                    class="btn btn-primary my-3 me-2"
+                    data-bs-toggle="modal"
+                    data-bs-target="#staticBackdrop"
+                  >
+                    Change reviewer
+                  </button>
+                  <button
+                    class="btn btn-primary my-3 ms-2"
+                    data-bs-toggle="modal"
+                    data-bs-target="#staticBackdrop3"
+                    onClick={handleMarkAsClosedButtonClicked}
+                  >
+                    Mark as closed
                   </button>
                 </div>
               </div>
@@ -146,7 +236,7 @@ function ComplaintDetails() {
               </div>
               <div className="col-9">
                 {complainAgainst.length != 0 ? (
-                  complainAgainst.map((e) => <h5>{e}</h5>)
+                  complainAgainst.map((e) => <h5>{e.fullName}</h5>)
                 ) : (
                   <h1></h1>
                 )}
@@ -203,16 +293,18 @@ function ComplaintDetails() {
               <div className="col-9">
                 {commentList.length != 0 ? (
                   commentList.map((e) => {
-                    return (<div className="row border border-4 bg-white border-white my-2 ">
-                      <h6 class="fw-normal my-1">{e}</h6>
-                    </div>)
+                    return (
+                      <div className="row border border-4 bg-white border-white my-2 ">
+                        <h6 class="fw-normal my-1">{e}</h6>
+                      </div>
+                    );
                   })
                 ) : (
                   <h5 class="mt-2">No Comments yet</h5>
                 )}
               </div>
             </div>
-            <div className="row mt-3">
+            <div className={"row mt-3 " + (isReviewer ? "d-flex" : "d-none")}>
               <div className="col-9 offset-3 p-0">
                 <form onSubmit={addCommentButtonClicked}>
                   <div class="form-group mb-4">
@@ -257,6 +349,135 @@ function ComplaintDetails() {
               <h6 class="mt-3">NSU ID: {lodgerNsuId}</h6>
               <h6 class="mt-3">Email: {lodgerEmail}</h6>
               <h6 class="mt-3">Designation: {lodgerDesignation}</h6>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div
+        class="modal fade"
+        id="staticBackdrop"
+        data-bs-backdrop="static"
+        data-bs-keyboard="false"
+        tabindex="-1"
+        aria-labelledby="staticBackdropLabel"
+        aria-hidden="true"
+      >
+        <div class="modal-dialog">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title" id="staticBackdropLabel">
+                Change Reviewer
+              </h5>
+              <button
+                type="button"
+                class="btn-close"
+                data-bs-dismiss="modal"
+                aria-label="Close"
+              ></button>
+            </div>
+            <div class="modal-body">
+              <form>
+                <div class="mb-3">
+                  <AsyncSelect
+                    loadOptions={fetchReviewerData}
+                    placeholder={
+                      <div style={{ color: "grey" }}>
+                        Choose Reviewer(only one)
+                      </div>
+                    }
+                    components={{
+                      DropdownIndicator: () => null, // Remove dropdown icon
+                      IndicatorSeparator: () => null, // Remove separator
+                    }}
+                    onChange={handleReviewerOnChange}
+                    onBlur={(e) => {
+                      setOpenCompReviewerMenu(false);
+                    }}
+                    onInputChange={(e, { action }) => {
+                      if (e.length === 0) {
+                        setOpenCompReviewerMenu(false);
+                        return;
+                      }
+                      if (action === "input-change") {
+                        setOpenCompReviewerMenu(true);
+                      }
+                    }}
+                    menuIsOpen={openCompReviewerMenu}
+                  />
+                  <span class={"text-danger d-" + newReviewerErrorClass}>
+                    Select a complain reviewer.
+                  </span>
+                </div>
+              </form>
+            </div>
+            <div class="modal-footer">
+              <button
+                type="button"
+                class="btn btn-primary"
+                onClick={changeReviewerButtonClicked}
+                data-bs-toggle="modal"
+                data-bs-target="#staticBackdrop2"
+              >
+                Change Reviewer
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div
+        class="modal fade"
+        id="staticBackdrop2"
+        data-bs-backdrop="static"
+        data-bs-keyboard="false"
+        tabindex="-1"
+        aria-labelledby="staticBackdrop2Label"
+        aria-hidden="true"
+      >
+        <div class="modal-dialog">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title" id="staticBackdrop2Label">
+                Reviewer Changed Successfully
+              </h5>
+            </div>
+            <div class="modal-body">Press Okay to continue</div>
+            <div class="modal-footer">
+              <button
+                type="button"
+                class="btn btn-primary"
+                onClick={handleOkayButton}
+              >
+                Okay
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div
+        class="modal fade "
+        id="staticBackdrop3"
+        data-bs-backdrop="static"
+        data-bs-keyboard="false"
+        tabindex="-1"
+        aria-labelledby="staticBackdrop3Label"
+        aria-hidden="true"
+      >
+        <div class="modal-dialog modal-dialog-centered">
+          <div class="modal-content">
+            <div class="modal-body">
+              Complain Closed Successfully
+            </div>
+            <div class="modal-footer">
+              <button
+                type="button"
+                class="btn btn-secondary"
+                onClick={handleCloseButton}
+              >
+                Close
+              </button>
             </div>
           </div>
         </div>

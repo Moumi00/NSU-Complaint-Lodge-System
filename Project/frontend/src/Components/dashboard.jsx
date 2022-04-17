@@ -2,6 +2,8 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 import ComplainRow from "./complainRow";
 import ReviewComplainRow from "./reviewComplainRow";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faLock, faUserLock } from "@fortawesome/free-solid-svg-icons";
 
 function Dashboard() {
   const token = localStorage.getItem("userUNID");
@@ -17,6 +19,8 @@ function Dashboard() {
   );
   const [reviewComplainSelectedClass, setReviewComplainSelectedClass] =
     useState("");
+  
+  const [isReviewer, setIsReviewer] = useState(false);
 
   useEffect(() => {
     async function fetchData() {
@@ -28,7 +32,7 @@ function Dashboard() {
           },
         }
       );
-      
+
       console.log(response.data.data);
       console.log(token);
       setName(response.data.data.fullName);
@@ -36,7 +40,8 @@ function Dashboard() {
       setEmail(response.data.data.email);
       setDesignation(response.data.data.userType);
       setComplainList(response.data.data.Complains);
-      setReviewComplainList(response.data.data.ComplainReviewers)
+      setReviewComplainList(response.data.data.ComplainReviewers);
+      setIsReviewer((response.data.data.actorType == "Reviewer") ? true : false)
     }
     fetchData();
   }, []);
@@ -97,20 +102,36 @@ function Dashboard() {
               <button
                 type="button"
                 class={"btn btn-lg " + reviewComplainSelectedClass}
+                disabled={!isReviewer}
                 onClick={reviewComplainButtonClicked}
               >
                 Review Complain(s)
+                <i className={"ms-2 d-" + (isReviewer ? "none" : "inline")}>
+                  <FontAwesomeIcon icon={faLock} />
+                </i>
               </button>
-              <div className={"h-100 flex-column d-" + (!reviewComplainSelectedClass ? "flex" : "none")}>
+              <div
+                className={
+                  "h-100 flex-column d-" +
+                  (!reviewComplainSelectedClass ? "flex" : "none")
+                }
+              >
                 {complainList.length != 0 ? (
                   complainList.map((e) => <ComplainRow complain={e} />)
                 ) : (
                   <h1 class="pt-4 ">No Complain Lodged</h1>
                 )}
               </div>
-              <div className={"h-100 flex-column d-" + (!reviewComplainSelectedClass ? "none" : "flex")}>
+              <div
+                className={
+                  "h-100 flex-column d-" +
+                  (!reviewComplainSelectedClass ? "none" : "flex")
+                }
+              >
                 {reviewComplainList.length != 0 ? (
-                  reviewComplainList.map((e) => <ReviewComplainRow complain={e} />)
+                  reviewComplainList.map((e) => (
+                    <ReviewComplainRow complain={e} />
+                  ))
                 ) : (
                   <h1 class="pt-4 ">No Complain to Review</h1>
                 )}

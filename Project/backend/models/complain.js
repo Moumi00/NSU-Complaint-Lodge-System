@@ -6,10 +6,10 @@ module.exports = (sequelize, DataTypes) => {
     },
     complainTitle: DataTypes.STRING,
     status: {
-      type: DataTypes.STRING,
-      defaultValue: "open"
+      type: DataTypes.ENUM("Open", "Close"),
+      defaultValue: "Open",
     },
-    edits: {
+    edits: { 
       type: DataTypes.INTEGER,
       defaultValue: 0
     }

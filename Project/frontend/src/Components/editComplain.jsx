@@ -35,10 +35,13 @@ function EditComplaint() {
         {
           params: {
             complainUNID: id,
-            ComplainerUNID: token,
           },
         }
       );
+      console.log(response);
+      if (token != response.data.data.ComplainerUNID){
+        window.location.replace("http://localhost:3000");
+      }
       if (response.data.error || response.data.data == null) {
         window.location.replace("http://localhost:3000");
       }

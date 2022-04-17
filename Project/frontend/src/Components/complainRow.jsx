@@ -3,16 +3,26 @@ import { useNavigate } from "react-router-dom";
 
 function ComplainRow(props) {
   let navigate = useNavigate();
+
+  const [latestComplain, setLatestComplain] = useState("");
   useEffect(() => {
     async function fetchData() {
       console.log(props.complain);
+      if (props.complain.Comments.length != 0) {
+        let objTemp = props.complain.Comments.reduce((max, game) =>
+          max.commentNumber > game.commentNumber ? max : game
+        );
+        setLatestComplain(objTemp.comment);
+      }
     }
     fetchData();
   }, []);
 
   const complainDetailsClicked = () => {
-    navigate("/complaint-details/" + props.complain.complainUNID, { state: props.complain.complainerUNID });
-  }
+    navigate("/complaint-details/" + props.complain.complainUNID, {
+      state: props.complain.complainerUNID,
+    });
+  };
 
   return (
     <>
@@ -21,7 +31,7 @@ function ComplainRow(props) {
           <div class="card-body">
             <h3 class="card-title">{props.complain.complainTitle}</h3>
             <h5 class="card-text mt-4 mb-3 text-danger">
-              Latest Comment: Upload Clear Photo
+              Latest Comment: {(props.complain.Comments != 0) ? latestComplain : "No comments yet"}
             </h5>
             <div className="d-flex justify-content-between">
               <h5 class="card-text">

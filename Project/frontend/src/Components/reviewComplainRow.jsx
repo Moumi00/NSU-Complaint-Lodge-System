@@ -12,8 +12,10 @@ function ReviewComplainRow(props) {
   }, []);
 
   const complainDetailsClicked = () => {
-    navigate("/complaint-details/" + props.complain.complainUNID, { state: props.complain.Complain.User.userUNID });
-  }
+    navigate("/complaint-details/" + props.complain.complainUNID, {
+      state: props.complain.Complain.User.userUNID,
+    });
+  };
   return (
     <>
       <div className="row">
@@ -24,7 +26,9 @@ function ReviewComplainRow(props) {
               Complainer: {props.complain.Complain.User.fullName}
             </h5>
             <div className="d-flex justify-content-between">
-              <h5 class="card-text">Complain Status: Open</h5>
+              <h5 class="card-text">
+                Complain Status: {props.complain.Complain.status}
+              </h5>
               <div>
                 <a
                   //href={"/complaint-details/" + props.complain.complainUNID}
