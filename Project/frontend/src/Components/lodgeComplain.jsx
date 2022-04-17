@@ -108,10 +108,10 @@ function LodgeComplaint() {
   async function handleLodgeComplaintButtonClicked(e) {
     e.preventDefault();
     console.log(complainAgainst);
-    if (!complainTitle && complainTitle > max) {
+    if (!complainTitle || complainTitle > max) {
       return setComplainTitleErrorClass("block");
     }
-    if (!complainDescription && complainDescription > max) {
+    if (!complainDescription || complainDescription > max) {
       return setComplainDescriptionErrorClass("block");
     }
     if (complainAgainst.length === 0) {
@@ -176,7 +176,7 @@ function LodgeComplaint() {
                 }}
               ></input>
               <span class={"text-danger d-" + complainTitleErrorClass}>
-                Enter Complaint Title.
+                Enter Complaint Title(can't exceed 250 words).
               </span>
             </div>
             <div class="form-group mb-4">
@@ -194,7 +194,7 @@ function LodgeComplaint() {
                 }}
               ></textarea>
               <span class={"text-danger d-" + complainDescriptionErrorClass}>
-                Enter Complaint Description.
+                Enter Complaint Description within 250 words.
               </span>
             </div>
             <div className="form-group d-flex flex-column mb-4">

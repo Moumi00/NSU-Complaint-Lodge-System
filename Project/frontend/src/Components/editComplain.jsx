@@ -23,6 +23,7 @@ function EditComplaint() {
 
   const [complainAgainstOptions, setComplainAgainstOptions] = useState([]);
   const [reviewerOption, setReviewerOption] = useState({});
+  const max = 255;
 
   if (!token) {
     window.location.replace("http://localhost:3000/login");
@@ -148,7 +149,7 @@ function EditComplaint() {
     if (!complainDescription) {
       return setComplainDescriptionErrorClass("block");
     }
-    if (complainAgainst.length === 0) {
+    if (complainAgainst.length === 0 || complainDescription.length > max) {
       return setComplainAgainstErrorClass("block");
     }
     if (!isFilePicked) {
@@ -221,7 +222,7 @@ function EditComplaint() {
                 }}
               ></textarea>
               <span class={"text-danger d-" + complainDescriptionErrorClass}>
-                Enter Complaint Description.
+                Enter Complaint Description within 250 words.
               </span>
             </div>
             <div className="form-group d-flex flex-column mb-4">
