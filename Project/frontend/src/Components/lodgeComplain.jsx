@@ -235,7 +235,7 @@ function LodgeComplaint() {
                 Evidence
               </label>
               <input
-                accept="image/*, application/pdf"
+                accept="image/*, application/pdf, video/*"
                 id="file"
                 type="file"
                 name="file"

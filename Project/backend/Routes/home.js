@@ -28,9 +28,9 @@ router.post("/change-status", async (req, res) => {
 
   res.json({
     data: "Status Updated",
-    error: ""
-  })
-})
+    error: "",
+  });
+});
 
 router.post("/add-comment", async (req, res) => {
   const temp = await Comment.findOne({
@@ -124,6 +124,7 @@ router.get("/user-details", async (req, res) => {
 });
 
 router.post("/edit-complain", async (req, res) => {
+  const complainAgainstUserUNID = JSON.parse(req.body.complainAgainstUserUNID);
   const temp = await Complain.findOne({
     attributes: ["edits"],
     where: {
@@ -146,29 +147,61 @@ router.post("/edit-complain", async (req, res) => {
 
   for (let i = 0; i < complainAgainstUserUNID.length; i++) {
     await ComplainAgainst.create({
-      ComplainUNID: complainUNID,
+      ComplainUNID: req.body.complainUNID,
       ComplainAgainstUserUNID: complainAgainstUserUNID[i],
       editHistory: editNumber,
     });
     console.log(complainAgainstUserUNID[i]);
   }
 
-  // await ComplainReviewer.Update(
-  //   {
-  //     editHistory: editNumber,
-  //   },
-  //   {
-  //     where: {
-  //       ComplainUNID: req.body.complainUNID,
-  //     },
-  //   }
-  // );
+  if (req.files != null) {
+    const files = req.files.file;
+
+    async function move(image, idx) {
+      let uploadPath;
+      uploadPath = path.join(__dirname, "..");
+      uploadPath +=
+        "/uploads/Evidence/" +
+        req.body.complainUNID +
+        "-" +
+        (idx + req.body.oldEvidenceCount) +
+        "." +
+        image.name.split(".").pop();
+      try {
+        image.mv(uploadPath);
+      } catch (e) {
+        return res.send({
+          success: false,
+          message: "upload error",
+        });
+      }
+      await Evidence.create({
+        ComplainUNID: req.body.complainUNID,
+        evidence:
+          req.body.complainUNID +
+          "-" +
+          (idx + req.body.oldEvidenceCount) +
+          "." +
+          image.name.split(".").pop(),
+      });
+    }
+
+    Array.isArray(files)
+      ? files.forEach((file, idx) => move(file, idx))
+      : move(files, 0);
+  }
 
   await ComplainDescription.create({
-    ComplainUNID: complainUNID,
+    ComplainUNID: req.body.complainUNID,
     complainDescription: req.body.complainDescription,
     editHistory: editNumber,
   });
+
+  res.json({
+    data: "Edited Successfully",
+    error: ""
+  })
+
 });
 
 router.post("/change-reviewer", async (req, res) => {
@@ -237,9 +270,6 @@ router.get("/complain-latest-details", async (req, res) => {
       {
         model: Evidence,
         attributes: ["evidence"],
-        where: {
-          editHistory: temp.dataValues.edits,
-        },
       },
       {
         model: Users,
@@ -264,7 +294,7 @@ router.get("/complain-latest-details", async (req, res) => {
     ],
     where: {
       complainUNID: req.query.complainUNID,
-      status: Complain.getAttributes().status.values[0]
+      status: Complain.getAttributes().status.values[0],
     },
   });
 

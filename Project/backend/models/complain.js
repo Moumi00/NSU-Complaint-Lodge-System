@@ -10,7 +10,7 @@ module.exports = (sequelize, DataTypes) => {
       defaultValue: "Open",
     },
     edits: { 
-      type: DataTypes.INTEGER,
+      type: DataTypes.INTEGER, 
       defaultValue: 0
     }
     

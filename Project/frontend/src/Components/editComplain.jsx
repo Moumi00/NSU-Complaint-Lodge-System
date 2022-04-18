@@ -23,6 +23,7 @@ function EditComplaint() {
 
   const [complainAgainstOptions, setComplainAgainstOptions] = useState([]);
   const [reviewerOption, setReviewerOption] = useState({});
+  const [oldEvidence, setOldEvidence] = useState([]);
   const max = 255;
 
   if (!token) {
@@ -40,7 +41,7 @@ function EditComplaint() {
         }
       );
       console.log(response);
-      if (token != response.data.data.ComplainerUNID){
+      if (token != response.data.data.ComplainerUNID) {
         window.location.replace("http://localhost:3000");
       }
       if (response.data.error || response.data.data == null) {
@@ -54,14 +55,18 @@ function EditComplaint() {
         label: response.data.data.ComplainReviewers[0].User.fullName,
         value: response.data.data.ComplainReviewers[0].User.userUNID,
       };
-      const temp1 = response.data.data.ComplainAgainsts.map((e)=>(
-        {label: e.User.fullName, value: e.User.userUNID}
-      ))
-      const temp2 = response.data.data.ComplainAgainsts.map((e)=>(e.User.userUNID));
+      const temp1 = response.data.data.ComplainAgainsts.map((e) => ({
+        label: e.User.fullName,
+        value: e.User.userUNID,
+      }));
+      const temp2 = response.data.data.ComplainAgainsts.map(
+        (e) => e.User.userUNID
+      );
       setComplainAgainst(temp2);
       setComplainAgainstOptions(temp1);
       setReviewerOption(temp);
-      setReviewer(response.data.data.ComplainReviewers[0].User.userUNID)
+      setReviewer(response.data.data.ComplainReviewers[0].User.userUNID);
+      setOldEvidence(response.data.data.Evidence.map((e) => e.evidence));
     }
     fetchData();
   }, []);
@@ -152,27 +157,25 @@ function EditComplaint() {
     if (complainAgainst.length === 0 || complainDescription.length > max) {
       return setComplainAgainstErrorClass("block");
     }
-    if (!isFilePicked) {
-      return setEvidenceErrorClass("block");
-    }
+    // if (!isFilePicked) {
+    //   return setEvidenceErrorClass("block");
+    // }
     console.log(selectedFiles);
 
     const formData = new FormData();
+    formData.append("complainUNID", id);
     formData.append("complainerUNID", token);
     formData.append("complainTitle", complainTitle);
     formData.append("complainDescription", complainDescription);
     formData.append("complainAgainstUserUNID", JSON.stringify(complainAgainst));
     formData.append("complainReviewerUserUNID", reviewer);
+    formData.append("oldEvidenceCount", oldEvidence.length);
     selectedFiles.forEach((file) => {
       formData.append("file", file);
     });
 
-    for (var pair of formData.entries()) {
-      console.log(pair[0] + " - " + pair[1]);
-    }
-
     let response = await axios.post(
-      "http://localhost:8000/home/lodge-complaint",
+      "http://localhost:8000/home/edit-complain",
       formData,
       {
         headers: { "Content-Type": "multipart/form-data" },
@@ -259,13 +262,32 @@ function EditComplaint() {
                 </span>
               </div>
             </div>
+            <div className="d-flex flex-column">
+              <div className="mb-2">Old Evidence(s)</div>
+              {oldEvidence.map((src, index) => (
+                <div className="mb-2">
+                  <a
+                    className="h6 fw-normal"
+                    href={"http://localhost:8000/uploads/Evidence/" + src}
+                    target="_blank"
+                    download={index + 1}
+                  >
+                    Evidence {index + 1}
+                  </a>
+                </div>
+              ))}
+            </div>
             <div class="form-group mb-4">
-              <label class="button-attach ms-0" for="file">
+              <label
+                class="button-attach ms-0"
+                for="file"
+                style={{ width: "40%" }}
+              >
                 <i class="bi bi-paperclip me-1"></i>
-                Evidence
+                Add new evidence
               </label>
               <input
-                accept="image/*, application/pdf"
+                accept="image/*, application/pdf, video/*"
                 id="file"
                 type="file"
                 name="file"
@@ -338,7 +360,7 @@ function EditComplaint() {
             class="modal fade"
             data-bs-backdrop="static"
             data-bs-keyboard="false"
-            id="exampleModal"
+            id="exampleModal" 
             tabindex="-1"
             aria-labelledby="exampleModalLabel"
             aria-hidden="true"

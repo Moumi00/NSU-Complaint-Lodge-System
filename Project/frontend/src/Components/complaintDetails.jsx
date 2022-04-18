@@ -123,7 +123,7 @@ function ComplaintDetails() {
 
   const handleCloseButton = () => {
     window.location.replace("http://localhost:3000");
-  }
+  };
 
   const addCommentButtonClicked = async (e) => {
     e.preventDefault();
@@ -165,13 +165,15 @@ function ComplaintDetails() {
   };
 
   const handleMarkAsClosedButtonClicked = async () => {
-    let response = await axios.post("http://localhost:8000/home/change-status", {
-      complainUNID: id,
-    });
+    let response = await axios.post(
+      "http://localhost:8000/home/change-status",
+      {
+        complainUNID: id,
+      }
+    );
 
-    console.log(response)
-
-  }
+    console.log(response);
+  };
 
   return (
     <div class="flex-grow-1 background-color d-flex">
@@ -251,18 +253,20 @@ function ComplaintDetails() {
                 </div>
               </div>
               <div className="col-9">
-                {evidence.map((src, index) => (
-                 <a href={"http://localhost:8000/uploads/Evidence/" + src} target="_blank" download>File {index + 1}</a>
-                ))}
-                {isViewerOpen && (
-                  <ImageViewer
-                    src={evidence}
-                    currentIndex={currentImage}
-                    disableScroll={false}
-                    closeOnClickOutside={true}
-                    onClose={closeImageViewer}
-                  />
-                )}
+                <div className="d-flex flex-column">
+                  {evidence.map((src, index) => (
+                    <div className="mb-2">
+                      <a
+                        className="h5"
+                        href={"http://localhost:8000/uploads/Evidence/" + src}
+                        target="_blank"
+                        download={index + 1}
+                      >
+                        Evidence {index + 1}
+                      </a>
+                    </div>
+                  ))}
+                </div>
               </div>
             </div>
             <div className="row mt-3">
@@ -460,9 +464,7 @@ function ComplaintDetails() {
       >
         <div class="modal-dialog modal-dialog-centered">
           <div class="modal-content">
-            <div class="modal-body">
-              Complain Closed Successfully
-            </div>
+            <div class="modal-body">Complain Closed Successfully</div>
             <div class="modal-footer">
               <button
                 type="button"
