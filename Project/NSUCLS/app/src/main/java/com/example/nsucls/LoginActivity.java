@@ -52,7 +52,7 @@ public class LoginActivity extends AppCompatActivity {
                             if (response.getString("error").toString().isEmpty()) {
                                 Toast.makeText(LoginActivity.this, "Logged in", Toast.LENGTH_SHORT).show();
                             } else {
-                                Toast.makeText(LoginActivity.this, "Invalid Credentials", Toast.LENGTH_SHORT).show();
+                                Toast.makeText(LoginActivity.this, response.getString("error").toString(), Toast.LENGTH_SHORT).show();
                             }
 //                            System.out.println(response.getString("data"));
 //                            System.out.println(response.getString("error"));
