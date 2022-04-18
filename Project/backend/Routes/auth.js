@@ -13,23 +13,23 @@ const CLIENT_ID =
   "992655217366-qiu0iegl7kmotoovl1630k6283o0jsuk.apps.googleusercontent.com";
 const client = new OAuth2Client(CLIENT_ID);
 
-router.get("/all", async (req, res) => {
-  const result = await UserVerification.findAll({
-    include: Users,
-  });
-  res.json(result);
-});
+// router.get("/all", async (req, res) => {
+//   const result = await UserVerification.findAll({
+//     include: Users,
+//   });
+//   res.json(result);
+// });
 
-router.get("/kisuEkta", async (req, res) => {
-  const result = await Users.findAll({
-    include: UserVerification,
-  });
-  res.json(result);
-});
+// router.get("/kisuEkta", async (req, res) => {
+//   const result = await Users.findAll({
+//     include: UserVerification,
+//   });
+//   res.json(result);
+// });
 
-router.get("/hudaai", async (req, res) => {
-  res.json(Users.getAttributes().actorType.values[1]);
-});
+// router.get("/hudaai", async (req, res) => {
+//   res.json(Users.getAttributes().actorType.values[1]);
+// });
 
 router.post("/google-accounts", async (req, res) => {
   try {
