@@ -74,6 +74,7 @@ function ComplaintDetails() {
       //   "http://localhost:8000/uploads/Evidence/2cdeaf0a-c7f2-4fd0-8773-68e02d854e8d-0.jpg",
       //   "http://localhost:8000/uploads/Evidence/2cdeaf0a-c7f2-4fd0-8773-68e02d854e8d-0.jpg",
       // ]);
+      setEvidence(response.data.data.Evidence.map((e) => e.evidence));
       setReviewer(response.data.data.ComplainReviewers[0].User.fullName);
       setCommentList(response.data.data.Comments.map((e) => e.comment));
       if (
@@ -245,22 +246,14 @@ function ComplaintDetails() {
             <div className="row mt-3">
               <div className="col-3">
                 <div className="d-flex justify-content-between">
-                  <div className="h5">Evidence</div>
+                  <div className="h5">Evidence(s)</div>
                   <div className="h5">:</div>
                 </div>
               </div>
               <div className="col-9">
                 {evidence.map((src, index) => (
-                  <img
-                    src={src}
-                    onClick={() => openImageViewer(index)}
-                    width="100"
-                    key={index}
-                    style={{ margin: "10px" }}
-                    alt=""
-                  />
+                 <a href={"http://localhost:8000/uploads/Evidence/" + src} target="_blank" download>File {index + 1}</a>
                 ))}
-
                 {isViewerOpen && (
                   <ImageViewer
                     src={evidence}
