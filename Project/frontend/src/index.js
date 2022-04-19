@@ -16,6 +16,7 @@ import Dashboard from './Components/dashboard';
 import GoogleRegistration from './Components/googleRegistration';
 import EditComplaint from './Components/editComplain';
 import ComplaintDetails from './Components/complaintDetails';
+import ViewHistory from './Components/viewHistory';
 
 ReactDOM.render(
   <React.StrictMode>
@@ -32,6 +33,7 @@ ReactDOM.render(
       <Route path='/google-registration' element={<GoogleRegistration/>} />
       <Route path='/edit-complaint/:id' element={<EditComplaint />} />
       <Route path='/complaint-details/:id' element={<ComplaintDetails />} />
+      <Route path='/view-edit-history/:id' element={<ViewHistory />} />
     </Routes>
     <Footer/>
     </BrowserRouter>
