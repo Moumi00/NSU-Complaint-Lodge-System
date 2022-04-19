@@ -88,6 +88,11 @@ router.get("/user-details", async (req, res) => {
             model: Comment,
             attributes: ["comment", "commentNumber"],
             required: false,
+            separate: true,
+            order: [
+              ["commentNumber", "DESC"]
+            ],
+            limit: 1
           },
         ],
       },
