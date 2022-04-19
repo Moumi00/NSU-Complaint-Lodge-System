@@ -283,8 +283,8 @@ router.post("/change-reviewer", async (req, res) => {
     }
   );
 
-  console.log("AISE " + req.body.complainReviewerUserUNID);
-  console.log("AISE " + req.body.complainUNID);
+  // console.log("ReviwerUNID - " + req.body.complainReviewerUserUNID);
+  // console.log("complainUNID - " + req.body.complainUNID);
   const result = await ComplainReviewer.create({
     currentReviewer: ComplainReviewer.getAttributes().currentReviewer.values[0],
     ComplainReviewerUserUNID: req.body.complainReviewerUserUNID,
