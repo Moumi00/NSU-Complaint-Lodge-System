@@ -89,11 +89,6 @@ function ComplaintDetails() {
     fetchData();
   }, []);
 
-  const openImageViewer = useCallback((index) => {
-    setCurrentImage(index);
-    setIsViewerOpen(true);
-  }, []);
-
   const handleReviewerOnChange = (e) => {
     setOpenCompReviewerMenu(false);
     setNewReviewerErrorClass("none");
@@ -346,6 +341,9 @@ function ComplaintDetails() {
               <h6 class="mt-3">NSU ID: {lodgerNsuId}</h6>
               <h6 class="mt-3">Email: {lodgerEmail}</h6>
               <h6 class="mt-3">Designation: {lodgerDesignation}</h6>
+            </div>
+            <div className="d-flex justify-content-end">
+              <a href={"/view-edit-history/" + id} className="btn btn-primary mt-4">View Edit History</a>
             </div>
           </div>
         </div>

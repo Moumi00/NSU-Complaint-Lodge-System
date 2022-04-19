@@ -72,7 +72,7 @@ router.post("/add-comment", async (req, res) => {
   });
 });
 
-router.get("/complain-history", async (req, res) =>{
+router.get("/total-edits", async (req, res)=>{
   const temp = await Complain.findOne({
     attributes: ["edits"],
     where: {
@@ -80,36 +80,41 @@ router.get("/complain-history", async (req, res) =>{
     },
   });
 
-  if (temp == null) {
-    return res.json({
-      data: "",
-      error: "Invalid Complain UNID",
-    });
-  }
-
-
-  const result = await Complain.findOne({
+  res.json({
+    data: temp,
+    error: ""
+  })
+})
+router.get("/complain-history", async (req, res) =>{
+  const result = await Complain.findAll({
     include: [
       {
         model: ComplainAgainst,
-        order : ["edits", "asc"],
+        where: {
+          editHistory: req.query.id,
+        },
         include: [
           {
             model: Users,
             attributes: ["fullName", "userUNID"],
           },
-        ],
+        ], 
       },
       {
         model: ComplainDescription,
-        order : ["edits", "asc"],
-        attributes: ["complainDescription", "editHistory"],
+        attributes: ["complainDescription"],
+        where: {
+          editHistory: req.query.id,
+        },
       },
       {
         model: Evidence,
-        order : ["edits", "asc"],
-        attributes: ["evidence", "editHistory"],
+        attributes: ["evidence"],
+        where: {
+          editHistory: req.query.id,
+        },
       },
+
     ],
     where: {
       complainUNID: req.query.complainUNID,
