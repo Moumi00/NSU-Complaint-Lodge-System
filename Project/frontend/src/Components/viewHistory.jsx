@@ -20,16 +20,19 @@ function ViewHistory() {
             complainUNID: id
           }
         })
-
+        
+        console.log(response)
+        if (response.data.data == null){
+          window.location.replace("http://localhost:3000")
+        }
       let totalEdits = response.data.data.edits
-
 
       let tempArr = [];
       for (let i = 0; i < totalEdits; i++) {
         let response = await axios.get(
           "http://localhost:8000/home/complain-history",
           {
-            params: {
+            params: { 
               complainUNID: id,
               id: i
             },

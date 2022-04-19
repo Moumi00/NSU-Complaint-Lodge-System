@@ -35,7 +35,7 @@ const client = new OAuth2Client(CLIENT_ID);
 //Used for google signins
 router.post("/google-accounts", async (req, res) => {
   try {
-    let googleID;banore
+    let googleID;
     const ticket = await client.verifyIdToken({
       idToken: req.body.googleID,
       audience: CLIENT_ID,
