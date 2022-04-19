@@ -72,6 +72,56 @@ router.post("/add-comment", async (req, res) => {
   });
 });
 
+router.get("/complain-history", async (req, res) =>{
+  const temp = await Complain.findOne({
+    attributes: ["edits"],
+    where: {
+      complainUNID: req.query.complainUNID,
+    },
+  });
+
+  if (temp == null) {
+    return res.json({
+      data: "",
+      error: "Invalid Complain UNID",
+    });
+  }
+
+
+  const result = await Complain.findOne({
+    include: [
+      {
+        model: ComplainAgainst,
+        order : ["edits", "asc"],
+        include: [
+          {
+            model: Users,
+            attributes: ["fullName", "userUNID"],
+          },
+        ],
+      },
+      {
+        model: ComplainDescription,
+        order : ["edits", "asc"],
+        attributes: ["complainDescription", "editHistory"],
+      },
+      {
+        model: Evidence,
+        order : ["edits", "asc"],
+        attributes: ["evidence", "editHistory"],
+      },
+    ],
+    where: {
+      complainUNID: req.query.complainUNID,
+    },
+  });
+
+  res.json({
+    data: result,
+    error: "",
+  });
+})
+
 
 //Get entire details of a user along with complain lodged, complains to review
 router.get("/user-details", async (req, res) => {
@@ -196,6 +246,7 @@ router.post("/edit-complain", async (req, res) => {
           (idx + req.body.oldEvidenceCount) +
           "." +
           image.name.split(".").pop(),
+          editHistory: editNumber
       });
     }
 
