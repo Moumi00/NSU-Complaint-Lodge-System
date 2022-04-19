@@ -24,7 +24,7 @@ function EditComplaint() {
   const [complainAgainstOptions, setComplainAgainstOptions] = useState([]);
   const [reviewerOption, setReviewerOption] = useState({});
   const [oldEvidence, setOldEvidence] = useState([]);
-  const max = 255;
+  const max = 250;
 
   if (!token) {
     window.location.replace("http://localhost:3000/login");
@@ -151,15 +151,13 @@ function EditComplaint() {
   async function handleLodgeComplaintButtonClicked(e) {
     e.preventDefault();
     console.log(complainAgainst);
-    if (!complainDescription) {
+    if (!complainDescription || complainDescription.length > max) {
       return setComplainDescriptionErrorClass("block");
     }
-    if (complainAgainst.length === 0 || complainDescription.length > max) {
+    if (complainAgainst.length === 0) {
       return setComplainAgainstErrorClass("block");
     }
-    // if (!isFilePicked) {
-    //   return setEvidenceErrorClass("block");
-    // }
+
     console.log(selectedFiles);
 
     const formData = new FormData();

@@ -22,7 +22,7 @@ function LodgeComplaint() {
   const [reviewerErrorClass, setReviewerErrorClass] = useState("none");
   const [evidenceErrorClass, setEvidenceErrorClass] = useState("none");
   const token = localStorage.getItem("userUNID");
-  const max = 255;
+  const max = 250;
 
   if (!token) {
     window.location.replace("http://localhost:3000/login");
@@ -108,10 +108,11 @@ function LodgeComplaint() {
   async function handleLodgeComplaintButtonClicked(e) {
     e.preventDefault();
     console.log(complainAgainst);
-    if (!complainTitle || complainTitle > max) {
+    console.log(complainTitle.length)
+    if (!complainTitle || complainTitle.length > max) {
       return setComplainTitleErrorClass("block");
     }
-    if (!complainDescription || complainDescription > max) {
+    if (!complainDescription || complainDescription.length > max) {
       return setComplainDescriptionErrorClass("block");
     }
     if (complainAgainst.length === 0) {
@@ -184,7 +185,7 @@ function LodgeComplaint() {
                 class="form-control"
                 id="form4Example3"
                 rows="6"
-                placeholder="Complain Description (upto 150 words)"
+                placeholder="Complain Description (upto 250 words)"
                 style={{ resize: "none" }}
                 onInput={(e) => {
                   setComplainDescription(e.target.value);

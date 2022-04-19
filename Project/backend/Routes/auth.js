@@ -31,6 +31,8 @@ const client = new OAuth2Client(CLIENT_ID);
 //   res.json(Users.getAttributes().actorType.values[1]);
 // });
 
+
+//Used for google signins
 router.post("/google-accounts", async (req, res) => {
   try {
     let googleID;
@@ -65,6 +67,8 @@ router.post("/google-accounts", async (req, res) => {
   }
 });
 
+
+//Used for google signups
 router.post("/register/google", async (req, res) => {
   try {
     let googleID;
@@ -136,6 +140,8 @@ router.post("/register/google", async (req, res) => {
   }
 });
 
+
+//Used for default registration
 router.post("/register", async (req, res) => {
   const result = await Users.findOne({
     where: {
@@ -218,6 +224,8 @@ router.post("/register", async (req, res) => {
   }
 });
 
+
+//Used for verifying email
 router.get("/verify-email/:verificationToken", async (req, res) => {
   const result = await UserVerification.findOne({
     where: {
@@ -259,6 +267,8 @@ router.get("/verify-email/:verificationToken", async (req, res) => {
   }
 });
 
+
+//Used for login
 router.post("/login", async (req, res) => {
   const result = await Users.findOne({
     where: { email: req.body.email },
@@ -304,6 +314,8 @@ router.post("/login", async (req, res) => {
   }
 });
 
+
+//Used for checking whether email sent for forget password is correct or not
 router.post("/forget-password", async (req, res) => {
   const result = await Users.findOne({
     where: {
@@ -342,6 +354,7 @@ router.post("/forget-password", async (req, res) => {
   }
 });
 
+//used to verify UNID (used for checking the userUNID stored in localstorage)
 router.post("/verify-unid", async (req, res) => {
   const result = await Users.findOne({
     where: {
@@ -361,6 +374,7 @@ router.post("/verify-unid", async (req, res) => {
   }
 });
 
+//used for verifying default logged in user
 router.post("/verify-default-user", async (req, res) => {
   const result = await Users.findOne({
     where: {
@@ -381,6 +395,8 @@ router.post("/verify-default-user", async (req, res) => {
   }
 });
 
+
+//used to update password
 router.post("/password-update", async (req, res) => {
   const result = await Users.findOne({
     where: {
