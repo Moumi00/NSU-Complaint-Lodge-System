@@ -521,7 +521,8 @@
               <strong>Associations: </strong><br />
               i) This model is associated with the Complain model. It has a one
               to many relationship as one complaint can be lodged against
-              multiple users.
+              multiple users. This association helps us to keep track of the
+              complain for which the users are added
 
               <br />
               <br />
@@ -530,7 +531,32 @@
               details of the complaint which has been lodged against this user.
 
               <br />
+              <br />
+              ii) This model is associated with the Users model. It has a one to
+              many relationship as one complaint can be lodged against multiple
+              users.
+              <br />
+              <br />
+              ComplainAgainstUserUNID is the foreign key of the ComplainAgainst
+              model. It's string type data. The purpose of this foreign key is
+              to know the details of the users against whom the complaint is
+              lodged.
             </div>
+          </div>
+        </div>
+      </div>
+      <div>
+        <h2 class="my-4">&#8226; Implementation Plan</h2>
+        <div class="information">
+          <div class="details">
+            <ul>
+              <li>Define goals</li>
+              <li>Conduct research</li>
+              <li>Map out risks</li>
+              <li>Schedule milestones</li>
+              <li>Assign tasks between group members</li>
+              <li>Unit testing</li>
+            </ul>
           </div>
         </div>
       </div>
