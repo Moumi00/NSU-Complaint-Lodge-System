@@ -1,0 +1,545 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>SRS</title>
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+      integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC"
+      crossorigin="anonymous"
+    />
+    <style>
+      .information {
+        page-break-inside: avoid;
+      }
+
+      .item {
+        display: flex;
+        justify-content: space-between;
+      }
+
+      .description {
+        /*background-color: green;*/
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+      }
+
+      .description:after {
+        content: "..............................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................";
+      }
+
+      .page-number {
+        /*background-color: red;*/
+        flex-shrink: 0;
+      }
+
+      hr {
+        height: 4px !important;
+        background-color: black;
+        opacity: 100;
+        border: none;
+      }
+
+      table,
+      th,
+      td {
+        border: 1px solid black;
+        border-collapse: collapse;
+      }
+    </style>
+  </head>
+
+  <body>
+    <div>
+      <hr class="mt-5" />
+      <div class="row mt-4">
+        <div class="col-7 offset-5">
+          <h2 class="text-end">Software Design Specification</h2>
+        </div>
+        <div class="col-8 offset-4 my-4">
+          <h5 class="text-end">for</h5>
+        </div>
+        <div class="col-12 mb-3">
+          <h2 class="text-end">North South University Complain Lodge System</h2>
+        </div>
+        <div class="col-8 offset-4 my-4">
+          <h5 class="text-end">Version 1.0 approved</h5>
+        </div>
+        <div class="col-8 offset-4 mb-2">
+          <h5 class="text-end">Prepared by</h5>
+        </div>
+        <div class="col-8 offset-4">
+          <h5 class="text-end">Omar Mohammed Haroon - 2012007042</h5>
+        </div>
+        <div class="col-8 offset-4">
+          <h5 class="text-end">Mohsina Matin Moumi - 2012012642</h5>
+        </div>
+        <div class="col-8 offset-4 mt-4">
+          <h5 class="text-end">North South University</h5>
+        </div>
+        <div class="col-8 offset-4 mt-4">
+          <h5 class="text-end">24-04-2022</h5>
+        </div>
+      </div>
+    </div>
+    <div style="break-after: page"></div>
+    <div>
+      <p class="fw-bold" style="font-size: 18px">Table of Contents</p>
+      <div class="item">
+        <div class="description fw-bold">Table of Contents</div>
+        <div class="page-number fw-bold">2</div>
+      </div>
+      <div>
+        <div class="item">
+          <div class="description fw-bold">&#8226; Introduction</div>
+          <div class="page-number fw-bold">3</div>
+        </div>
+        <div class="item">
+          <div class="description fw-bold">&#8226; Design Components</div>
+          <div class="page-number fw-bold">3</div>
+        </div>
+      </div>
+      <div>
+        <div class="item">
+          <div class="description fw-bold">&#8226;Class Diagram</div>
+          <div class="page-number fw-bold">3</div>
+        </div>
+        <div class="item">
+          <div class="description ms-4">&#8226;Detailed Class Diagram</div>
+          <div class="page-number fw-bold">3</div>
+        </div>
+        <div class="item">
+          <div class="description ms-4">&#8226;Detailed Class Description</div>
+          <div class="page-number fw-bold">4</div>
+        </div>
+      </div>
+      <div>
+        <div class="item">
+          <div class="description fw-bold">&#8226;Database Design</div>
+          <div class="page-number fw-bold">8</div>
+        </div>
+        <div class="item">
+          <div class="description ms-4">&#8226;ER Diagram</div>
+          <div class="page-number fw-bold">8</div>
+        </div>
+        <div class="item">
+          <div class="description ms-4">&#8226;ER Description</div>
+          <div class="page-number fw-bold">8</div>
+        </div>
+      </div>
+      <div>
+        <div class="item">
+          <div class="description fw-bold">&#8226; Implementation Plan</div>
+          <div class="page-number fw-bold">3</div>
+        </div>
+      </div>
+    </div>
+    <div style="break-after: page"></div>
+    <div>
+      <h2 class="my-4">&#8226; Introduction</h2>
+      <div class="information">
+        <div class="details">
+          The main purpose of this SDS document is to provide the outcome of the
+          work of the software architect(s) that is NSU-CLS.This will help to
+          ensure that the final output software product meets the requirements
+          of the end customer, i.e. functions as expected, is reliable, is easy
+          to use, does not demand inordinate efforts to train staff in its use,
+          etc. This document will deliver a detailed description of the software
+          components and sub-systems to be provided as part of the product.
+        </div>
+      </div>
+    </div>
+    <div>
+      <h2 class="my-4">&#8226; Design Components</h2>
+      <div class="information">
+        <div class="details">
+          NSU-CLS software has two parts. One is a web application and another
+          is a mobile app. (write about web application). The mobile app has a
+          special feature of voice recognition which enables users to lodge a
+          complaint via speech instead of text. This feature is particularly
+          introduced for the convenience of NSU helpers and staff.
+        </div>
+      </div>
+    </div>
+    <div>
+      <h2 class="my-4">&#8226; Class Diagram</h2>
+      <div class="information">
+        <div class="heading fs-4 h2 my-3">Detailed Class Diagram</div>
+        <div class="details">
+          <img
+            src="./Image/Class Diagram.png"
+            alt="Class Diagram"
+            width="100%"
+          />
+        </div>
+      </div>
+      <div class="information">
+        <div class="heading fs-4 h2 my-3">Detailed Class Description</div>
+        <div class="details">
+          <div class="fs-5"><strong>Class name: </strong>Users</div>
+          <div class="fs-5">
+            <strong>Purpose: </strong>This class stores all the details as
+            attributes of each user.
+          </div>
+          <div class="fs-5">
+            <strong>Attributes: </strong><br />
+            <strong> i) userUNID - </strong> It's a string type data. It stores
+            an unique ID given to each user account by which we can identify it.
+            This is also the primary key of this table. <br />
+            <strong>ii) fullName - </strong> It's a string type data. It stores
+            the full name of users <br />
+            <strong>iii) nsuId - </strong> It's a string type data. It stores
+            the 10 digits of NSU ID of the users. <br />
+            <strong>iv) email - </strong> It's string type data. It stores the
+            email address with which the user registered. <br />
+            <strong>v) password - </strong>It's a string type data. It stores
+            the password of the users which he will use to log in.<br />
+            <strong>vi) userType - </strong>It's a string type data. It stores
+            the designation of the users (i.e faculty, TA / RA, student, helper
+            etc.)<br />
+            <strong>vii) actorType - </strong>It's an enumeration. It states
+            whether the user is a reviewer or non-reviewer. This attribute will
+            be used to determine whether the user will be allowed to review a
+            complaint or not.<br />
+            <strong>viii) accountType - </strong>It's an enumeration. It states
+            whether the user logged in via Google Sign In process or the default
+            sign-up and log-in process. This attribute tells us whether a user
+            is verified or not<br />
+            <strong>ix) nsuIdPhoto - </strong>It's a string type data. It is
+            used to store the name of the file which is uploaded in backend<br />
+            <strong>x) isVerified - </strong>It's a boolean type data. This
+            attribute will determine if the user account is already verified
+            through the email verification process or not. The default value of
+            this attribute is set to false.<br />
+            <strong>xi) active - </strong>It's a boolean type data. This
+            attribute will determine if a user account is currently active or it
+            has been deleted by the admin. The active status will be set to
+            false if the admin deletes a user account.
+          </div>
+        </div>
+        <div class="details mt-5">
+          <div class="fs-5">
+            <strong>Class name: </strong>GoogleVerification
+          </div>
+          <div class="fs-5">
+            <strong>Purpose: </strong>This class stores the details of the users
+            who registered using google.
+          </div>
+          <div class="fs-5">
+            <strong>Attributes: </strong><br />
+            <strong> i) googleID - </strong> It's a string type data. It stores
+            an unique ID given by google. <br />
+            <strong>ii) isVerified - </strong> It's a boolean type data. Its
+            default value is set to true as no email verification process is
+            needed for users logged via google accounts.
+            <br />
+          </div>
+        </div>
+        <div class="details mt-5">
+          <div class="fs-5"><strong>Class name: </strong>UserVerification</div>
+          <div class="fs-5">
+            <strong>Purpose: </strong>This class stores the details of the users
+            who registered using Default Register page.
+          </div>
+          <div class="fs-5">
+            <strong>Attributes: </strong><br />
+            <strong> i) verificationToken - </strong> It's a string type data.
+            It is a unique token given to user for verification. <br />
+            <strong>ii) isVerified - </strong> It's a boolean type data. Its
+            default value is set to false as all accounts (registered by default
+            method) need to go through the email verification process to be
+            logged in. <br />
+            <strong>iii) expiryDate - </strong> It's a Date type data. This
+            verification process has a 24 hour time-limit and will expire after
+            that. This attribute will help to store the expiry time of the given
+            token.
+            <br />
+          </div>
+        </div>
+        <div class="details mt-5">
+          <div class="fs-5"><strong>Class name: </strong>Complain</div>
+          <div class="fs-5">
+            <strong>Purpose: </strong>This class or model helps to store details
+            of each lodged complaint.
+          </div>
+          <div class="fs-5">
+            <strong>Attributes: </strong><br />
+            <strong> i) complainUNID - </strong> It's a string type data. It
+            stores an unique ID given to each lodged complaint by which we can
+            identify it particularly. This is the primary key of this table.
+            <br />
+            <strong>ii) complainTitle - </strong> It's a string type data. It
+            stores the title or name of the complaint. This attribute is
+            supposed to describe the purpose of the lodge complaint very
+            shortly. This attribute cannot be updated by any user, hence it
+            doesn't need to be a separate model itself.
+            <br />
+            <strong>iii) status - </strong> It's an enumeration. It states
+            whether a complaint is open or close. The default value of the
+            status is set to open.
+            <br />
+            <strong>iii) status - </strong> It's an enumeration. It states
+            whether a complaint is open or close. The default value of the
+            status is set to open.
+            <br />
+            <strong>iii) edits - </strong> It's an integer type data. It stores
+            the number of times a particular complaint is updated. The default
+            value of this attribute is set to 0.
+
+            <br />
+          </div>
+        </div>
+        <div class="details mt-5">
+          <div class="fs-5"><strong>Class name: </strong>Comment</div>
+          <div class="fs-5">
+            <strong>Purpose: </strong>This class stores all the comments (added
+            by the reviewer of that complaint) of a particular complaint. Since
+            new comments of a particular complaint can be updated, it is kept as
+            a separate class, rather than an attribute.
+          </div>
+          <div class="fs-5">
+            <strong>Attributes: </strong><br />
+            <strong> i) comment - </strong> It's a string type data. It stores
+            comment of a complaint added by a reviewer of that complaint.
+            <br />
+            <strong>ii) commentNumber - </strong> It's an integer type data. It
+            stores the number of comments of a particular complaint. The default
+            value of this attribute is set to 0. It is also used to get the
+            serial of the comment
+            <br />
+          </div>
+        </div>
+        <div class="details mt-5">
+          <div class="fs-5"><strong>Class name: </strong>Evidence</div>
+          <div class="fs-5">
+            <strong>Purpose: </strong>This class stores details of the evidence
+            which is uploaded for a complain.
+          </div>
+          <div class="fs-5">
+            <strong>Attributes: </strong><br />
+            <strong> i) evidence - </strong> It's a string type data. It stores
+            the name of the file which is uploaded as evidence in backend.
+            <br />
+            <strong>ii) editHistory - </strong> It's an integer type data. It
+            stores the version number of a particular complaint on which this
+            evidence was uploaded. The default value of this attribute is stored
+            to 0.
+            <br />
+          </div>
+        </div>
+        <div class="details mt-5">
+          <div class="fs-5"><strong>Class name: </strong>ComplainAgainst</div>
+          <div class="fs-5">
+            <strong>Purpose: </strong>This class has an association with the
+            Users class because of which this class has an attribute of Users
+            type that again stores the details of the user against whom the
+            complaint has been lodged.
+          </div>
+          <div class="fs-5">
+            <strong>Attributes: </strong><br />
+            <strong>i) editHistory - </strong> It's an integer type data. It
+            stores the version number of a particular complaint on which the
+            user's full name was entered against whom the complaint was lodged.
+            The default value of this attribute is stored to 0.
+            <br />
+          </div>
+        </div>
+        <div class="details mt-5">
+          <div class="fs-5">
+            <strong>Class name: </strong>ComplainDescription
+          </div>
+          <div class="fs-5">
+            <strong>Purpose: </strong>It stores the description of a particular
+            complaint. The description has a limit of 250 words. Since
+            description of a particular complaint can be updated, it is kept as
+            a separate class, rather than an attribute.
+          </div>
+          <div class="fs-5">
+            <strong>Attributes: </strong><br />
+            <strong>i) complainDescription - </strong> It's a string type data.
+            It stores the description of a particular complaint.
+            <br />
+            <strong>ii) editHistory - </strong> It's an integer type data. It
+            stores the version number of a particular complaint on which this
+            description was updated. The default value of this attribute is
+            stored to 0.
+            <br />
+          </div>
+        </div>
+        <div class="details mt-5">
+          <div class="fs-5"><strong>Class name: </strong>ComplainReviewer</div>
+          <div class="fs-5">
+            <strong>Purpose: </strong>It determines if a particular user(of
+            reviewer type) of a particular complaint is currently the reviewer
+            of it or not. This class is associated with the Users and Complain
+            class because of which this class has an attribute of Users type
+            that again stores the details of the user who is reviewing the
+            complaint; and Complain type that stores the details of the lodged
+            complaint this reviewer is reviewing.
+          </div>
+          <div class="fs-5">
+            <strong>Attributes: </strong><br />
+            <strong>i) currentReviewer - </strong> It's an enumeration. It
+            states yes if the reviewer is currently reviewing the complaint and
+            no, if he passed that complaint to another reviewer.
+            <br />
+          </div>
+        </div>
+      </div>
+      <div style="break-after: page"></div>
+      <div>
+        <h2 class="my-4">&#8226; Database Design</h2>
+        <div class="information">
+          <div class="heading fs-4 h2 my-3">ER Diagram</div>
+          <div class="details">
+            <img
+              src="./Image/ER Diagram.png"
+              alt="Class Diagram"
+              width="100%"
+            />
+          </div>
+        </div>
+        <div class="information">
+          <div class="heading fs-4 h2 my-3">ER Description</div>
+          <div class="details">
+            <div class="fs-5"><strong>Class name: </strong>Users</div>
+            <div class="fs-5">
+              <strong>Associations: </strong><br />
+              i) This model is associated with the Complain model. It has a one
+              to many relationship as one user can lodge multiple complaints.
+
+              <br />
+              ii) This model is associated with the ComplainReviewer model. It
+              has a one to many relationship as one user can review multiple
+              complaints.
+
+              <br />
+            </div>
+          </div>
+          <div class="details mt-5">
+            <div class="fs-5">
+              <strong>Class name: </strong>GoogleVerification
+            </div>
+            <div class="fs-5">
+              <strong>Associations: </strong><br />
+              i) This model is associated with the Users model. It has a one to
+              one relationship with the Users model, as one google verification
+              is for one user only.
+
+              <br />
+              <br />
+              UserUNID is the foreign key of GoogleVerification model. It's
+              string type data. The purpose of this is to keep details of the
+              user who registered using google.
+
+              <br />
+            </div>
+          </div>
+          <div class="details mt-5">
+            <div class="fs-5">
+              <strong>Class name: </strong>UserVerification
+            </div>
+            <div class="fs-5">
+              <strong>Associations: </strong><br />
+              i) This model is associated with the Users model. It has a one to
+              one relationship with the Users model, as one user verification is
+              for one user only.
+
+              <br />
+              <br />
+              UserUNID is the foreign key of the UserVerification model. It's
+              string type data. The purpose of this is to keep details of the
+              user who registered using register page.
+
+              <br />
+            </div>
+          </div>
+          <div class="details mt-5">
+            <div class="fs-5"><strong>Class name: </strong>Complain</div>
+            <div class="fs-5">
+              <strong>Associations: </strong><br />
+              i) This model is associated with the Users model. It has a one to
+              many relationship with the Users model, as one user can lodge
+              multiple complaints.
+
+              <br />
+              <br />
+              ComplainerUNID is the foreign key of Complain model. It's string
+              type data. The purpose of this foreign key is to know the details
+              of the user who has lodged the complaint.
+
+              <br />
+              <br />
+              ii) This model is associated with the ComplainReviewer model. It
+              has a one to many relationship as the reviewer of a complaint can
+              be changed and updated.
+              <br />
+              <br />
+              iii) This model is associated with the ComplainDescription model.
+              It has a one to many relationship as the description of a
+              complaint can be changed and updated.
+              <br />
+              <br />
+              iv) This model is associated with the ComplainAgainst model. It
+              has a one to many relationship as the complaint can be lodged
+              against multiple users.
+              <br />
+              <br />
+              v) This model is associated with the Evidence model. It has a one
+              to many relationship as the lodged complaint can have multiple
+              evidence files.
+              <br />
+              <br />
+              vi) This model is associated with the Comment model. It has a one
+              to many relationship as the reviewer of the complaint can add
+              multiple comments.
+            </div>
+          </div>
+          <div class="details mt-5">
+            <div class="fs-5"><strong>Class name: </strong>Comment</div>
+            <div class="fs-5">
+              <strong>Associations: </strong><br />
+              i) This model is associated with the Complain model. It has a one
+              to many relationship as one complaint can have multiple comments.
+
+              <br />
+              <br />
+              ComplainUNID is the foreign key of the Comment model. It's string
+              type data. The purpose of this foreign key is to know the details
+              of the complaint of which this comment is added.
+
+              <br />
+            </div>
+          </div>
+          <div class="details mt-5">
+            <div class="fs-5"><strong>Class name: </strong>ComplainAgainst</div>
+            <div class="fs-5">
+              <strong>Associations: </strong><br />
+              i) This model is associated with the Complain model. It has a one
+              to many relationship as one complaint can be lodged against
+              multiple users.
+
+              <br />
+              <br />
+              ComplainUNID is the foreign key of the ComplainAgainst model. It's
+              string type data. The purpose of this foreign key is to know the
+              details of the complaint which has been lodged against this user.
+
+              <br />
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script
+      src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
+      integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
+      crossorigin="anonymous"
+    ></script>
+  </body>
+</html>
