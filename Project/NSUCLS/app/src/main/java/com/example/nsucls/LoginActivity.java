@@ -2,6 +2,7 @@ package com.example.nsucls;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.TextView;
@@ -50,7 +51,9 @@ public class LoginActivity extends AppCompatActivity {
 
                         try {
                             if (response.getString("error").toString().isEmpty()) {
-                                Toast.makeText(LoginActivity.this, "Logged in", Toast.LENGTH_SHORT).show();
+//                                Toast.makeText(LoginActivity.this, "Logged in", Toast.LENGTH_SHORT).show();
+                                Intent myIntent = new Intent(LoginActivity.this, HomeActivity.class);
+                                startActivity(myIntent);
                             } else {
                                 Toast.makeText(LoginActivity.this, response.getString("error").toString(), Toast.LENGTH_SHORT).show();
                             }
