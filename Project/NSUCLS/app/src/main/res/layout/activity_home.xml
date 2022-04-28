@@ -76,24 +76,26 @@
         android:gravity="center_horizontal">
 
         <ImageButton
-            android:layout_below="@+id/details"
             android:layout_width="100dp"
             android:layout_height="100dp"
-            android:scaleType="fitCenter"
+            android:layout_below="@+id/details"
             android:background="@color/primary_col"
-            android:src="@drawable/my_complains"/>
+            android:scaleType="fitCenter"
+            android:src="@drawable/my_complains" />
+
         <ImageButton
-            android:layout_below="@+id/details"
             android:layout_width="100dp"
             android:layout_height="100dp"
-            android:scaleType="fitCenter"
-            android:src="@drawable/google"/>
-        <ImageButton
             android:layout_below="@+id/details"
+            android:scaleType="fitCenter"
+            android:src="@drawable/google" />
+
+        <ImageButton
             android:layout_width="100dp"
             android:layout_height="100dp"
+            android:layout_below="@+id/details"
             android:scaleType="fitCenter"
-            android:src="@drawable/google"/>
+            android:src="@drawable/google" />
 
     </LinearLayout>
 
