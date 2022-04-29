@@ -13,7 +13,7 @@
         android:theme="@style/Theme.NSUCLS"
         android:usesCleartextTraffic="true" >
         <activity
-            android:name=".LogdeComplaintActivity"
+            android:name=".LodgeComplaintActivity"
             android:exported="false" />
         <activity
             android:name=".HomeActivity"

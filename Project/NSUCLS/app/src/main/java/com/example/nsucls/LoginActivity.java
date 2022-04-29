@@ -52,7 +52,7 @@ public class LoginActivity extends AppCompatActivity {
                         try {
                             if (response.getString("error").toString().isEmpty()) {
 //                                Toast.makeText(LoginActivity.this, "Logged in", Toast.LENGTH_SHORT).show();
-                                Intent myIntent = new Intent(LoginActivity.this, LogdeComplaintActivity.class);
+                                Intent myIntent = new Intent(LoginActivity.this, LodgeComplaintActivity.class);
                                 startActivity(myIntent);
                             } else {
                                 Toast.makeText(LoginActivity.this, response.getString("error").toString(), Toast.LENGTH_SHORT).show();
