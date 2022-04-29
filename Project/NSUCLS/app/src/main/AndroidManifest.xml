@@ -16,6 +16,12 @@
             android:name=".LodgeComplaintActivity"
             android:exported="false" />
         <activity
+            android:name=".ReviewComplainsActivity"
+            android:exported="false" />
+        <activity
+            android:name=".MyComplainsActivity"
+            android:exported="false" />
+        <activity
             android:name=".HomeActivity"
             android:exported="false" />
         <activity

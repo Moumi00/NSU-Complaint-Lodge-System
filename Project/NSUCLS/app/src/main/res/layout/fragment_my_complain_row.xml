@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    tools:context=".MyComplainRow"
+    android:background="@color/primary_col"
+    android:layout_marginBottom="15dp">
+
+    <!-- TODO: Update blank fragment layout -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:background="@drawable/border"
+            android:elevation="200dp">>
+            <TextView
+                android:id="@+id/title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Title"
+                android:textSize="40dp"
+                android:textColor="@color/black"
+                android:layout_margin="30dp"/>
+            <TextView
+                android:id="@+id/latestComment"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Latest Comment: MARA KHEYE GELAM"
+                android:textSize="15dp"
+                android:textColor="@color/black"
+                android:layout_margin="10dp"/>
+            <TextView
+                android:id="@+id/status"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Complain Status: Open"
+                android:textSize="15dp"
+                android:textColor="@color/black"
+                android:layout_margin="10dp"/>
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content">
+                <com.google.android.material.button.MaterialButton
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="10dp"
+                    android:text="Details"/>
+                <com.google.android.material.button.MaterialButton
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="10dp"
+                    android:text="Edit Complaint"/>
+            </LinearLayout>
+        </LinearLayout>
+</FrameLayout>
