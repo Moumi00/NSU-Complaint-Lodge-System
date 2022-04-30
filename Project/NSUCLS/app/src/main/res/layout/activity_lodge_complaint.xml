@@ -51,43 +51,54 @@
         android:textColor="@color/white"
         android:textColorHint="@color/white" />
 
-    <com.hootsuite.nachos.NachoTextView
-        android:id="@+id/nacho_text_view_complainAgainst"
+    <MultiAutoCompleteTextView
+        android:id="@+id/complainAgainst"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/complaintDescription"
+        android:layout_below="@id/complaintDescription"
         android:layout_marginHorizontal="20dp"
         android:background="#30ffffff"
         android:hint="Complain Against"
         android:padding="20dp"
-        android:textColorHint="@color/white"
+        android:textColorHint="@color/white" />
 
-        />
-
-
-    <com.hootsuite.nachos.NachoTextView
-        android:id="@+id/nacho_text_view_reviewer"
+    <Button
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/nacho_text_view_complainAgainst"
+        android:layout_below="@+id/complainAgainst"
+        android:id="@+id/evidence"
+        android:text="UPLOAD File"
+        android:layout_marginRight="170dp"
+        android:layout_marginLeft="20dp"
+        android:layout_marginTop="20dp"
+        android:textColor="@color/white"
+        android:textSize="20dp"
+        android:drawableLeft="@drawable/paperclip"
+        android:gravity="center"/>
+
+    <AutoCompleteTextView
+        android:id="@+id/complainReviewer"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/evidence"
         android:layout_marginHorizontal="20dp"
         android:layout_marginTop="20dp"
         android:background="#30ffffff"
         android:hint="Choose Reviewer"
         android:padding="20dp"
-        android:textColorHint="@color/white"
-
-        />
+        android:textColorHint="@color/white" />
 
     <com.google.android.material.button.MaterialButton
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/loginButton"
-        android:layout_below="@id/nacho_text_view_reviewer"
+        android:layout_below="@id/complainReviewer"
         android:layout_centerHorizontal="true"
         android:text="Lodge Complaint"
         android:backgroundTint="@color/design_default_color_primary_variant"
-        android:layout_margin="15dp"
+        android:layout_marginTop="50dp"
+        android:layout_marginBottom="10dp"
+        android:textSize="15dp"
         />
 
 </RelativeLayout>
