@@ -16,12 +16,7 @@
         android:usesCleartextTraffic="true" >
         <activity
             android:name=".LodgeComplaintActivity"
-            android:exported="true">  //eta false chilo true korsi kono pera ase???
-        <intent-filter>
-            <action android:name="android.intent.action.MAIN" />
-
-            <category android:name="android.intent.category.LAUNCHER" />
-        </intent-filter>
+            android:exported="false">
         </activity>
         <activity
             android:name=".ReviewComplainsActivity"
