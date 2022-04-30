@@ -1,19 +1,29 @@
 package com.example.nsucls;
 
-import androidx.appcompat.app.AppCompatActivity;
-
+import android.Manifest;
 import android.content.Intent;
 import android.os.Bundle;
-import android.view.MotionEvent;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
+import android.widget.Button;
 import android.widget.MultiAutoCompleteTextView;
+
+import androidx.appcompat.app.AppCompatActivity;
+
+import com.karumi.dexter.Dexter;
+import com.karumi.dexter.PermissionToken;
+import com.karumi.dexter.listener.PermissionDeniedResponse;
+import com.karumi.dexter.listener.PermissionGrantedResponse;
+import com.karumi.dexter.listener.PermissionRequest;
+import com.karumi.dexter.listener.single.PermissionListener;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 
 public class LodgeComplaintActivity extends AppCompatActivity {
+
+    Button uploadFileButton;
 
 
     private static final String[] COUNTRIES = new String[] {
@@ -61,9 +71,34 @@ public class LodgeComplaintActivity extends AppCompatActivity {
                 }
             }
         });
-    }
 
-    public void Upload(View view) {
-        startActivity(new Intent(LodgeComplaintActivity.this, Upload.class));
+        uploadFileButton = (Button) findViewById(R.id.evidence);
+        uploadFileButton.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View view) {
+                Dexter.withActivity(LodgeComplaintActivity.this).withPermission(Manifest.permission.READ_EXTERNAL_STORAGE)
+                        .withListener(new PermissionListener() {
+                            @Override
+                            public void onPermissionGranted(PermissionGrantedResponse permissionGrantedResponse) {
+                                Intent intent = new Intent(Intent.ACTION_PICK);
+                                intent.setType("image/*");
+                                startActivityForResult(Intent.createChooser(intent, "Upload File"), 1);
+                            }
+
+                            @Override
+                            public void onPermissionDenied(PermissionDeniedResponse permissionDeniedResponse) {
+
+                            }
+
+                            @Override
+                            public void onPermissionRationaleShouldBeShown(PermissionRequest permissionRequest, PermissionToken permissionToken) {
+                                permissionToken.continuePermissionRequest();
+                            }
+                        });
+            }
+        });
+
+//    public void Upload(View view) {
+//        startActivity(new Intent(LodgeComplaintActivity.this, Upload.class));
+//    }
     }
 }
