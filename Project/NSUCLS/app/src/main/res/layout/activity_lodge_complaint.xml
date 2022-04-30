@@ -72,8 +72,10 @@
         android:layout_marginLeft="20dp"
         android:layout_marginTop="20dp"
         android:textColor="@color/white"
+        android:onClick="Upload"
         android:textSize="20dp"
         android:drawableLeft="@drawable/paperclip"
+        android:backgroundTint="@color/design_default_color_primary_variant"
         android:gravity="center"/>
 
     <AutoCompleteTextView
@@ -89,16 +91,16 @@
         android:textColorHint="@color/white" />
 
     <com.google.android.material.button.MaterialButton
+        android:id="@+id/lodgeComplaintButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/loginButton"
         android:layout_below="@id/complainReviewer"
         android:layout_centerHorizontal="true"
-        android:text="Lodge Complaint"
+        android:layout_marginStart="15dp"
+        android:layout_marginTop="20dp"
+        android:layout_marginBottom="15dp"
         android:backgroundTint="@color/design_default_color_primary_variant"
-        android:layout_marginTop="50dp"
-        android:layout_marginBottom="10dp"
-        android:textSize="15dp"
-        />
+        android:text="Lodge Complaint"
+        android:textSize="15dp" />
 
 </RelativeLayout>

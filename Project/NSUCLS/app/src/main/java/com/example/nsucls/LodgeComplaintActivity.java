@@ -1,6 +1,8 @@
 package com.example.nsucls;
 
 import androidx.appcompat.app.AppCompatActivity;
+
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.MotionEvent;
 import android.view.View;
@@ -59,6 +61,9 @@ public class LodgeComplaintActivity extends AppCompatActivity {
                 }
             }
         });
+    }
 
+    public void Upload(View view) {
+        startActivity(new Intent(LodgeComplaintActivity.this, Upload.class));
     }
 }
