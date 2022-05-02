@@ -44,7 +44,7 @@ public class LoginActivity extends AppCompatActivity {
                     e.printStackTrace();
                 }
                 JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.POST,
-                        "http://10.0.2.2:8000/auth/login", jsonBody, new Response.Listener<JSONObject>() {
+                        SplashActivity.baseURL + "/auth/login", jsonBody, new Response.Listener<JSONObject>() {
                     @Override
                     public void onResponse(JSONObject response) {
                         System.out.println("AISE");
