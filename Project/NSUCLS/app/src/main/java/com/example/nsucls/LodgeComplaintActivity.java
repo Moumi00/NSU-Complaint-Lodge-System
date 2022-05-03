@@ -1,18 +1,23 @@
 package com.example.nsucls;
 
 import android.Manifest;
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.database.Cursor;
+import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
+import android.provider.OpenableColumns;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
+import android.widget.LinearLayout;
 import android.widget.MultiAutoCompleteTextView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -143,6 +148,7 @@ public class LodgeComplaintActivity extends AppCompatActivity {
         complainAgainstTextField.setOnFocusChangeListener(new View.OnFocusChangeListener() {
             public void onFocusChange(View v, boolean hasFocus) {
                 if (!hasFocus) {
+                    complainAgainstUsers.clear();
                     String[] names = complainAgainstTextField.getText().toString().split("\\s*,\\s*");
                     for (int i = 0; i < complainAgainst.size(); i++){
                         if (Arrays.stream(names).anyMatch(complainAgainst.get(i).toString()::equals)){
@@ -183,8 +189,16 @@ public class LodgeComplaintActivity extends AppCompatActivity {
                             reviewers.clear();
                             for (int i = 0; i < jsonArray.length(); i++){
                                 JSONObject obj = jsonArray.getJSONObject(i);
-                                if (complainAgainstUsers.indexOf())
-                                reviewers.add(new User(obj.getString("uniqueDetail").toString(), obj.getString("userUNID").toString()));
+                                User temp = new User(obj.getString("uniqueDetail").toString(), obj.getString("userUNID").toString());
+                                System.out.println(temp);
+                                int tempo = 0;
+                                for (User user : complainAgainstUsers){
+                                    if (user.getName().equals(temp.getName())){
+                                        tempo = 1;
+                                    }
+                                }
+                                if (tempo == 0)
+                                    reviewers.add(temp);
                             }
                             System.out.println(reviewers);
                             ArrayAdapter<User> adapter = new ArrayAdapter<User>(
@@ -246,8 +260,10 @@ public class LodgeComplaintActivity extends AppCompatActivity {
         lodgeComplaintButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
-                uploadToServer();
+                if (checkValidity()) {
+                    System.out.println(images.size());
+//                    uploadToServer();
+                }
             }
         });
 
@@ -257,10 +273,26 @@ public class LodgeComplaintActivity extends AppCompatActivity {
         complainTitle = ((TextView)findViewById(R.id.complaintTile)).getText().toString();
         complainDescription = ((TextView)findViewById(R.id.complaintDescription)).getText().toString();
 
-        if (complainTitle.isEmpty() || complainTitle.length() > 255)
+        if (complainTitle.isEmpty() || complainTitle.length() > 255) {
+            ((TextView)findViewById(R.id.complaintTile)).setError("Must be less than 255 characters");
             return false;
-        if (complainDescription.isEmpty() || complainDescription.length() > 255)
+        }
+        if (complainDescription.isEmpty() || complainDescription.length() > 255) {
+            ((TextView)findViewById(R.id.complaintDescription)).setError("Must be less than 255 characters");
             return false;
+        }
+        if (images.size() == 0){
+            Toast.makeText(this, "No Image Selected", Toast.LENGTH_SHORT).show();
+            return false;
+        }
+        if (complainAgainstUsers.size() == 0) {
+            ((MultiAutoCompleteTextView)findViewById(R.id.complainAgainst)).setError("Select user(s) to complain against");
+            return false;
+        }
+        if (reviewerName == null) {
+            ((AutoCompleteTextView)findViewById(R.id.complainReviewer)).setError("Select user to review complaint");
+            return false;
+        }
 
         return true;
     }
@@ -317,19 +349,130 @@ public class LodgeComplaintActivity extends AppCompatActivity {
 
             switch (requestCode){
                 case 1:
-                    if(resultCode == RESULT_OK && data !=null){
+                    if(resultCode == RESULT_OK && data != null){
+                        System.out.println("EDDUR AISE AND ");
+                        LinearLayout linearLayout = (LinearLayout) findViewById(R.id.linearLayoutEvidence);
+                        linearLayout.setOrientation(LinearLayout.VERTICAL);
+                        LinearLayout.LayoutParams params1 = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+                        params1.setMargins(150,50,10,50);
+                        LinearLayout.LayoutParams textViewParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT, 1.0F);
+                        textViewParams.setMargins(50,50,10,50);
+                        LinearLayout.LayoutParams buttonParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+                        buttonParams.setMargins(50,50,10,50);
 
-                        int count = data.getClipData().getItemCount();
-                        for(int i=0; i<count; i++){
-                            Uri image = data.getClipData().getItemAt(i).getUri();
-                            String imagePath = FileUtils.getPath(LodgeComplaintActivity.this,image);
+
+                        if (data.getData() == null) {
+                            int count = data.getClipData().getItemCount();
+                            System.out.println(count);
+                            for (int i = 0; i < count; i++) {
+                                Uri image = data.getClipData().getItemAt(i).getUri();
+                                String imagePath = FileUtils.getPath(LodgeComplaintActivity.this, image);
+                                images.add(Uri.parse(imagePath));
+
+                                //Layout for individual line
+                                LinearLayout individualLineForEvidence = new LinearLayout(this);
+                                individualLineForEvidence.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT));
+                                individualLineForEvidence.setOrientation(LinearLayout.HORIZONTAL);
+                                individualLineForEvidence.setBackgroundColor((Color.parseColor("#ffffff")));
+                                individualLineForEvidence.setLayoutParams(params1);
+                                linearLayout.addView(individualLineForEvidence);
+
+
+                                //Textview for file name
+                                TextView textView = new TextView(this);
+                                textView.setText(getFileName(image));
+                                textView.setLayoutParams(textViewParams);
+                                textView.setTextSize(15);
+                                textView.setTextColor(Color.parseColor("#000000"));
+
+
+                                //Button to remove file
+                                Button myButton = new Button(this);
+                                myButton.setText("X");
+                                myButton.setLayoutParams(buttonParams);
+
+                                myButton.setOnClickListener(new View.OnClickListener() {
+                                    @Override
+                                    public void onClick(View view) {
+                                        System.out.println(images.size());
+                                        images.remove(Uri.parse(imagePath));
+                                        System.out.println(images.size());
+                                        linearLayout.removeView(individualLineForEvidence);
+                                    }
+                                });
+
+                                //Adding to parent
+                                individualLineForEvidence.addView(textView);
+                                individualLineForEvidence.addView(myButton);
+
+                            }
+                        } else {
+                            Uri image = data.getData();
+                            String imagePath = FileUtils.getPath(LodgeComplaintActivity.this, image);
                             images.add(Uri.parse(imagePath));
+
+                            //Layout for individual line
+                            LinearLayout individualLineForEvidence = new LinearLayout(this);
+                            individualLineForEvidence.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT));
+                            individualLineForEvidence.setOrientation(LinearLayout.HORIZONTAL);
+                            individualLineForEvidence.setBackgroundColor((Color.parseColor("#ffffff")));
+                            individualLineForEvidence.setLayoutParams(params1);
+                            linearLayout.addView(individualLineForEvidence);
+
+                            //Textview for file name
+                            TextView textView = new TextView(this);
+                            textView.setText(getFileName(image));
+                            textView.setLayoutParams(textViewParams);
+                            textView.setTextSize(15);
+                            textView.setTextColor(Color.parseColor("#000000"));
+
+                            //Button to remove file
+                            Button myButton = new Button(this);
+                            myButton.setText("X");
+                            myButton.setLayoutParams(buttonParams);
+
+                            myButton.setOnClickListener(new View.OnClickListener() {
+                                @Override
+                                public void onClick(View view) {
+                                    System.out.println(images.size());
+                                    images.remove(Uri.parse(imagePath));
+                                    System.out.println(images.size());
+                                    linearLayout.removeView(individualLineForEvidence);
+                                }
+                            });
+
+                            //Adding to parent
+                            individualLineForEvidence.addView(textView);
+                            individualLineForEvidence.addView(myButton);
                         }
 
                     }
             }
 
         }
+    }
+
+    @SuppressLint("Range")
+    public String getFileName(Uri uri) {
+        String result = null;
+        if (uri.getScheme().equals("content")) {
+            Cursor cursor = getContentResolver().query(uri, null, null, null, null);
+            try {
+                if (cursor != null && cursor.moveToFirst()) {
+                    result = cursor.getString(cursor.getColumnIndex(OpenableColumns.DISPLAY_NAME));
+                }
+            } finally {
+                cursor.close();
+            }
+        }
+        if (result == null) {
+            result = uri.getPath();
+            int cut = result.lastIndexOf('/');
+            if (cut != -1) {
+                result = result.substring(cut + 1);
+            }
+        }
+        return result;
     }
 
     public void uploadToServer(){
