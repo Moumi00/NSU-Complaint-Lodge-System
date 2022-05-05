@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from "react";
-import Select from "react-select";
 import { Modal } from "bootstrap";
 import axios from "axios";
 import AsyncSelect from "react-select/async";
@@ -108,7 +107,7 @@ function LodgeComplaint() {
   async function handleLodgeComplaintButtonClicked(e) {
     e.preventDefault();
     console.log(complainAgainst);
-    console.log(complainTitle.length)
+    console.log(complainTitle.length);
     if (!complainTitle || complainTitle.length > max) {
       return setComplainTitleErrorClass("block");
     }
@@ -124,7 +123,7 @@ function LodgeComplaint() {
     if (!reviewer) {
       return setReviewerErrorClass("block");
     }
-    
+
     console.log(selectedFiles);
 
     const formData = new FormData();

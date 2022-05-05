@@ -12,13 +12,8 @@ code {
     monospace;
 }
 
-/* .primary-color {
-  background-color: #95b486;
-} */
-
 .primary-color {
   background-color: #244873;
-  /* background-color: #254E58; */
 }
 
 ul {
@@ -109,8 +104,3 @@ input[type="file"] {
 .card-shadow {
   box-shadow: 0 8px 16px 0 rgba(0, 0, 0, 0.2), 0 12px 20px 0 rgba(0, 0, 0, 0.19);
 }
-
-
-
-
-

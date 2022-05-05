@@ -19,7 +19,7 @@ function Dashboard() {
   );
   const [reviewComplainSelectedClass, setReviewComplainSelectedClass] =
     useState("");
-  
+
   const [isReviewer, setIsReviewer] = useState(false);
 
   useEffect(() => {
@@ -41,7 +41,7 @@ function Dashboard() {
       setDesignation(response.data.data.userType);
       setComplainList(response.data.data.Complains);
       setReviewComplainList(response.data.data.ComplainReviewers);
-      setIsReviewer((response.data.data.actorType == "Reviewer") ? true : false)
+      setIsReviewer(response.data.data.actorType == "Reviewer" ? true : false);
     }
     fetchData();
   }, []);

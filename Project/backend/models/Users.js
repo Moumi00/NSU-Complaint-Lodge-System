@@ -2,7 +2,6 @@
 
 module.exports = (sequelize, DataTypes) => {
   const Users = sequelize.define("Users", {
-
     // Unique UserID for all user
     userUNID: {
       type: DataTypes.STRING,
@@ -35,8 +34,7 @@ module.exports = (sequelize, DataTypes) => {
   });
 
   Users.associate = (models) => {
-
-    //One to Many association with User verification model 
+    //One to Many association with User verification model
     //(A user can have multiple user verification)
     Users.hasMany(models.UserVerification, {
       foreignKey: {
@@ -44,7 +42,7 @@ module.exports = (sequelize, DataTypes) => {
       },
     });
 
-    //One to Many association with Complain model 
+    //One to Many association with Complain model
     //(A user can have multiple Complain)
     Users.hasMany(models.Complain, {
       foreignKey: {
@@ -52,7 +50,7 @@ module.exports = (sequelize, DataTypes) => {
       },
     });
 
-    //One to Many association with Complain Reviewer model 
+    //One to Many association with Complain Reviewer model
     //(A user can have multiple Complain to review)
     Users.hasMany(models.ComplainReviewer, {
       foreignKey: {

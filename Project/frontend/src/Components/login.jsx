@@ -6,7 +6,6 @@ import { useNavigate } from "react-router-dom";
 function Login() {
   let navigate = useNavigate();
 
-
   const [email, setEmail] = useState("");
   const [emailErrorClass, setEmailErrorClass] = useState("none");
   const [password, setPassword] = useState("");
@@ -49,7 +48,7 @@ function Login() {
   };
 
   async function handleLoginButtonClicked(e) {
-    e.preventDefault();
+    e.preventDefault(); //Stops the page from loading
 
     console.log(password);
     console.log(password.length);
@@ -57,8 +56,6 @@ function Login() {
       setEmailErrorClass("block");
       return;
     }
-
-
 
     let response = await axios.post("http://localhost:8000/auth/login", {
       email: email,
@@ -77,16 +74,19 @@ function Login() {
 
   async function onLoginSuccess(res) {
     // console.log("Login Success:", res.profileObj);
-    let response = await axios.post("http://localhost:8000/auth/google-accounts", {
-      googleID: res.getAuthResponse().id_token,
-    });
+    let response = await axios.post(
+      "http://localhost:8000/auth/google-accounts",
+      {
+        googleID: res.getAuthResponse().id_token,
+      }
+    );
     console.log(response);
-    if (response.data.data){
+    if (response.data.data) {
       localStorage.setItem("userUNID", response.data.data.UserUNID);
       window.location.replace("http://localhost:3000");
     } else {
       res.profileObj.googleID = res.getAuthResponse().id_token;
-      navigate('/google-registration', {state: res.profileObj } )
+      navigate("/google-registration", { state: res.profileObj });
     }
   }
 

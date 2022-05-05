@@ -22,12 +22,15 @@ function ForgetPassword() {
       setEmailErrorClass("block");
       return;
     }
-    
-    let response = await axios.post('http://localhost:8000/auth/forget-password', {
-      email: email
-    })
-    if(response.data.error) {
-      setErrorClass('block');
+
+    let response = await axios.post(
+      "http://localhost:8000/auth/forget-password",
+      {
+        email: email,
+      }
+    );
+    if (response.data.error) {
+      setErrorClass("block");
       setError(response.data.error);
       return;
     } else {

@@ -13,25 +13,6 @@ const CLIENT_ID =
   "992655217366-qiu0iegl7kmotoovl1630k6283o0jsuk.apps.googleusercontent.com";
 const client = new OAuth2Client(CLIENT_ID);
 
-// router.get("/all", async (req, res) => {
-//   const result = await UserVerification.findAll({
-//     include: Users,
-//   });
-//   res.json(result);
-// });
-
-// router.get("/kisuEkta", async (req, res) => {
-//   const result = await Users.findAll({
-//     include: UserVerification,
-//   });
-//   res.json(result);
-// });
-
-// router.get("/hudaai", async (req, res) => {
-//   res.json(Users.getAttributes().actorType.values[1]);
-// });
-
-
 //Used for google signins
 router.post("/google-accounts", async (req, res) => {
   try {
@@ -66,7 +47,6 @@ router.post("/google-accounts", async (req, res) => {
     });
   }
 });
-
 
 //Used for google signups
 router.post("/register/google", async (req, res) => {
@@ -105,7 +85,6 @@ router.post("/register/google", async (req, res) => {
           });
         }
       });
-      console.log(Users.getAttributes().accountType.values[0]);
       const UNID = uuid.v4();
       const user = await Users.create({
         userUNID: UNID,
@@ -139,7 +118,6 @@ router.post("/register/google", async (req, res) => {
     });
   }
 });
-
 
 //Used for default registration
 router.post("/register", async (req, res) => {
@@ -181,7 +159,6 @@ router.post("/register", async (req, res) => {
     uploadPath = path.join(__dirname, "..");
     uploadPath +=
       "/uploads/NSU IDs/" + req.body.nsuId + "." + file.name.split(".").pop();
-    console.log("Upload path:" + uploadPath);
     file.mv(uploadPath, function (err) {
       if (err) {
         return res.json({
@@ -224,7 +201,6 @@ router.post("/register", async (req, res) => {
   }
 });
 
-
 //Used for verifying email
 router.get("/verify-email/:verificationToken", async (req, res) => {
   const result = await UserVerification.findOne({
@@ -266,7 +242,6 @@ router.get("/verify-email/:verificationToken", async (req, res) => {
     }
   }
 });
-
 
 //Used for login
 router.post("/login", async (req, res) => {
@@ -313,7 +288,6 @@ router.post("/login", async (req, res) => {
     }
   }
 });
-
 
 //Used for checking whether email sent for forget password is correct or not
 router.post("/forget-password", async (req, res) => {
@@ -394,7 +368,6 @@ router.post("/verify-default-user", async (req, res) => {
     });
   }
 });
-
 
 //used to update password
 router.post("/password-update", async (req, res) => {

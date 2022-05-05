@@ -2,16 +2,14 @@
 
 module.exports = (sequelize, DataTypes) => {
   const ComplainAgainst = sequelize.define("ComplainAgainst", {
-
-    //To keep track of the version as it can be editted 
+    //To keep track of the version as it can be editted
     editHistory: {
       type: DataTypes.INTEGER,
-      defaultValue: 0
-    }
+      defaultValue: 0,
+    },
   });
 
   ComplainAgainst.associate = (models) => {
-
     //One to many association with Complain model (Each Complain Against belongs to a Complain)
     ComplainAgainst.belongsTo(models.Complain, {
       foreignKey: {

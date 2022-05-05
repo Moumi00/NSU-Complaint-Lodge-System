@@ -37,7 +37,6 @@ function Register() {
     { label: "Admin", value: 5, isDisabled: true },
   ]);
 
-
   const token = localStorage.getItem("userUNID");
   const clientId =
     "992655217366-qiu0iegl7kmotoovl1630k6283o0jsuk.apps.googleusercontent.com";
@@ -96,7 +95,7 @@ function Register() {
       return;
     }
 
-    if ((password.length < 6 || password.length > 30)) {
+    if (password.length < 6 || password.length > 30) {
       setPasswordErrorClass("block");
       return;
     }
@@ -139,7 +138,6 @@ function Register() {
   const updateList = function (e) {
     e.preventDefault();
     const newFiles = e.target.files[0];
-    console.log(newFiles);
     if (newFiles) {
       setIsFilePicked(true);
       setIdPhotoErrorClass("none");
@@ -159,7 +157,6 @@ function Register() {
   }
 
   async function onLoginSuccess(res) {
-    // console.log("Login Success:", res.profileObj);
     let response = await axios.post(
       "http://localhost:8000/auth/google-accounts",
       {
@@ -171,7 +168,6 @@ function Register() {
       window.location.replace("http://localhost:3000");
     } else {
       res.profileObj.googleID = res.getAuthResponse().id_token;
-      // console.log(res.getAuthResponse().id_token);
       console.log(res.profileObj);
       navigate("/google-registration", { state: res.profileObj });
     }

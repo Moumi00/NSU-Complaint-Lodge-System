@@ -2,7 +2,6 @@ import React, { useState, useEffect, useCallback } from "react";
 import axios from "axios";
 import { useParams } from "react-router-dom";
 import { useLocation } from "react-router-dom";
-import ImageViewer from "react-simple-image-viewer";
 import AsyncSelect from "react-select/async";
 
 function ComplaintDetails() {
@@ -19,8 +18,6 @@ function ComplaintDetails() {
   const [lodgerUserUNID, setLodgerUserUNID] = useState("");
   const [lodgerDesignation, setLodgerDesignation] = useState("");
   const [evidence, setEvidence] = useState([]);
-  const [currentImage, setCurrentImage] = useState(0);
-  const [isViewerOpen, setIsViewerOpen] = useState(false);
   const [reviewer, setReviewer] = useState("");
   const [comment, setComment] = useState("");
   const [commentList, setCommentList] = useState([]);
@@ -44,7 +41,7 @@ function ComplaintDetails() {
           },
         }
       );
-      console.log(response);
+
       if (
         !(
           token == response.data.data.ComplainerUNID ||
@@ -70,10 +67,6 @@ function ComplaintDetails() {
       setLodgerDesignation(response.data.data.User.userType);
       setLodgerUserUNID(response.data.data.ComplainerUNID);
       setComplainUNID(response.data.data.complainUNID);
-      // setEvidence([
-      //   "http://localhost:8000/uploads/Evidence/2cdeaf0a-c7f2-4fd0-8773-68e02d854e8d-0.jpg",
-      //   "http://localhost:8000/uploads/Evidence/2cdeaf0a-c7f2-4fd0-8773-68e02d854e8d-0.jpg",
-      // ]);
       setEvidence(response.data.data.Evidence.map((e) => e.evidence));
       setReviewer(response.data.data.ComplainReviewers[0].User.fullName);
       setCommentList(response.data.data.Comments.map((e) => e.comment));
@@ -107,11 +100,6 @@ function ComplaintDetails() {
     );
   };
 
-  const closeImageViewer = () => {
-    setCurrentImage(0);
-    setIsViewerOpen(false);
-  };
-
   const handleOkayButton = () => {
     window.location.replace("http://localhost:3000");
   };
@@ -122,8 +110,6 @@ function ComplaintDetails() {
 
   const addCommentButtonClicked = async (e) => {
     e.preventDefault();
-
-    console.log("aise0");
     if (!comment) {
       return setCommentErrorClass("block");
     }
@@ -132,8 +118,6 @@ function ComplaintDetails() {
       complainUNID: complainUNID,
       comment: comment,
     });
-
-    console.log(response);
 
     if (response.data.data) {
       window.location.reload();
@@ -166,8 +150,6 @@ function ComplaintDetails() {
         complainUNID: id,
       }
     );
-
-    console.log(response);
   };
 
   return (
@@ -343,7 +325,12 @@ function ComplaintDetails() {
               <h6 class="mt-3">Designation: {lodgerDesignation}</h6>
             </div>
             <div className="d-flex justify-content-end">
-              <a href={"/view-edit-history/" + id} className="btn btn-primary mt-4">View Edit History</a>
+              <a
+                href={"/view-edit-history/" + id}
+                className="btn btn-primary mt-4"
+              >
+                View Edit History
+              </a>
             </div>
           </div>
         </div>

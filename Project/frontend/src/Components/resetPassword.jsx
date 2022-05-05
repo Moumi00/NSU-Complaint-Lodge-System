@@ -1,6 +1,6 @@
 import axios from "axios";
 import React, { useState, useEffect } from "react";
-import { Navigate, useParams } from "react-router-dom";
+import { useParams } from "react-router-dom";
 
 function ResetPassword() {
   const { id } = useParams();
@@ -11,10 +11,12 @@ function ResetPassword() {
 
   useEffect(() => {
     async function fetchData() {
-      let response = await axios.post("http://localhost:8000/auth/verify-default-user", {
-        UNID: id,
-      });
-      console.log(response);
+      let response = await axios.post(
+        "http://localhost:8000/auth/verify-default-user",
+        {
+          UNID: id,
+        }
+      );
 
       if (response.data.error) {
         window.location.replace("http://localhost:3000");
@@ -36,10 +38,13 @@ function ResetPassword() {
       return;
     }
 
-    let response = await axios.post('http://localhost:8000/auth/password-update', {
-      UNID: id,
-      password: password
-    })
+    let response = await axios.post(
+      "http://localhost:8000/auth/password-update",
+      {
+        UNID: id,
+        password: password,
+      }
+    );
     alert(response.data.data);
   }
 

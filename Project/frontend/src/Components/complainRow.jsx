@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 
 function ComplainRow(props) {
@@ -6,8 +6,9 @@ function ComplainRow(props) {
 
   useEffect(() => {
     async function fetchData() {
-      console.log(props.complain);
-      console.log(props.complain.Comments.length);
+      //is this console required?
+      // console.log(props.complain);
+      // console.log(props.complain.Comments.length);
     }
     fetchData();
   }, []);
@@ -26,9 +27,9 @@ function ComplainRow(props) {
             <h3 class="card-title">{props.complain.complainTitle}</h3>
             <h5 class="card-text mt-4 mb-3 text-danger">
               Latest Comment:{" "}
-              {((props.complain.Comments.length == 1)
+              {props.complain.Comments.length == 1
                 ? props.complain.Comments[0].comment
-                : "No comments yet")}
+                : "No comments yet"}
             </h5>
             <div className="d-flex justify-content-between">
               <h5 class="card-text">

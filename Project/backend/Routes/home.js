@@ -11,9 +11,8 @@ const {
 const router = express.Router();
 const path = require("path");
 const uuid = require("uuid");
-const { Op, where } = require("sequelize");
+const { Op } = require("sequelize");
 const { Sequelize } = require("sequelize");
-
 
 //Used to change the status of complain (Open to Close)
 router.post("/change-status", async (req, res) => {
@@ -33,7 +32,6 @@ router.post("/change-status", async (req, res) => {
     error: "",
   });
 });
-
 
 //Used to add comment to a complain
 router.post("/add-comment", async (req, res) => {
@@ -58,8 +56,6 @@ router.post("/add-comment", async (req, res) => {
     commentNumber = temp.dataValues.commentNumber + 1;
   }
 
-  console.log(commentNumber);
-
   await Comment.create({
     ComplainUNID: req.body.complainUNID,
     comment: req.body.comment,
@@ -72,7 +68,7 @@ router.post("/add-comment", async (req, res) => {
   });
 });
 
-router.get("/total-edits", async (req, res)=>{
+router.get("/total-edits", async (req, res) => {
   const temp = await Complain.findOne({
     attributes: ["edits"],
     where: {
@@ -82,10 +78,10 @@ router.get("/total-edits", async (req, res)=>{
 
   res.json({
     data: temp,
-    error: ""
-  })
-})
-router.get("/complain-history", async (req, res) =>{
+    error: "",
+  });
+});
+router.get("/complain-history", async (req, res) => {
   const result = await Complain.findAll({
     include: [
       {
@@ -98,7 +94,7 @@ router.get("/complain-history", async (req, res) =>{
             model: Users,
             attributes: ["fullName", "userUNID"],
           },
-        ], 
+        ],
       },
       {
         model: ComplainDescription,
@@ -114,7 +110,6 @@ router.get("/complain-history", async (req, res) =>{
           editHistory: req.query.id,
         },
       },
-
     ],
     where: {
       complainUNID: req.query.complainUNID,
@@ -125,8 +120,7 @@ router.get("/complain-history", async (req, res) =>{
     data: result,
     error: "",
   });
-})
-
+});
 
 //Get entire details of a user along with complain lodged, complains to review
 router.get("/user-details", async (req, res) => {
@@ -150,10 +144,8 @@ router.get("/user-details", async (req, res) => {
             attributes: ["comment", "commentNumber"],
             required: false,
             separate: true,
-            order: [
-              ["commentNumber", "DESC"]
-            ],
-            limit: 1
+            order: [["commentNumber", "DESC"]],
+            limit: 1,
           },
         ],
       },
@@ -189,7 +181,6 @@ router.get("/user-details", async (req, res) => {
   });
 });
 
-
 //Used to edit a complain
 router.post("/edit-complain", async (req, res) => {
   const complainAgainstUserUNID = JSON.parse(req.body.complainAgainstUserUNID);
@@ -219,7 +210,6 @@ router.post("/edit-complain", async (req, res) => {
       ComplainAgainstUserUNID: complainAgainstUserUNID[i],
       editHistory: editNumber,
     });
-    console.log(complainAgainstUserUNID[i]);
   }
 
   if (req.files != null) {
@@ -251,7 +241,7 @@ router.post("/edit-complain", async (req, res) => {
           (idx + req.body.oldEvidenceCount) +
           "." +
           image.name.split(".").pop(),
-          editHistory: editNumber
+        editHistory: editNumber,
       });
     }
 
@@ -268,11 +258,9 @@ router.post("/edit-complain", async (req, res) => {
 
   res.json({
     data: "Edited Successfully",
-    error: ""
-  })
-
+    error: "",
+  });
 });
-
 
 //Used to change reviewer
 router.post("/change-reviewer", async (req, res) => {
@@ -288,8 +276,6 @@ router.post("/change-reviewer", async (req, res) => {
     }
   );
 
-  // console.log("ReviwerUNID - " + req.body.complainReviewerUserUNID);
-  // console.log("complainUNID - " + req.body.complainUNID);
   const result = await ComplainReviewer.create({
     currentReviewer: ComplainReviewer.getAttributes().currentReviewer.values[0],
     ComplainReviewerUserUNID: req.body.complainReviewerUserUNID,
@@ -301,7 +287,6 @@ router.post("/change-reviewer", async (req, res) => {
     error: "",
   });
 });
-
 
 //Used to get the latest version of the complain
 router.get("/complain-latest-details", async (req, res) => {
@@ -377,10 +362,9 @@ router.get("/complain-latest-details", async (req, res) => {
   });
 });
 
-
 //Get a list of all the reviewers
 router.get("/reviewers", async (req, res) => {
-  const result = await Users.findAll({ 
+  const result = await Users.findAll({
     attributes: ["fullName", "userUNID"],
     where: {
       [Op.and]: [
@@ -406,7 +390,6 @@ router.get("/reviewers", async (req, res) => {
     error: "",
   });
 });
-
 
 //Get a list of all users someone can complain against
 router.get("/complain-against", async (req, res) => {
@@ -498,7 +481,5 @@ router.post("/lodge-complaint", async (req, res) => {
     error: "",
   });
 });
-
-
 
 module.exports = router;

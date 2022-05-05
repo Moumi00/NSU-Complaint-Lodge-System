@@ -32,7 +32,7 @@ module.exports = (sequelize, DataTypes) => {
       },
     });
 
-    //One to many association with Complain Reviewer model 
+    //One to many association with Complain Reviewer model
     //(Each Complain can have many reviewer as we can change reviewer)
     Complain.hasMany(models.ComplainReviewer, {
       foreignKey: {
@@ -40,7 +40,7 @@ module.exports = (sequelize, DataTypes) => {
       },
     });
 
-    //One to many association with Complain Description model 
+    //One to many association with Complain Description model
     //(Each Complain can have many description as we can edit description)
     Complain.hasMany(models.ComplainDescription, {
       foreignKey: {
@@ -48,7 +48,7 @@ module.exports = (sequelize, DataTypes) => {
       },
     });
 
-    //One to many association with Complain Against model 
+    //One to many association with Complain Against model
     //(Each Complain can have many Users against whom complain is lodged)
     Complain.hasMany(models.ComplainAgainst, {
       foreignKey: {
@@ -56,7 +56,7 @@ module.exports = (sequelize, DataTypes) => {
       },
     });
 
-    //One to many association with Evidence model 
+    //One to many association with Evidence model
     //(Each Complain can have many many Evidence)
     Complain.hasMany(models.Evidence, {
       foreignKey: {
@@ -64,7 +64,7 @@ module.exports = (sequelize, DataTypes) => {
       },
     });
 
-    //One to many association with Comment model 
+    //One to many association with Comment model
     //(Each Complain can have multiple comments)
     Complain.hasMany(models.Comment, {
       foreignKey: {

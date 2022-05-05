@@ -2,7 +2,6 @@
 
 module.exports = (sequelize, DataTypes) => {
   const UserVerification = sequelize.define("UserVerification", {
-
     //Unique Token send for verification in mail
     verificationToken: {
       type: DataTypes.STRING,
@@ -20,15 +19,14 @@ module.exports = (sequelize, DataTypes) => {
   });
 
   UserVerification.associate = (models) => {
-
-    //One to Many association with User model 
+    //One to Many association with User model
     //(Each user verification belongs to a User)
     UserVerification.belongsTo(models.Users, {
       foreignKey: {
         name: "UserUNID",
       },
     });
-  }; 
- 
+  };
+
   return UserVerification;
 };

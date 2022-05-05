@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 
 function ReviewComplainRow(props) {
@@ -31,7 +31,6 @@ function ReviewComplainRow(props) {
               </h5>
               <div>
                 <a
-                  //href={"/complaint-details/" + props.complain.complainUNID}
                   class="btn btn-primary me-2"
                   onClick={complainDetailsClicked}
                 >

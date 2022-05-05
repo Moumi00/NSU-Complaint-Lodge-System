@@ -1,4 +1,3 @@
-import React, { useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEnvelope, faFax, faPhone } from "@fortawesome/free-solid-svg-icons";
 import {
@@ -16,9 +15,13 @@ function Footer() {
           <div class="col-md-6">
             <img
               src={require("../Assets/footer-logo.png")}
-              style={{width:"300px",marginTop:"0px",marginLeft:"-10px", maxHeight:"50px"}}
-            >
-            </img>
+              style={{
+                width: "300px",
+                marginTop: "0px",
+                marginLeft: "-10px",
+                maxHeight: "50px",
+              }}
+            ></img>
             <p class="text-white">
               Bashundhara, Dhaka-1229, Bangladesh
               <br />

@@ -158,8 +158,6 @@ function EditComplaint() {
       return setComplainAgainstErrorClass("block");
     }
 
-    console.log(selectedFiles);
-
     const formData = new FormData();
     formData.append("complainUNID", id);
     formData.append("complainerUNID", token);
@@ -358,7 +356,7 @@ function EditComplaint() {
             class="modal fade"
             data-bs-backdrop="static"
             data-bs-keyboard="false"
-            id="exampleModal" 
+            id="exampleModal"
             tabindex="-1"
             aria-labelledby="exampleModalLabel"
             aria-hidden="true"
