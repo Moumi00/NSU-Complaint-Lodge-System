@@ -314,7 +314,7 @@ router.get("/complain-latest-details", async (req, res) => {
         include: [
           {
             model: Users,
-            attributes: ["fullName", "userUNID"],
+            attributes: ["fullName", "userUNID", "uniqueDetail"],
           },
         ],
       },
@@ -341,7 +341,7 @@ router.get("/complain-latest-details", async (req, res) => {
         include: [
           {
             model: Users,
-            attributes: ["fullName", "userUNID"],
+            attributes: ["fullName", "userUNID", "uniqueDetail"],
           },
         ],
       },
@@ -364,12 +364,17 @@ router.get("/complain-latest-details", async (req, res) => {
 
 //Get a list of all the reviewers
 router.get("/reviewers", async (req, res) => {
+<<<<<<< HEAD
   const result = await Users.findAll({
     attributes: ["fullName", "userUNID"],
+=======
+  const result = await Users.findAll({ 
+    attributes: ["uniqueDetail", "userUNID"],
+>>>>>>> 2f084fea465a20ff19095bf4a5a2f1246ca7201a
     where: {
       [Op.and]: [
         {
-          fullName: {
+          uniqueDetail: {
             [Op.substring]: req.query.query,
           },
         },
@@ -395,11 +400,11 @@ router.get("/reviewers", async (req, res) => {
 router.get("/complain-against", async (req, res) => {
   // console.log(req.query);
   const result = await Users.findAll({
-    attributes: ["fullName", "userUNID"],
+    attributes: ["uniqueDetail", "userUNID"],
     where: {
       [Op.and]: [
         {
-          fullName: {
+          uniqueDetail: {
             [Op.substring]: req.query.query,
           },
         },
@@ -482,4 +487,55 @@ router.post("/lodge-complaint", async (req, res) => {
   });
 });
 
+<<<<<<< HEAD
+=======
+router.post("/lodge-complaint-trial", async (req, res) => {
+  const complainUNID = uuid.v4();
+  await Complain.create({ 
+    complainUNID: complainUNID,
+    complainTitle: req.body.complainTitle,
+  });
+
+  const files = req.files.file;
+
+  console.log(req.files);
+
+  async function move(image, idx) {
+    let uploadPath; 
+    uploadPath = path.join(__dirname, "..");
+    uploadPath +=
+      "/uploads/Evidence/" +
+      complainUNID +
+      "-" +
+      idx +
+      "." +
+      image.name.split(".").pop();
+    try {
+      image.mv(uploadPath);
+    } catch (e) {
+      return res.send({
+        success: false,
+        message: "upload error",
+      });
+    }
+    await Evidence.create({
+      ComplainUNID: complainUNID,
+      evidence: complainUNID + "-" + idx + "." + image.name.split(".").pop(), 
+    });
+  }
+
+  Array.isArray(files)
+    ? files.forEach((file, idx) => move(file, idx))
+    : move(files, 0);
+
+
+  res.json({
+    data: "Succesfully lodged a complaint",
+    error: "",
+  });
+});
+
+
+
+>>>>>>> 2f084fea465a20ff19095bf4a5a2f1246ca7201a
 module.exports = router;

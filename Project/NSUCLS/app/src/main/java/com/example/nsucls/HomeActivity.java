@@ -29,7 +29,7 @@ public class HomeActivity extends AppCompatActivity {
 
 
         JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.GET,
-                "http://10.0.2.2:8000/home/user-details?userUNID=261b6357-91c8-41c6-a00a-36d657c58fb7",null, new Response.Listener<JSONObject>() {
+                SplashActivity.baseURL + "/home/user-details?userUNID=261b6357-91c8-41c6-a00a-36d657c58fb7",null, new Response.Listener<JSONObject>() {
             @Override
             public void onResponse(JSONObject response) {
                 try {

@@ -78,7 +78,7 @@ function LodgeComplaint() {
     );
     callback(
       response.data.data.map((i) => ({
-        label: i.fullName,
+        label: i.uniqueDetail,
         value: i.userUNID,
         isDisabled: reviewer == i.userUNID ? true : false,
       }))
@@ -95,7 +95,7 @@ function LodgeComplaint() {
     console.log(response);
     callback(
       response.data.data.map((i) => ({
-        label: i.fullName,
+        label: i.uniqueDetail,
         value: i.userUNID,
         isDisabled: complainAgainst.some((e) =>
           e == i.userUNID ? true : false

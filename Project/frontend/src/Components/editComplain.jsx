@@ -52,11 +52,11 @@ function EditComplaint() {
         response.data.data.ComplainDescriptions[0].complainDescription
       );
       let temp = {
-        label: response.data.data.ComplainReviewers[0].User.fullName,
+        label: response.data.data.ComplainReviewers[0].User.uniqueDetail,
         value: response.data.data.ComplainReviewers[0].User.userUNID,
       };
       const temp1 = response.data.data.ComplainAgainsts.map((e) => ({
-        label: e.User.fullName,
+        label: e.User.uniqueDetail,
         value: e.User.userUNID,
       }));
       const temp2 = response.data.data.ComplainAgainsts.map(
@@ -122,7 +122,7 @@ function EditComplaint() {
     );
     callback(
       response.data.data.map((i) => ({
-        label: i.fullName,
+        label: i.uniqueDetail,
         value: i.userUNID,
         isDisabled: reviewer == i.userUNID ? true : false,
       }))
@@ -139,7 +139,7 @@ function EditComplaint() {
     console.log(response);
     callback(
       response.data.data.map((i) => ({
-        label: i.fullName,
+        label: i.uniqueDetail,
         value: i.userUNID,
         isDisabled: complainAgainst.some((e) =>
           e == i.userUNID ? true : false

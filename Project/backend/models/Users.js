@@ -13,6 +13,8 @@ module.exports = (sequelize, DataTypes) => {
     email: DataTypes.STRING(320),
     password: DataTypes.STRING,
 
+    uniqueDetail: DataTypes.STRING,
+
     //Designation
     userType: DataTypes.STRING,
 

@@ -86,17 +86,20 @@ router.post("/register/google", async (req, res) => {
         }
       });
       const UNID = uuid.v4();
+      
       const user = await Users.create({
         userUNID: UNID,
         fullName: req.body.fullName,
         nsuId: req.body.nsuId,
         email: req.body.email,
+        uniqueDetail: req.body.fullName + " [" + req.body.nsuId + "]",
         actorType: actorType,
         accountType: Users.getAttributes().accountType.values[0],
         userType: req.body.userType,
         isVerified: true,
         nsuIdPhoto: req.body.nsuId + "." + file.name.split(".").pop(),
       });
+      console.log("UNID");
       res.json({
         data: user,
         error: "",
@@ -173,6 +176,7 @@ router.post("/register", async (req, res) => {
       userUNID: UNID,
       fullName: req.body.fullName,
       nsuId: req.body.nsuId,
+      uniqueDetail: req.body.fullName + " [" + req.body.nsuId + "]",
       email: req.body.email,
       actorType: actorType,
       accountType: Users.getAttributes().accountType.values[1],
@@ -194,7 +198,7 @@ router.post("/register", async (req, res) => {
       verificationToken;
     mailSender(req.body.email, subject, text);
   } else {
-    res.json({
+    res.json({ 
       data: "",
       error: "Email Already Registered",
     });

@@ -44,7 +44,7 @@ public class LoginActivity extends AppCompatActivity {
                     e.printStackTrace();
                 }
                 JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.POST,
-                        "http://10.0.2.2:8000/auth/login", jsonBody, new Response.Listener<JSONObject>() {
+                        SplashActivity.baseURL + "/auth/login", jsonBody, new Response.Listener<JSONObject>() {
                     @Override
                     public void onResponse(JSONObject response) {
                         System.out.println("AISE");
@@ -52,7 +52,7 @@ public class LoginActivity extends AppCompatActivity {
                         try {
                             if (response.getString("error").toString().isEmpty()) {
 //                                Toast.makeText(LoginActivity.this, "Logged in", Toast.LENGTH_SHORT).show();
-                                Intent myIntent = new Intent(LoginActivity.this, ComplaintDetailsActivity.class);
+                                Intent myIntent = new Intent(LoginActivity.this, LodgeComplaintActivity.class);
                                 startActivity(myIntent);
                             } else {
                                 Toast.makeText(LoginActivity.this, response.getString("error").toString(), Toast.LENGTH_SHORT).show();
