@@ -41,7 +41,7 @@ function ComplaintDetails() {
           },
         }
       );
-
+      
       if (
         !(
           token == response.data.data.ComplainerUNID ||
@@ -89,8 +89,8 @@ function ComplaintDetails() {
   };
 
   const changeReviewerButtonClicked = async (e) => {
-    console.log(newReviewer);
-    console.log(lodgerUserUNID);
+    // console.log(newReviewer);
+    // console.log(lodgerUserUNID);
     let response = await axios.post(
       "http://localhost:8000/home/change-reviewer",
       {

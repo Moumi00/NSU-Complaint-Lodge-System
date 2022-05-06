@@ -72,14 +72,11 @@ function Register() {
   async function handleSubmit(e) {
     e.preventDefault(); //stops the page from reloading
 
-    console.log(designation);
-
     if (fullName.length < 3 || fullName.length > 30) {
       setNameErrorClass("block");
       return;
     }
 
-    console.log(nsuId);
     if (nsuId.length != 10) {
       setNsuIdErrorClass("block");
       return;
@@ -105,7 +102,6 @@ function Register() {
       return;
     }
 
-    console.log(selectedFiles);
     if (!isFilePicked) {
       return setIdPhotoErrorClass("block");
     }

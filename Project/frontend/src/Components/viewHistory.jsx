@@ -14,7 +14,6 @@ function ViewHistory() {
         },
       });
 
-      console.log(response);
       if (response.data.data == null) {
         window.location.replace("http://localhost:3000");
       }
