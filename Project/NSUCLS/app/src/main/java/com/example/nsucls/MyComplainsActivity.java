@@ -1,12 +1,16 @@
 package com.example.nsucls;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.util.TypedValue;
+import android.view.View;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.ListAdapter;
 import android.widget.ListView;
@@ -25,25 +29,27 @@ import java.util.List;
 
 public class MyComplainsActivity extends AppCompatActivity {
 
+    private RecyclerView mRecyclerView;
+    private RecyclerView.Adapter mAdapter;
+    private RecyclerView.LayoutManager mLayoutManager;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_my_complains);
-        ListView l = findViewById(R.id.list);
+        mRecyclerView = (RecyclerView) findViewById(R.id.my_recycler_view);
 
         Intent intent = getIntent();
         String jsonArray = intent.getStringExtra("jsonArray");
 
         try {
             if (jsonArray.length() == 2){
-                LinearLayout linearLayout = new LinearLayout(this);
-                setContentView(linearLayout);
-                linearLayout.setOrientation(LinearLayout.VERTICAL);
+                LinearLayout linearLayout = (LinearLayout) findViewById(R.id.parentLayout);
                 TextView textView = new TextView(this);
                 textView.setText("No complains yet");
                 textView.setTextSize(40);
                 textView.setTextColor(Color.parseColor("#000000"));
-                linearLayout.addView(textView);
+                linearLayout.addView(textView, 2);
                 return;
             }
             JSONArray array = new JSONArray(jsonArray);
@@ -54,15 +60,22 @@ public class MyComplainsActivity extends AppCompatActivity {
                 JSONObject obj = array.getJSONObject(i);
                 HashMap<String, String> map = new HashMap<String, String>();
                 System.out.println("OY NOKA");
-                map.put("title", obj.getString("complainTitle"));
+                map.put("title", "Title: " + obj.getString("complainTitle"));
                 map.put("status", "Status: " + obj.getString("status"));
+
                 map.put("latestComment", "Latest Comment: " + ((obj.getJSONArray("Comments").length() == 0) ? "No comments yet" : obj.getJSONArray("Comments").getJSONObject(0).getString("comment")));
+                map.put("complainUNID", obj.getString("complainUNID"));
                 mylist.add(map);
             }
 
-            ListAdapter adapter = new SimpleAdapter(this, mylist , R.layout.fragment_my_complain_row,
-                    new String[] { "title", "status", "latestComment" },new int[] { R.id.title, R.id.status, R.id.latestComment});
-            l.setAdapter(adapter);
+            mLayoutManager = new LinearLayoutManager(this);
+            mRecyclerView.setLayoutManager(mLayoutManager);
+
+            mAdapter = new MyComplainsAdapter(mylist);
+            mRecyclerView.setAdapter(mAdapter);
+
+
+
         } catch (JSONException e) {
             System.out.println("EIDI LAGBONA");
             e.printStackTrace();

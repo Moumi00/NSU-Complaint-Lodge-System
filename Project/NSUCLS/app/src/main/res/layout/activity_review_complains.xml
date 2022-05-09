@@ -4,12 +4,29 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ReviewComplainsActivity">
+    tools:context=".ReviewComplainsActivity"
+    android:orientation="vertical">
 
-    <ListView
-        android:id="@+id/list"
+    <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        />
+        android:text="Complains to review"
+        android:textSize="30dp"
+        android:layout_marginVertical="30dp"
+        android:textColor="@color/black"
+        android:textStyle="bold"/>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="5dp"
+        android:background="#c0c0c0"/>
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/my_recycler_view"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginTop="15dp"
+        android:layout_marginHorizontal="5dp"
+        android:scrollbars="vertical" />
 
 </LinearLayout>

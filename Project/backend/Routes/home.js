@@ -364,13 +364,8 @@ router.get("/complain-latest-details", async (req, res) => {
 
 //Get a list of all the reviewers
 router.get("/reviewers", async (req, res) => {
-<<<<<<< HEAD
-  const result = await Users.findAll({
-    attributes: ["fullName", "userUNID"],
-=======
   const result = await Users.findAll({ 
     attributes: ["uniqueDetail", "userUNID"],
->>>>>>> 2f084fea465a20ff19095bf4a5a2f1246ca7201a
     where: {
       [Op.and]: [
         {
@@ -426,6 +421,7 @@ router.get("/complain-against", async (req, res) => {
 //Used to lodge complain
 router.post("/lodge-complaint", async (req, res) => {
   const complainUNID = uuid.v4();
+  console.log(req.body.complainAgainstUserUNID)
   const complainAgainstUserUNID = JSON.parse(req.body.complainAgainstUserUNID);
   //   return console.log(JSON.parse(req.body.complainAgainstUserUNID));
   await Complain.create({
@@ -487,8 +483,6 @@ router.post("/lodge-complaint", async (req, res) => {
   });
 });
 
-<<<<<<< HEAD
-=======
 router.post("/lodge-complaint-trial", async (req, res) => {
   const complainUNID = uuid.v4();
   await Complain.create({ 
@@ -537,5 +531,4 @@ router.post("/lodge-complaint-trial", async (req, res) => {
 
 
 
->>>>>>> 2f084fea465a20ff19095bf4a5a2f1246ca7201a
 module.exports = router;

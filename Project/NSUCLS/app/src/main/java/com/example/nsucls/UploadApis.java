@@ -16,7 +16,11 @@ public interface UploadApis {
 //    Call<RequestBody> uploadImage(@Part MultipartBody.Part part, @Part("somedata") RequestBody requestBody);
 
     @Multipart
-    @POST("lodge-complaint-trial")
-    Call<ResponseBody> callMultipleUploadApi(@Part List<MultipartBody.Part> image, @Part("complainTitle") String complainTitle);
+    @POST("lodge-complaint")
+    Call<ResponseBody> callMultipleUploadApi(@Part List<MultipartBody.Part> image);
+                                             //@Part("complainTitle") String complainTitle,
+                                             //@Part("complainDescription") String complainDescription,
+                                             //@Part("complainReviewerUserUNID") String complainReviewerUserUNID,
+                                             //@Part("complainAgainstUserUNID") List<String> complainAgainstUserUNID);
 
 }
