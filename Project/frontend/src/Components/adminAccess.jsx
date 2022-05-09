@@ -5,19 +5,27 @@ import axios from "axios";
 function AdminAccess() {
   const [errorClass, setErrorClass] = useState("none");
   const [error, setError] = useState("");
-  const [password, setPassword] = useState("none");
+  const [password, setPassword] = useState("");
   const token = localStorage.getItem("userUNID");
 
   useEffect(() => {
-    async function fetchData() {}
+    async function fetchData() {
+      localStorage.removeItem("userUNID");
+    }
     fetchData();
   }, []);
 
   async function handleGainAccessButtonClicked(e) {
     e.preventDefault();
+    console.log(password)
+    if (!password || password > 255){
+      setErrorClass("block")
+      setError("Input a proper password");
+      return;
+    }
 
     let response = await axios.post("http://localhost:8000/auth/login", {
-      email: null,
+      email: "Admin",
       password: password,
     });
 
@@ -26,7 +34,6 @@ function AdminAccess() {
       setError(response.data.error);
       return;
     } else {
-      localStorage.setItem("userUNID", response.data.data.userUNID);
       window.location.replace("http://localhost:3000/admin-homepage");
     }
   }

@@ -1,13 +1,23 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import axios from "axios";
 import AsyncSelect from "react-select/async";
 import { useNavigate } from "react-router-dom";
 
 function AdminHomepage() {
+  const ref = document.referrer;
   let navigate = useNavigate();
   const [openCompLodgerMenu, setOpenCompLodgerMenu] = useState(false);
   const [newLodger, setNewLodger] = useState("");
   const [newLodgerErrorClass, setNewLodgerErrorClass] = useState("none");
+
+  useEffect(() => {
+    async function fetchData() {
+      if (!ref){
+        window.location.replace("http://localhost:3000");
+      }
+    }
+    fetchData();
+  }, []);
 
   const handleLodgerOnChange = (e) => {
     setOpenCompLodgerMenu(false);

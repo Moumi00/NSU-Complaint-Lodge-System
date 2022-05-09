@@ -27,6 +27,12 @@ function Dashboard() {
 
   useEffect(() => {
     async function fetchData() {
+      console.log(token);
+      if (!token) {
+        console.log("aise")
+        window.location.replace("http://localhost:3000");
+        return;
+      }
       let response = await axios.get(
         "http://localhost:8000/home/user-details",
         {

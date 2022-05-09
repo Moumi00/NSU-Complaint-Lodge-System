@@ -40,6 +40,14 @@ function LodgeComplaint() {
     fetchData();
   }, []);
 
+  const handleOkButtonClicked = () => {
+    if (location.state) {
+      window.location.replace("http://localhost:3000/admin-homepage");
+    } else {
+      window.location.replace("http://localhost:3000/");
+    }
+  }
+
 
   const updateList = function (e) {
     e.preventDefault();
@@ -343,7 +351,7 @@ function LodgeComplaint() {
                 </div>
                 <div class="modal-body">Click OK to continue</div>
                 <div class="modal-footer">
-                  <a className="btn btn-primary" href="/">
+                  <a className="btn btn-primary" onClick={handleOkButtonClicked}>
                     OK
                   </a>
                 </div>

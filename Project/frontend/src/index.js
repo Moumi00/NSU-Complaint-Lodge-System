@@ -24,7 +24,7 @@ ReactDOM.render(
   <React.StrictMode>
     <BrowserRouter>
     <Navbar/>
-    <Routes>
+    <Routes> 
       <Route path='/' element={<Homepage/>}/>
       <Route path='/register' element={<Register/>}/>
       <Route path='/login' element={<Login/>}/>

@@ -1,10 +1,10 @@
 //To keep track of all User
 
 module.exports = (sequelize, DataTypes) => {
-  const Users = sequelize.define("Users", {
+  const Users = sequelize.define("Users", {   
     // Unique UserID for all user
     userUNID: {
-      type: DataTypes.STRING,
+      type: DataTypes.STRING, 
       primaryKey: true,
     },
 
