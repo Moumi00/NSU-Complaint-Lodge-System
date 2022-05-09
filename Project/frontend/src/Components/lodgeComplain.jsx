@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { Modal } from "bootstrap";
 import axios from "axios";
+import { useLocation } from "react-router-dom";
 import AsyncSelect from "react-select/async";
 
 function LodgeComplaint() {
@@ -20,12 +21,25 @@ function LodgeComplaint() {
     useState("none");
   const [reviewerErrorClass, setReviewerErrorClass] = useState("none");
   const [evidenceErrorClass, setEvidenceErrorClass] = useState("none");
-  const token = localStorage.getItem("userUNID");
+  const [token, setToken] = useState("");
   const max = 250;
+  const location = useLocation();
 
-  if (!token) {
-    window.location.replace("http://localhost:3000/login");
-  }
+  useEffect(() => {
+    async function fetchData() {
+      console.log(location);
+      console.log(localStorage.getItem("userUNID"));
+      setToken(localStorage.getItem("userUNID"))
+      if (((!localStorage.getItem("userUNID")) && (location.state == null))) {
+          window.location.replace("http://localhost:3000/login");
+      }
+      if (location.state){
+        setToken(location.state)
+      }
+    }
+    fetchData();
+  }, []);
+
 
   const updateList = function (e) {
     e.preventDefault();

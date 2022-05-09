@@ -368,7 +368,7 @@ router.get("/all", async (req, res) => {
     where: {
       uniqueDetail: {
         [Op.substring]: req.query.query,
-      },
+      }, 
     },
     limit: 10,
   });

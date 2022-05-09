@@ -133,7 +133,7 @@ function ComplaintDetails() {
     });
     callback(
       response.data.data.map((i) => ({
-        label: i.fullName,
+        label: i.uniqueDetails,
         value: i.userUNID,
         isDisabled:
           complainAgainst.some((e) =>
