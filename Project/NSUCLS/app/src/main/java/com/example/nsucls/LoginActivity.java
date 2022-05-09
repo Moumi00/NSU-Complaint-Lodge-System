@@ -3,6 +3,7 @@ package com.example.nsucls;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.TextView;
@@ -23,6 +24,11 @@ public class LoginActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
+        SharedPreferences settings = getApplicationContext().getSharedPreferences("localStorage", 0);
+        if (settings.contains("userUNID")) {
+            Intent myIntent = new Intent(LoginActivity.this, HomeActivity.class);
+            startActivity(myIntent);
+        }
 
         TextView username = (TextView) findViewById(R.id.username);
         TextView password = (TextView) findViewById(R.id.password);
@@ -52,7 +58,12 @@ public class LoginActivity extends AppCompatActivity {
                         try {
                             if (response.getString("error").toString().isEmpty()) {
 //                                Toast.makeText(LoginActivity.this, "Logged in", Toast.LENGTH_SHORT).show();
-                                Intent myIntent = new Intent(LoginActivity.this, LodgeComplaintActivity.class);
+                                SharedPreferences settings = getApplicationContext().getSharedPreferences("localStorage", 0);
+                                SharedPreferences.Editor editor = settings.edit();
+                                editor.putString("userUNID", response.getJSONObject("data").getString("userUNID"));
+                                editor.apply();
+
+                                Intent myIntent = new Intent(LoginActivity.this, HomeActivity.class);
                                 startActivity(myIntent);
                             } else {
                                 Toast.makeText(LoginActivity.this, response.getString("error").toString(), Toast.LENGTH_SHORT).show();

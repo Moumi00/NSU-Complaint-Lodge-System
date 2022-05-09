@@ -437,6 +437,7 @@ router.get("/complain-against", async (req, res) => {
 //Used to lodge complain
 router.post("/lodge-complaint", async (req, res) => {
   const complainUNID = uuid.v4();
+  console.log(req.body.complainAgainstUserUNID)
   const complainAgainstUserUNID = JSON.parse(req.body.complainAgainstUserUNID);
   //   return console.log(JSON.parse(req.body.complainAgainstUserUNID));
   await Complain.create({
@@ -542,5 +543,7 @@ router.post("/lodge-complaint-trial", async (req, res) => {
     error: "",
   });
 });
+
+
 
 module.exports = router;

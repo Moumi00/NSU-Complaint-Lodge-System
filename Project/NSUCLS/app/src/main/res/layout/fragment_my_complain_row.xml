@@ -1,56 +1,58 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:card_view="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    tools:context=".MyComplainRow"
-    android:background="@color/primary_col"
-    android:layout_marginBottom="15dp">
+    android:layout_margin="5dp"
+    android:orientation="horizontal"
+    android:elevation="300dp"
+    card_view:cardBackgroundColor="@color/primary_col"
+    card_view:cardCornerRadius="5dp"
+    card_view:cardUseCompatPadding="true" >
 
-    <!-- TODO: Update blank fragment layout -->
-        <LinearLayout
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="?android:selectableItemBackground"  >
+
+        <TextView
+            android:id="@+id/title"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:background="@drawable/border"
-            android:elevation="200dp">>
-            <TextView
-                android:id="@+id/title"
+            android:layout_marginHorizontal="10dp"
+            android:gravity="center_vertical"
+            android:text="Title"
+            android:textColor="@android:color/black"
+            android:textSize="24sp" />
+        <TextView
+            android:id="@+id/latestComment"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/title"
+            android:text="Latest Comment:"
+            android:textSize="15dp"
+            android:textColor="@color/black"
+            android:layout_margin="10dp"/>
+        <TextView
+            android:id="@+id/status"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/latestComment"
+            android:text="Complain Status: Open"
+            android:textSize="15dp"
+            android:textColor="@color/black"
+            android:layout_margin="10dp"/>
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/status">
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/detailsButton"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Title"
-                android:textSize="40dp"
-                android:textColor="@color/black"
-                android:layout_margin="30dp"/>
-            <TextView
-                android:id="@+id/latestComment"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Latest Comment: MARA KHEYE GELAM"
-                android:textSize="15dp"
-                android:textColor="@color/black"
-                android:layout_margin="10dp"/>
-            <TextView
-                android:id="@+id/status"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Complain Status: Open"
-                android:textSize="15dp"
-                android:textColor="@color/black"
-                android:layout_margin="10dp"/>
-            <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content">
-                <com.google.android.material.button.MaterialButton
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_margin="10dp"
-                    android:text="Details"/>
-                <com.google.android.material.button.MaterialButton
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_margin="10dp"
-                    android:text="Edit Complaint"/>
-            </LinearLayout>
+                android:layout_margin="10dp"
+                android:text="Details"/>
         </LinearLayout>
-</FrameLayout>
+    </RelativeLayout>
+
+</androidx.cardview.widget.CardView>

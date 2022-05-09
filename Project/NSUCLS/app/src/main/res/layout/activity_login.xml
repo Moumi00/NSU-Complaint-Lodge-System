@@ -53,15 +53,17 @@
         />
 
     <com.google.android.material.button.MaterialButton
+        android:id="@+id/loginButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/loginButton"
         android:layout_below="@id/password"
         android:layout_centerHorizontal="true"
-        android:text="LOGIN"
+        android:layout_marginStart="15dp"
+        android:layout_marginTop="15dp"
+        android:layout_marginEnd="15dp"
+        android:layout_marginBottom="15dp"
         android:backgroundTint="@color/design_default_color_primary_variant"
-        android:layout_margin="15dp"
-    />
+        android:text="LOGIN" />
 
     <TextView
         android:layout_width="match_parent"

@@ -106,14 +106,14 @@ function LodgeComplaint() {
 
   async function handleLodgeComplaintButtonClicked(e) {
     e.preventDefault();
-    console.log(complainAgainst);
+    console.log(JSON.stringify(complainAgainst));
     console.log(complainTitle.length);
     if (!complainTitle || complainTitle.length > max) {
       return setComplainTitleErrorClass("block");
     }
     if (!complainDescription || complainDescription.length > max) {
       return setComplainDescriptionErrorClass("block");
-    }
+    } 
     if (complainAgainst.length === 0) {
       return setComplainAgainstErrorClass("block");
     }
