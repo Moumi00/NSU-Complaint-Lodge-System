@@ -14,10 +14,13 @@ function Dashboard() {
   const [designation, setDesignation] = useState("");
   const [complainList, setComplainList] = useState([]);
   const [reviewComplainList, setReviewComplainList] = useState([]);
+  const [reviewedComplainList, setReviewedComplainList] = useState([]);
   const [myComplainsSelectedClass, setMyComplainSelectedClass] = useState(
     "btn-light card-shadow"
   );
   const [reviewComplainSelectedClass, setReviewComplainSelectedClass] =
+    useState("");
+  const [reviewedComplainSelectedClass, setReviewedComplainSelectedClass] =
     useState("");
 
   const [isReviewer, setIsReviewer] = useState(false);
@@ -32,15 +35,20 @@ function Dashboard() {
           },
         }
       );
-
-      console.log(response.data.data);
-      console.log(token);
+      let openComplain = [];
+      let closeComplain = [];
       setName(response.data.data.fullName);
       setNsuId(response.data.data.nsuId);
       setEmail(response.data.data.email);
       setDesignation(response.data.data.userType);
       setComplainList(response.data.data.Complains);
-      setReviewComplainList(response.data.data.ComplainReviewers);
+      response.data.data.ComplainReviewers.map((i) => {
+        i.Complain.status == "Open"
+          ? openComplain.push(i)
+          : closeComplain.push(i);
+      });
+      setReviewComplainList(openComplain);
+      setReviewedComplainList(closeComplain);
       setIsReviewer(response.data.data.actorType == "Reviewer" ? true : false);
     }
     fetchData();
@@ -58,12 +66,21 @@ function Dashboard() {
   const myComplainsButtonClicked = () => {
     setMyComplainSelectedClass("btn-light card-shadow");
     setReviewComplainSelectedClass("");
+    setReviewedComplainSelectedClass("");
   };
 
   const reviewComplainButtonClicked = () => {
     setMyComplainSelectedClass("");
+    setReviewedComplainSelectedClass("");
     setReviewComplainSelectedClass("btn-light card-shadow");
   };
+
+  const reviewedComplainButtonClicked = () => {
+    setMyComplainSelectedClass("");
+    setReviewComplainSelectedClass("");
+    setReviewedComplainSelectedClass("btn-light card-shadow");
+  };
+
   return (
     <>
       <div class="flex-grow-1 background-color d-flex">
@@ -110,10 +127,22 @@ function Dashboard() {
                   <FontAwesomeIcon icon={faLock} />
                 </i>
               </button>
+              <button
+                type="button"
+                class={"btn btn-lg " + reviewedComplainSelectedClass}
+                disabled={!isReviewer}
+                onClick={reviewedComplainButtonClicked}
+              >
+                Reviewed Complain(s)
+                <i className={"ms-2 d-" + (isReviewer ? "none" : "inline")}>
+                  <FontAwesomeIcon icon={faLock} />
+                </i>
+              </button>
+
               <div
                 className={
                   "h-100 flex-column d-" +
-                  (!reviewComplainSelectedClass ? "flex" : "none")
+                  (!myComplainsSelectedClass ? "none" : "flex")
                 }
               >
                 {complainList.length != 0 ? (
@@ -134,6 +163,21 @@ function Dashboard() {
                   ))
                 ) : (
                   <h1 class="pt-4 ">No Complain to Review</h1>
+                )}
+              </div>
+
+              <div
+                className={
+                  "h-100 flex-column d-" +
+                  (!reviewedComplainSelectedClass ? "none" : "flex")
+                }
+              >
+                {reviewedComplainList.length != 0 ? (
+                  reviewedComplainList.map((e) => (
+                    <ReviewComplainRow complain={e} />
+                  ))
+                ) : (
+                  <h1 class="pt-4 ">No Complain Reviewed</h1>
                 )}
               </div>
             </div>

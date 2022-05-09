@@ -16,13 +16,10 @@ function EmailVerified() {
   useEffect(() => {
     async function fetchData() {
       console.log(verificationToken);
-      let response = await axios.post(
-        "http://localhost:8000/auth/verify-verification-token",
-        {
-          verificationToken: verificationToken,
-        }
-      );
-      console.log(response);
+      console.log("Lola");
+      let response = await axios.post("http://localhost:8000/auth/verify-verification-token", {
+        verificationToken: verificationToken,
+      });
       if (response.data.error == "Invalid verification token") {
         window.location.replace("http://localhost:3000");
       } else if (response.data.error) {
@@ -33,7 +30,7 @@ function EmailVerified() {
         setText(response.data.data);
       }
       response = await axios.get(
-        "http://localhost:8000/auth/verify-email/" + { verificationToken }
+        "http://localhost:8000/auth/verify-email/" + verificationToken
       );
     }
     fetchData();

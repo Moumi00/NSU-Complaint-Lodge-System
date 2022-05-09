@@ -3,15 +3,17 @@ import { Modal } from "bootstrap";
 import axios from "axios";
 import AsyncSelect from "react-select/async";
 
-function LodgeComplaint() {
+function AdminLodgeComplaint() {
   const [selectedFiles, setSelectedFiles] = useState([]);
   const [isFilePicked, setIsFilePicked] = useState(false);
   const [openCompAgainstMenu, setOpenCompAgainstMenu] = useState(false);
   const [openCompReviewerMenu, setOpenCompReviewerMenu] = useState(false);
+  const [openCompLodgerMenu, setOpenCompLodgerMenu] = useState(false);
   const [complainTitle, setComplainTitle] = useState("");
   const [complainDescription, setComplainDescription] = useState("");
   const [complainAgainst, setComplainAgainst] = useState([]);
   const [reviewer, setReviewer] = useState("");
+  const [lodger, setLodger] = useState("");
   const [complainTitleErrorClass, setComplainTitleErrorClass] =
     useState("none");
   const [complainDescriptionErrorClass, setComplainDescriptionErrorClass] =
@@ -19,6 +21,7 @@ function LodgeComplaint() {
   const [complainAgainstErrorClass, setComplainAgainstErrorClass] =
     useState("none");
   const [reviewerErrorClass, setReviewerErrorClass] = useState("none");
+  const [lodgerErrorClass, setLodgerErrorClass] = useState("none");
   const [evidenceErrorClass, setEvidenceErrorClass] = useState("none");
   const token = localStorage.getItem("userUNID");
   const max = 250;
@@ -65,6 +68,11 @@ function LodgeComplaint() {
     setReviewerErrorClass("none");
     setReviewer(e.value);
   };
+  const handleLodgerOnChange = (e) => {
+    setOpenCompLodgerMenu(false);
+    setLodgerErrorClass("none");
+    setLodger(e.value);
+  };
 
   const fetchComplainAgainstData = async (input, callback) => {
     let response = await axios.get(
@@ -85,14 +93,34 @@ function LodgeComplaint() {
     );
   };
 
+  const fetchLodgerData = async (input, callback) => {
+    let response = await axios.get("http://localhost:8000/home/all", {
+      params: {
+        query: input,
+      },
+    });
+    console.log(response.data.data);
+    callback(
+      response.data.data.map((i) => ({
+        label: i.uniqueDetail,
+        value: i.userUNID,
+        isDisabled: (complainAgainst.some((e) =>
+          e == i.userUNID
+            ? true
+            : false) || (reviewer == i.userUNID ? true : false)
+        ),
+      }))
+    );
+  };
+
   const fetchReviewerData = async (input, callback) => {
     let response = await axios.get("http://localhost:8000/home/reviewers", {
       params: {
         query: input,
-        userUNID: token,
+        userUNID: "",
       },
     });
-    console.log(response);
+    //console.log("helo" + response.data.data);
     callback(
       response.data.data.map((i) => ({
         label: i.uniqueDetail,
@@ -123,15 +151,16 @@ function LodgeComplaint() {
     if (!reviewer) {
       return setReviewerErrorClass("block");
     }
-
-    console.log(selectedFiles);
-
+    if (!lodger) {
+      return setLodgerErrorClass("block");
+    }
     const formData = new FormData();
     formData.append("complainerUNID", token);
     formData.append("complainTitle", complainTitle);
     formData.append("complainDescription", complainDescription);
     formData.append("complainAgainstUserUNID", JSON.stringify(complainAgainst));
     formData.append("complainReviewerUserUNID", reviewer);
+    formData.append("complainLodgerUserUNID", lodger);
     selectedFiles.forEach((file) => {
       formData.append("file", file);
     });
@@ -147,7 +176,6 @@ function LodgeComplaint() {
         headers: { "Content-Type": "multipart/form-data" },
       }
     );
-    console.log(response);
     if (response.data.data) {
       let myModal = new Modal(document.getElementById("exampleModal"));
       myModal.show();
@@ -299,6 +327,37 @@ function LodgeComplaint() {
                 </span>
               </div>
             </div>
+            <div className="form-group d-flex flex-column mb-4">
+              <div className="col-12">
+                <AsyncSelect
+                  loadOptions={fetchLodgerData}
+                  placeholder={
+                    <div style={{ color: "grey" }}>Choose Lodger(only one)</div>
+                  }
+                  components={{
+                    DropdownIndicator: () => null, // Remove dropdown icon
+                    IndicatorSeparator: () => null, // Remove separator
+                  }}
+                  onChange={handleLodgerOnChange}
+                  onBlur={(e) => {
+                    setOpenCompLodgerMenu(false);
+                  }}
+                  onInputChange={(e, { action }) => {
+                    if (e.length === 0) {
+                      setOpenCompLodgerMenu(false);
+                      return;
+                    }
+                    if (action === "input-change") {
+                      setOpenCompLodgerMenu(true);
+                    }
+                  }}
+                  menuIsOpen={openCompLodgerMenu}
+                />
+                <span class={"text-danger d-" + lodgerErrorClass}>
+                  Select a Complaint Lodger.
+                </span>
+              </div>
+            </div>
             <div className="d-block">
               <button type="submit" class="btn btn-primary w-100 fw-bold">
                 Lodge Complaint
@@ -342,4 +401,4 @@ function LodgeComplaint() {
   );
 }
 
-export default LodgeComplaint;
+export default AdminLodgeComplaint;
