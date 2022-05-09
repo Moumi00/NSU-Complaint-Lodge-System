@@ -23,6 +23,7 @@ function ComplaintDetails() {
   const [commentList, setCommentList] = useState([]);
   const [commentErrorClass, setCommentErrorClass] = useState("none");
   const [isReviewer, setIsReviewer] = useState("");
+  const [isOpen, setIsOpen] = useState("");
   const [openCompReviewerMenu, setOpenCompReviewerMenu] = useState(false);
 
   const [newReviewer, setNewReviewer] = useState("");
@@ -41,7 +42,7 @@ function ComplaintDetails() {
           },
         }
       );
-
+      
       if (
         !(
           token == response.data.data.ComplainerUNID ||
@@ -51,6 +52,7 @@ function ComplaintDetails() {
       ) {
         window.location.replace("http://localhost:3000");
       }
+      response.data.data.status == "Open" ? setIsOpen(true): setIsOpen(false);
       setComplainTitle(response.data.data.complainTitle);
       setComplainDescription(
         response.data.data.ComplainDescriptions[0].complainDescription
@@ -89,8 +91,6 @@ function ComplaintDetails() {
   };
 
   const changeReviewerButtonClicked = async (e) => {
-    console.log(newReviewer);
-    console.log(lodgerUserUNID);
     let response = await axios.post(
       "http://localhost:8000/home/change-reviewer",
       {
@@ -164,7 +164,7 @@ function ComplaintDetails() {
               <div className="col-5">
                 <div
                   className={
-                    "justify-content-end " + (isReviewer ? "d-flex" : "d-none")
+                    "justify-content-end " + ((isReviewer && isOpen) ? "d-flex" : "d-none")
                   }
                 >
                   <button
@@ -278,7 +278,7 @@ function ComplaintDetails() {
                 )}
               </div>
             </div>
-            <div className={"row mt-3 " + (isReviewer ? "d-flex" : "d-none")}>
+            <div className={"row mt-3 " + ((isReviewer && isOpen) ? "d-flex" : "d-none")}>
               <div className="col-9 offset-3 p-0">
                 <form onSubmit={addCommentButtonClicked}>
                   <div class="form-group mb-4">
@@ -300,7 +300,7 @@ function ComplaintDetails() {
                     </span>
                   </div>
                   <div className="d-flex justify-content-end">
-                    <button type="submit" class="btn btn-primary fw-bold">
+                    <button type="submit" class={"btn btn-primary fw-bold d-" + (isOpen ? "block" : "none")}>
                       Add new comment
                     </button>
                   </div>

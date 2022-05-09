@@ -16,6 +16,9 @@ import GoogleRegistration from './Components/googleRegistration';
 import EditComplaint from './Components/editComplain';
 import ComplaintDetails from './Components/complaintDetails';
 import ViewHistory from './Components/viewHistory';
+import EmailVerified from './Components/emailVerified';
+import AdminHomepage from './Components/adminHomepage';
+import AdminLodgeComplaint from './Components/adminLodgeComplaint';
 
 ReactDOM.render(
   <React.StrictMode>
@@ -33,6 +36,9 @@ ReactDOM.render(
       <Route path='/edit-complaint/:id' element={<EditComplaint />} />
       <Route path='/complaint-details/:id' element={<ComplaintDetails />} />
       <Route path='/view-edit-history/:id' element={<ViewHistory />} />
+      <Route path='/email-verified/:verificationToken' element={<EmailVerified />} />
+      <Route path='/admin-homepage' element={<AdminHomepage/>}/>
+      <Route path='/admin-lodge-complaint' element={<AdminLodgeComplaint/>}/>
     </Routes>
     <Footer/>
     </BrowserRouter>

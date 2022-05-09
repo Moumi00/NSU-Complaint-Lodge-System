@@ -50,8 +50,6 @@ function Login() {
   async function handleLoginButtonClicked(e) {
     e.preventDefault(); //Stops the page from loading
 
-    console.log(password);
-    console.log(password.length);
     if (!validateEmail()) {
       setEmailErrorClass("block");
       return;
@@ -73,14 +71,13 @@ function Login() {
   }
 
   async function onLoginSuccess(res) {
-    // console.log("Login Success:", res.profileObj);
     let response = await axios.post(
       "http://localhost:8000/auth/google-accounts",
       {
         googleID: res.getAuthResponse().id_token,
       }
     );
-    console.log(response);
+    
     if (response.data.data) {
       localStorage.setItem("userUNID", response.data.data.UserUNID);
       window.location.replace("http://localhost:3000");

@@ -99,7 +99,7 @@ router.post("/register/google", async (req, res) => {
         isVerified: true,
         nsuIdPhoto: req.body.nsuId + "." + file.name.split(".").pop(),
       });
-      console.log("UNID");
+      //console.log("UNID");
       res.json({
         data: user,
         error: "",
@@ -194,7 +194,7 @@ router.post("/register", async (req, res) => {
     let subject = "Verify Email";
     let text =
       "Please visit the following link to verify your email:\n" +
-      "http://localhost:8000/auth/verify-email/" +
+      "http://localhost:3000/email-verified/" +
       verificationToken;
     mailSender(req.body.email, subject, text);
   } else {
@@ -242,6 +242,33 @@ router.get("/verify-email/:verificationToken", async (req, res) => {
       res.json({
         data: "",
         error: "Verify Time passed",
+      });
+    }
+  }
+});
+
+//Used for verifying if the verification token in the params is valid or not.
+router.post("/verify-verification-token", async (req, res) => {
+  const result = await UserVerification.findOne({
+    where: {
+      verificationToken: req.body.verificationToken,
+    },
+  });
+  if(result == null){
+    return res.json({
+      data: "",
+      error: "Invalid verification token",
+    });
+  } else {
+    if (result.expiryDate < new Date()) {
+      return res.json({
+        data: "",
+        error: "Link expired.",
+      });
+    } else {
+      return res.json({
+        data: "Email verified successfully!",
+        error: "",
       });
     }
   }
@@ -407,6 +434,38 @@ router.post("/password-update", async (req, res) => {
   }
 });
 
+router.post("/resend-link", async (req, res) => {
+  const result = await UserVerification.findOne({
+    where: {
+      verificationToken: req.body.verificationToken
+    }
+  });
+  if (result == null) {
+    return res.json({
+      data: "",
+      error: "Invalid verfication token.",
+    });
+  } 
+  verificationToken = uuid.v4();
+    await UserVerification.create({
+      verificationToken: verificationToken,
+      expiryDate: new Date(new Date().getTime() + 24 * 60 * 60 * 1000), //24 hours valid to verify email
+      UserUNID: result.UserUNID,
+    });
+
+    const user = await Users.findOne({
+      where: {
+        UserUNID: result.UserUNID
+      }
+    });
+    let subject = "Verify Email";
+    let text =
+      "Please visit the following link to verify your email:\n" +
+      "http://localhost:3000/email-verified/" +
+      verificationToken;
+    mailSender(user.email, subject, text);
+});
+
 module.exports = router;
 
 //TODO:
@@ -423,3 +482,5 @@ module.exports = router;
 //11. Send UNID along with fullname to lodge complain
 //12. What all can be updated in lodge complain
 //13. Give errors as soon as input is taken
+//14. How to know admin is logged in, create a password for admin
+//15. Resend mail automatically for verification if unverified account tries to login after 24 hour

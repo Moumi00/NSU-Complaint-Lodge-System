@@ -161,9 +161,9 @@ router.get("/user-details", async (req, res) => {
           {
             model: Complain,
             attributes: ["complainTitle", "status"],
-            where: {
-              status: Complain.getAttributes().status.values[0],
-            },
+            // where: {
+            //   status: Complain.getAttributes().status.values[0],
+            // },
             include: [
               {
                 model: Users,
@@ -352,7 +352,7 @@ router.get("/complain-latest-details", async (req, res) => {
     ],
     where: {
       complainUNID: req.query.complainUNID,
-      status: Complain.getAttributes().status.values[0],
+      // status: Complain.getAttributes().status.values[0],
     },
   });
 
@@ -362,9 +362,25 @@ router.get("/complain-latest-details", async (req, res) => {
   });
 });
 
+router.get("/all", async (req, res) => {
+  const result = await Users.findAll({
+    attributes: ["uniqueDetail", "userUNID"],
+    where: {
+      uniqueDetail: {
+        [Op.substring]: req.query.query,
+      },
+    },
+    limit: 10,
+  });
+  return res.json({
+    data: result,
+    error: "",
+  });
+});
+
 //Get a list of all the reviewers
 router.get("/reviewers", async (req, res) => {
-  const result = await Users.findAll({ 
+  const result = await Users.findAll({
     attributes: ["uniqueDetail", "userUNID"],
     where: {
       [Op.and]: [
@@ -485,7 +501,7 @@ router.post("/lodge-complaint", async (req, res) => {
 
 router.post("/lodge-complaint-trial", async (req, res) => {
   const complainUNID = uuid.v4();
-  await Complain.create({ 
+  await Complain.create({
     complainUNID: complainUNID,
     complainTitle: req.body.complainTitle,
   });
@@ -495,7 +511,7 @@ router.post("/lodge-complaint-trial", async (req, res) => {
   console.log(req.files);
 
   async function move(image, idx) {
-    let uploadPath; 
+    let uploadPath;
     uploadPath = path.join(__dirname, "..");
     uploadPath +=
       "/uploads/Evidence/" +
@@ -514,14 +530,13 @@ router.post("/lodge-complaint-trial", async (req, res) => {
     }
     await Evidence.create({
       ComplainUNID: complainUNID,
-      evidence: complainUNID + "-" + idx + "." + image.name.split(".").pop(), 
+      evidence: complainUNID + "-" + idx + "." + image.name.split(".").pop(),
     });
   }
 
   Array.isArray(files)
     ? files.forEach((file, idx) => move(file, idx))
     : move(files, 0);
-
 
   res.json({
     data: "Succesfully lodged a complaint",

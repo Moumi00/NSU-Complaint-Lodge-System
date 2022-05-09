@@ -40,7 +40,6 @@ function EditComplaint() {
           },
         }
       );
-      console.log(response);
       if (token != response.data.data.ComplainerUNID) {
         window.location.replace("http://localhost:3000");
       }

@@ -42,12 +42,18 @@ function ComplainRow(props) {
                 >
                   Check details
                 </a>
-                <a
-                  href={"/edit-complaint/" + props.complain.complainUNID}
+                <button
+                  type="button"
+                  onClick={(e) => {
+                    e.preventDefault();
+                    window.location.href =
+                      "/edit-complaint/" + props.complain.complainUNID;
+                  }}
                   class="btn btn-primary"
+                  disabled={props.complain.status == "Open" ? false : true}
                 >
                   Edit Complain
-                </a>
+                </button>
               </div>
             </div>
           </div>
