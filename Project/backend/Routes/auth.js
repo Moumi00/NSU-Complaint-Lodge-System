@@ -473,14 +473,15 @@ module.exports = router;
 //2. Expiry time for password change
 //3. Check primarity of NSU ID
 //4. Eye of passwords dissappear        {DONE}
-//5. After succesfull register redirect to homepage
-//6. Same for login
-//7. Add videos to file type
+//5. After succesfull register redirect to homepage   {DONE}
+//6. Same for login  {DONE}
+//7. Add videos to file type    {DONE}
 //8. Add ID image while registering   {DONE}
 //9. Add ID image to search bar
 //10. Options after typing in search bar  {DONE}
-//11. Send UNID along with fullname to lodge complain
-//12. What all can be updated in lodge complain
+//11. Send UNID along with fullname to lodge complain  {DONE}
+//12. What all can be updated in lodge complain  {DONE}
 //13. Give errors as soon as input is taken
 //14. How to know admin is logged in, create a password for admin
 //15. Resend mail automatically for verification if unverified account tries to login after 24 hour
+//16. link diye editdetails e jaite parbena

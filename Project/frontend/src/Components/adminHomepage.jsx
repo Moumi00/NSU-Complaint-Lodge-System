@@ -2,9 +2,9 @@ import React, { useState } from "react";
 
 function AdminHomepage() {
   return (
-    <div class="flex-grow-1">
-      <div className="row">
-        <div class="d-grid gap-4 col-4 mx-auto">
+    <div class="flex-grow-1 d-flex align-items-center">
+      <div className="row w-100 justify-content-center">
+        <div class="d-grid gap-4 col-4">
           <a class="btn admin-button-color btn-lg fw-bold" href="http://localhost:3000/register" type="button">
             Create Account
           </a>
