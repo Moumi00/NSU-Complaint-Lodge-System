@@ -485,3 +485,4 @@ module.exports = router;
 //14. How to know admin is logged in, create a password for admin
 //15. Resend mail automatically for verification if unverified account tries to login after 24 hour
 //16. link diye editdetails e jaite parbena
+//17. Navbar will be different for admin
