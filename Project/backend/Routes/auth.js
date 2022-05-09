@@ -482,7 +482,7 @@ module.exports = router;
 //11. Send UNID along with fullname to lodge complain  {DONE}
 //12. What all can be updated in lodge complain  {DONE}
 //13. Give errors as soon as input is taken
-//14. How to know admin is logged in, create a password for admin
+//14. How to know admin is logged in, create a password for admin  {DONE}
 //15. Resend mail automatically for verification if unverified account tries to login after 24 hour
 //16. link diye editdetails e jaite parbena
 //17. Navbar will be different for admin

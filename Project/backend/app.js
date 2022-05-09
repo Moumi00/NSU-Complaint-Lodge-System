@@ -3,6 +3,7 @@ const app = express();
 const mysql = require("mysql2");
 const auth = require("./Routes/auth");
 const home = require("./Routes/home");
+const admin = require("./Routes/admin");
 const fileUpload = require("express-fileupload");
 const cors = require("cors");  
 
@@ -26,6 +27,7 @@ app.use(fileUpload());
 app.use('/uploads/Evidence', express.static(__dirname + '/uploads/Evidence'));
 app.use("/auth", auth);
 app.use("/home", home);
+app.use("/admin", admin);
 
 const connection = mysql.createConnection({
   host: "localhost",

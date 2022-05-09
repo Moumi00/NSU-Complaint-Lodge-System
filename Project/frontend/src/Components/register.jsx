@@ -7,7 +7,7 @@ import { useNavigate } from "react-router-dom";
 
 function Register() {
   let navigate = useNavigate();
-
+  let ref = document.referrer;
   const [fullName, setFullName] = useState("");
   const [nsuId, setNsuId] = useState("");
   const [email, setEmail] = useState("");
@@ -53,6 +53,7 @@ function Register() {
 
   useEffect(() => {
     async function fetchData() {
+      console.log(ref);
       if (token) {
         let response = await axios.post(
           "http://localhost:8000/auth/verify-unid",
@@ -114,13 +115,25 @@ function Register() {
     formData.append("userType", designation);
     formData.append("file", selectedFiles);
 
-    let response = await axios.post(
-      "http://localhost:8000/auth/register",
-      formData,
-      {
-        headers: { "Content-Type": "multipart/form-data" },
-      }
-    );
+    let response;
+    if(ref != "http://localhost:3000/admin-homepage") {
+      response = await axios.post(
+        "http://localhost:8000/auth/register",
+        formData,
+        {
+          headers: { "Content-Type": "multipart/form-data" },
+        }
+      );
+    } else {
+      response = await axios.post(
+        "http://localhost:8000/admin/create-account",
+        formData,
+        {
+          headers: { "Content-Type": "multipart/form-data" },
+        }
+      );
+    }
+    
     if (response.data.error) {
       setErrorClass("block");
       setError(response.data.error);
@@ -357,8 +370,10 @@ function Register() {
               </button>
             </div>
           </form>
+          <div className={ref == "http://localhost:3000/admin-homepage" ? "d-none" : "d-block"}>
           <hr class="my-4" />
           <div className="d-flex justify-content-center">
+            
             <GoogleLogin
               clientId={clientId}
               buttonText="Google Signup"
@@ -369,6 +384,8 @@ function Register() {
             />
           </div>
 
+          </div>
+          
           {/* Modal for successful Registration */}
           <div
             class="modal fade"
@@ -392,7 +409,7 @@ function Register() {
                     aria-label="Close"
                   ></button>
                 </div>
-                <div class="modal-body">Please verify your email.</div>
+                <div class="modal-body">{ref == "http://localhost:3000/admin-homepage" ? "You may login now.": "Please verify your email."}</div>
                 <div class="modal-footer">
                   <a className="btn btn-primary" href="/login">
                     Ok
