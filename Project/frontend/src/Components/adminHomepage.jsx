@@ -2,39 +2,96 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 import AsyncSelect from "react-select/async";
 import { useNavigate } from "react-router-dom";
+import { Modal } from "bootstrap";
 
 function AdminHomepage() {
   const ref = document.referrer;
   let navigate = useNavigate();
-  const [openCompLodgerMenu, setOpenCompLodgerMenu] = useState(false);
-  const [newLodger, setNewLodger] = useState("");
-  const [newLodgerErrorClass, setNewLodgerErrorClass] = useState("none");
+  const [openCompUserMenu, setOpenCompUserMenu] = useState(false);
+  const [newModalInput, setNewModalInput] = useState("");
+  //const [newLodgerErrorClass, setNewLodgerErrorClass] = useState("none");
+  const [modalTitle, setModalTitle] = useState("");
+  const [modalPlaceholder, setModalPlaceholder] = useState("");
+  const [modalButton, setModalButton] = useState("");
+  const [errorClass, setErrorClass] = useState("");
+  const [modalErrorText, setModalErrorText] = useState("");
+  const [islodging, setIslodging] = useState(false); //picchi button onClick konta hobe bujhar jonno
+  const [isDeleting, setIsDeleting] = useState(false); //might delete later
+  const [isViewing, setIsViewing] = useState(false);
 
   useEffect(() => {
     async function fetchData() {
-      if (!ref){
+      if (!ref) {
         window.location.replace("http://localhost:3000");
       }
     }
     fetchData();
   }, []);
 
-  const handleLodgerOnChange = (e) => {
-    setOpenCompLodgerMenu(false);
-    setNewLodgerErrorClass("none");
-    setNewLodger(e.value);
+  const handleModalOnChange = (e) => {
+    setOpenCompUserMenu(false);
+    setErrorClass("none");
+    setNewModalInput(e.value);
   };
 
-  const handleLodgeComplainClick = () => {
-    if (!newLodger){
-      setNewLodgerErrorClass("block");
+  const handleModalButtonClicked = async () => {
+    if (!newModalInput) {
+      setErrorClass("block");
+      if (islodging) {
+        setModalErrorText("Select complain lodger");
+      } else if (isViewing) {
+        setModalErrorText("Select an user to view its complaints");
+      } else {
+        setModalErrorText("Select an account to delete");
+      }
       return;
+    } else {
+      if (islodging) {
+        navigate("/lodge-complaint", { state: newModalInput });
+      } else if (isViewing) {
+        //notun ekta page hobe all complaints dekhabe
+        navigate("/lodge-complaint", { state: newModalInput });
+      } else {
+        //ekhane kisu ekta korte hobe modal mara lagbe to confirm account delete hoise
+        let response = await axios.post(
+          "http://localhost:8000/admin/delete-account",
+          {
+            userUNID: newModalInput,
+          }
+        );
+        let myModal = new Modal (document.getElementById("confirmationModal"));
+        myModal.show();
+      }
+      window.location.reload();
     }
-    navigate("/lodge-complaint", { state: newLodger });
-    window.location.reload();
+  };
+
+  function handleDeleteAccountButtonClicked() {
+    setModalTitle("Select User");
+    setModalPlaceholder("Choose account to delete");
+    setModalButton("Delete Account");
+    setIsDeleting(true);
+    //might delete later
+    setErrorClass("none");
   }
 
-  const fetchLodgerData = async (input, callback) => {
+  function handleLodgeComplaintButtonClicked() {
+    setModalTitle("Select Lodger");
+    setModalPlaceholder("Choose lodger");
+    setModalButton("Lodge Complaint");
+    setIslodging(true);
+    setErrorClass("none");
+  }
+
+  function handleViewAllComplaintButtonClicked() {
+    setModalTitle("Select User");
+    setModalPlaceholder("Choose User to view all its complaints");
+    setModalButton("View Complaints");
+    setIsViewing(true);
+    setErrorClass("none");
+  }
+
+  const fetchUserData = async (input, callback) => {
     let response = await axios.get("http://localhost:8000/home/all", {
       params: {
         query: input,
@@ -47,6 +104,7 @@ function AdminHomepage() {
       }))
     );
   };
+
   return (
     <div class="flex-grow-1 d-flex align-items-center">
       <div className="row w-100 justify-content-center">
@@ -58,7 +116,13 @@ function AdminHomepage() {
           >
             Create Account
           </a>
-          <button class="btn admin-button-color btn-lg fw-bold" type="button">
+          <button
+            class="btn admin-button-color btn-lg fw-bold"
+            type="button"
+            data-bs-toggle="modal"
+            data-bs-target="#staticBackdrop"
+            onClick={handleDeleteAccountButtonClicked}
+          >
             Delete Account
           </button>
           <button
@@ -66,15 +130,23 @@ function AdminHomepage() {
             data-bs-toggle="modal"
             data-bs-target="#staticBackdrop"
             type="button"
+            onClick={handleLodgeComplaintButtonClicked}
           >
             Lodge Complaint
           </button>
-          <button class="btn admin-button-color btn-lg fw-bold" type="button">
+          <button
+            class="btn admin-button-color btn-lg fw-bold"
+            data-bs-toggle="modal"
+            data-bs-target="#staticBackdrop"
+            type="button"
+            onClick={handleViewAllComplaintButtonClicked}
+          >
             View All Complaints
           </button>
         </div>
       </div>
 
+      {/* Modal for searching all type of users*/}
       <div
         class="modal"
         id="staticBackdrop"
@@ -88,7 +160,7 @@ function AdminHomepage() {
           <div class="modal-content">
             <div class="modal-header">
               <h5 class="modal-title" id="staticBackdropLabel">
-                Select lodger
+                {modalTitle}
               </h5>
               <button
                 type="button"
@@ -101,33 +173,31 @@ function AdminHomepage() {
               <form>
                 <div class="mb-3">
                   <AsyncSelect
-                    loadOptions={fetchLodgerData}
+                    loadOptions={fetchUserData}
                     placeholder={
-                      <div style={{ color: "grey" }}>
-                        Choose Lodger
-                      </div>
+                      <div style={{ color: "grey" }}>{modalPlaceholder}</div>
                     }
-                    onChange={handleLodgerOnChange}
+                    onChange={handleModalOnChange}
                     components={{
                       DropdownIndicator: () => null, // Remove dropdown icon
                       IndicatorSeparator: () => null, // Remove separator
                     }}
                     onBlur={(e) => {
-                      setOpenCompLodgerMenu(false);
+                      setOpenCompUserMenu(false);
                     }}
                     onInputChange={(e, { action }) => {
                       if (e.length === 0) {
-                        setOpenCompLodgerMenu(false);
+                        setOpenCompUserMenu(false);
                         return;
                       }
                       if (action === "input-change") {
-                        setOpenCompLodgerMenu(true);
+                        setOpenCompUserMenu(true);
                       }
                     }}
-                    menuIsOpen={openCompLodgerMenu}
+                    menuIsOpen={openCompUserMenu}
                   />
-                  <span class={"text-danger d-" + newLodgerErrorClass}>
-                    Select complain lodger.
+                  <span class={"text-danger d-" + errorClass}>
+                    {modalErrorText}
                   </span>
                 </div>
               </form>
@@ -136,12 +206,37 @@ function AdminHomepage() {
               <button
                 type="button"
                 class="btn btn-primary"
-                onClick={handleLodgeComplainClick}
+                onClick={handleModalButtonClicked}
               >
-                Lodge Complain
+                {modalButton}
               </button>
             </div>
           </div>
+        </div>
+      </div>
+
+      {/* Confirmation Modal */}
+      <div
+        class="modal"
+        id="confirmationModal"
+        data-bs-backdrop="static"
+        data-bs-keyboard="false"
+        tabindex="-1"
+        aria-labelledby="confirmationModalLabel"
+        aria-hidden="true"
+      >
+        <div class="modal-header">
+          <button
+            type="button"
+            class="btn-close"
+            data-bs-dismiss="modal"
+            aria-label="Close"
+          ></button>
+        </div>
+        <div class="modal-body">
+          <h1>
+            Account Deleted Successfully
+          </h1>
         </div>
       </div>
     </div>
