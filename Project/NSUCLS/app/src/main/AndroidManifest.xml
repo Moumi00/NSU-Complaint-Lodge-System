@@ -19,29 +19,24 @@
         android:usesCleartextTraffic="true" >
         <activity
             android:name=".LodgeComplaintActivity"
-            android:exported="false"
-            android:noHistory="true" >
+            android:exported="false">
         </activity>
         <activity
             android:name=".ComplaintDetailsActivity"
-            android:exported="false"
-            android:noHistory="true" >
+            android:exported="false">
         </activity>
         <activity
             android:name=".ReviewComplainsActivity"
-            android:exported="false"
-            android:noHistory="true" />
+            android:exported="false" />
         <activity
             android:name=".MyComplainsActivity"
-            android:exported="false"
-            android:noHistory="true" />
+            android:exported="false" />
         <activity
             android:name=".HomeActivity"
             android:exported="false" />
         <activity
             android:name=".SplashActivity"
-            android:exported="true"
-            android:noHistory="true" >
+            android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -50,8 +45,7 @@
         </activity>
         <activity
             android:name=".LoginActivity"
-            android:exported="true"
-            android:noHistory="true" />
+            android:exported="true" />
         <provider
             android:name="androidx.core.content.FileProvider"
             android:authorities="${applicationId}.provider"
