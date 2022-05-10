@@ -48,10 +48,12 @@ function AdminHomepage() {
     } else {
       if (islodging) {
         navigate("/lodge-complaint", { state: newModalInput });
+        window.location.reload();
       } else if (isViewing) {
-        //notun ekta page hobe all complaints dekhabe
-        navigate("/lodge-complaint", { state: newModalInput });
+        // navigate("/lodge-complaint", { state: newModalInput });
       } else {
+        console.log("DHUK");
+        //notun ekta page hobe all complaints dekhabe
         //ekhane kisu ekta korte hobe modal mara lagbe to confirm account delete hoise
         let response = await axios.post(
           "http://localhost:8000/admin/delete-account",
@@ -59,10 +61,10 @@ function AdminHomepage() {
             userUNID: newModalInput,
           }
         );
+        console.log(response);
         let myModal = new Modal (document.getElementById("confirmationModal"));
         myModal.show();
       }
-      window.location.reload();
     }
   };
 
@@ -71,6 +73,8 @@ function AdminHomepage() {
     setModalPlaceholder("Choose account to delete");
     setModalButton("Delete Account");
     setIsDeleting(true);
+    setIsViewing(false);
+    setIslodging(false);
     //might delete later
     setErrorClass("none");
   }
@@ -80,6 +84,8 @@ function AdminHomepage() {
     setModalPlaceholder("Choose lodger");
     setModalButton("Lodge Complaint");
     setIslodging(true);
+    setIsDeleting(false);
+    setIsViewing(false);
     setErrorClass("none");
   }
 
@@ -88,6 +94,8 @@ function AdminHomepage() {
     setModalPlaceholder("Choose User to view all its complaints");
     setModalButton("View Complaints");
     setIsViewing(true);
+    setIsViewing(false);
+    setIslodging(false);
     setErrorClass("none");
   }
 
@@ -148,7 +156,7 @@ function AdminHomepage() {
 
       {/* Modal for searching all type of users*/}
       <div
-        class="modal"
+        class="modal fade"
         id="staticBackdrop"
         data-bs-backdrop="static"
         data-bs-keyboard="false"
@@ -207,6 +215,8 @@ function AdminHomepage() {
                 type="button"
                 class="btn btn-primary"
                 onClick={handleModalButtonClicked}
+                data-bs-toggle="modal"
+                data-bs-target="#confirmationModal"
               >
                 {modalButton}
               </button>
@@ -217,7 +227,7 @@ function AdminHomepage() {
 
       {/* Confirmation Modal */}
       <div
-        class="modal"
+        class="modal fade"
         id="confirmationModal"
         data-bs-backdrop="static"
         data-bs-keyboard="false"
@@ -225,18 +235,30 @@ function AdminHomepage() {
         aria-labelledby="confirmationModalLabel"
         aria-hidden="true"
       >
-        <div class="modal-header">
-          <button
-            type="button"
-            class="btn-close"
-            data-bs-dismiss="modal"
-            aria-label="Close"
-          ></button>
-        </div>
-        <div class="modal-body">
-          <h1>
+        <div class="modal-dialog">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title" id="staticBackdropLabel">
+                Deletion Successful
+              </h5>
+              <button
+                type="button"
+                class="btn-close"
+                onClick={(e) => {
+                  window.location.reload();
+                }}
+                aria-label="Close"
+              ></button>
+            </div>
+            <div class="modal-body">
+            <h4>
             Account Deleted Successfully
-          </h1>
+          </h4>
+            </div>
+            <div class="modal-footer">
+              
+            </div>
+          </div>
         </div>
       </div>
     </div>
