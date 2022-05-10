@@ -69,10 +69,27 @@ router.post("/create-account", async (req, res) => {
       });
       
     } else {
-      res.json({ 
-        data: "",
-        error: "Email Already Registered",
-      });
+      if(result.active == 0) {
+        await Users.update(
+          {
+            active: 1
+          },
+          {
+            where: {
+              userUNID: result.userUNID
+            }
+          }
+        )
+        res.json({ 
+          data: "Account recovered successfully",
+          error: "",
+        });
+      } else {
+        res.json({ 
+          data: "",
+          error: "Email Already Registered",
+        });
+      }
     }
   });
 
