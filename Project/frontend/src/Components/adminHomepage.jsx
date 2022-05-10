@@ -9,14 +9,13 @@ function AdminHomepage() {
   let navigate = useNavigate();
   const [openCompUserMenu, setOpenCompUserMenu] = useState(false);
   const [newModalInput, setNewModalInput] = useState("");
-  //const [newLodgerErrorClass, setNewLodgerErrorClass] = useState("none");
   const [modalTitle, setModalTitle] = useState("");
   const [modalPlaceholder, setModalPlaceholder] = useState("");
   const [modalButton, setModalButton] = useState("");
   const [errorClass, setErrorClass] = useState("");
   const [modalErrorText, setModalErrorText] = useState("");
-  const [islodging, setIslodging] = useState(false); //picchi button onClick konta hobe bujhar jonno
-  const [isDeleting, setIsDeleting] = useState(false); //might delete later
+  const [islodging, setIslodging] = useState(false); 
+  const [isDeleting, setIsDeleting] = useState(false); 
   const [isViewing, setIsViewing] = useState(false);
 
   useEffect(() => {
@@ -50,11 +49,9 @@ function AdminHomepage() {
         navigate("/lodge-complaint", { state: newModalInput });
         window.location.reload();
       } else if (isViewing) {
-        // navigate("/lodge-complaint", { state: newModalInput });
+         navigate("/admin-view-all-complaints", { state: newModalInput });
+         window.location.reload();
       } else {
-        console.log("DHUK");
-        //notun ekta page hobe all complaints dekhabe
-        //ekhane kisu ekta korte hobe modal mara lagbe to confirm account delete hoise
         let response = await axios.post(
           "http://localhost:8000/admin/delete-account",
           {
@@ -94,7 +91,7 @@ function AdminHomepage() {
     setModalPlaceholder("Choose User to view all its complaints");
     setModalButton("View Complaints");
     setIsViewing(true);
-    setIsViewing(false);
+    setIsDeleting(false);
     setIslodging(false);
     setErrorClass("none");
   }
@@ -173,7 +170,9 @@ function AdminHomepage() {
               <button
                 type="button"
                 class="btn-close"
-                data-bs-dismiss="modal"
+                onClick={(e) => {
+                  window.location.reload();
+                }}
                 aria-label="Close"
               ></button>
             </div>

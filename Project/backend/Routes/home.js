@@ -147,6 +147,16 @@ router.get("/user-details", async (req, res) => {
             order: [["commentNumber", "DESC"]],
             limit: 1,
           },
+          {
+            model: ComplainReviewer,
+            attributes: ["ComplainReviewerUserUNID"],
+            include: [
+              {
+                model: Users,
+                attributes: ["fullName"],
+              },
+            ],
+          },
         ],
       },
       {

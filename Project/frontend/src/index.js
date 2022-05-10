@@ -19,6 +19,7 @@ import ViewHistory from './Components/viewHistory';
 import EmailVerified from './Components/emailVerified';
 import AdminHomepage from './Components/adminHomepage';
 import AdminAccess from './Components/adminAccess';
+import AdminViewAllCom from './Components/adminViewAllCom';
 
 ReactDOM.render(
   <React.StrictMode>
@@ -39,6 +40,7 @@ ReactDOM.render(
       <Route path='/email-verified/:verificationToken' element={<EmailVerified />} />
       <Route path='/admin-homepage' element={<AdminHomepage/>}/>
       <Route path='/admin-access' element={<AdminAccess/>}/>
+      <Route path='/admin-view-all-complaints' element={<AdminViewAllCom/>}/>
     </Routes>
     <Footer/>
     </BrowserRouter>
