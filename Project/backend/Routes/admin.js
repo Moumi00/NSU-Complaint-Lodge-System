@@ -5,12 +5,6 @@ const bcrypt = require("bcrypt");
 const saltRounds = 10;
 const uuid = require("uuid");
 const path = require("path");
-const { GoogleVerification } = require("../models");
-const { OAuth2Client } = require("google-auth-library");
-const CLIENT_ID =
-  "992655217366-qiu0iegl7kmotoovl1630k6283o0jsuk.apps.googleusercontent.com";
-const client = new OAuth2Client(CLIENT_ID);
-
 
 router.post("/create-account", async (req, res) => {
     const result = await Users.findOne({
@@ -80,6 +74,23 @@ router.post("/create-account", async (req, res) => {
         error: "Email Already Registered",
       });
     }
+  });
+
+  router.post("/delete-account", async (req, res) => {
+    await Users.update(
+      {
+        active : 0
+      }, 
+      {
+        where: {
+          userUNID: req.body.userUNID
+        }
+      }
+    );
+    return res.json({ 
+      data: "Deleted Account Successfully",
+      error: "",
+    });
   });
 
 module.exports = router;
