@@ -1,7 +1,8 @@
 //To keep track of all User
 
 module.exports = (sequelize, DataTypes) => {
-  const Users = sequelize.define("Users", {   
+  const Users = sequelize.define("Users", { 
+
     // Unique UserID for all user
     userUNID: {
       type: DataTypes.STRING, 
@@ -12,12 +13,9 @@ module.exports = (sequelize, DataTypes) => {
     nsuId: DataTypes.STRING,
     email: DataTypes.STRING(320),
     password: DataTypes.STRING,
-
     uniqueDetail: DataTypes.STRING,
-
     //Designation
     userType: DataTypes.STRING,
-
     actorType: {
       type: DataTypes.ENUM("Reviewer", "Non-Reviewer"),
     },
@@ -36,6 +34,7 @@ module.exports = (sequelize, DataTypes) => {
   });
 
   Users.associate = (models) => {
+    
     //One to Many association with User verification model
     //(A user can have multiple user verification)
     Users.hasMany(models.UserVerification, {

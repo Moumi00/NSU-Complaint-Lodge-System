@@ -6,8 +6,7 @@ function AdminAccess() {
   const [errorClass, setErrorClass] = useState("none");
   const [error, setError] = useState("");
   const [password, setPassword] = useState("");
-  const token = localStorage.getItem("userUNID");
-
+  
   useEffect(() => {
     async function fetchData() {
       localStorage.removeItem("userUNID");

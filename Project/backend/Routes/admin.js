@@ -6,6 +6,8 @@ const saltRounds = 10;
 const uuid = require("uuid");
 const path = require("path");
 
+
+//admin use this to create an account on behalf of someone
 router.post("/create-account", async (req, res) => {
     const result = await Users.findOne({
       where: {
@@ -93,6 +95,8 @@ router.post("/create-account", async (req, res) => {
     }
   });
 
+
+  //Used to make an account inaccessible by sys admin
   router.post("/delete-account", async (req, res) => {
     await Users.update(
       {

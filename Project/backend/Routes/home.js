@@ -51,7 +51,6 @@ router.post("/add-comment", async (req, res) => {
 
   let commentNumber = 0;
 
-  // console.log("TEMP: ***" + temp.dataValues)
   if (temp != null) {
     commentNumber = temp.dataValues.commentNumber + 1;
   }
@@ -171,9 +170,6 @@ router.get("/user-details", async (req, res) => {
           {
             model: Complain,
             attributes: ["complainTitle", "status"],
-            // where: {
-            //   status: Complain.getAttributes().status.values[0],
-            // },
             include: [
               {
                 model: Users,
@@ -286,6 +282,7 @@ router.post("/change-reviewer", async (req, res) => {
     }
   );
 
+  //creating new reviewer
   const result = await ComplainReviewer.create({
     currentReviewer: ComplainReviewer.getAttributes().currentReviewer.values[0],
     ComplainReviewerUserUNID: req.body.complainReviewerUserUNID,
@@ -362,7 +359,6 @@ router.get("/complain-latest-details", async (req, res) => {
     ],
     where: {
       complainUNID: req.query.complainUNID,
-      // status: Complain.getAttributes().status.values[0],
     },
   });
 
@@ -379,7 +375,7 @@ router.get("/all", async (req, res) => {
       uniqueDetail: {
         [Op.substring]: req.query.query,
       },
-      active: 1, 
+      active: 1,
     },
     limit: 10,
   });
@@ -404,7 +400,7 @@ router.get("/reviewers", async (req, res) => {
           actorType: "Reviewer",
         },
         {
-          active: 1
+          active: 1,
         },
         {
           userUNID: {
@@ -423,7 +419,6 @@ router.get("/reviewers", async (req, res) => {
 
 //Get a list of all users someone can complain against
 router.get("/complain-against", async (req, res) => {
-  // console.log(req.query);
   const result = await Users.findAll({
     attributes: ["uniqueDetail", "userUNID"],
     where: {
@@ -454,9 +449,8 @@ router.get("/complain-against", async (req, res) => {
 //Used to lodge complain
 router.post("/lodge-complaint", async (req, res) => {
   const complainUNID = uuid.v4();
-  console.log(req.body.complainAgainstUserUNID)
+  console.log(req.body.complainAgainstUserUNID);
   const complainAgainstUserUNID = JSON.parse(req.body.complainAgainstUserUNID);
-  //   return console.log(JSON.parse(req.body.complainAgainstUserUNID));
   await Complain.create({
     complainUNID: complainUNID,
     complainTitle: req.body.complainTitle,
@@ -467,7 +461,6 @@ router.post("/lodge-complaint", async (req, res) => {
       ComplainUNID: complainUNID,
       ComplainAgainstUserUNID: complainAgainstUserUNID[i],
     });
-    console.log(complainAgainstUserUNID[i]);
   }
   const files = req.files.file;
 
@@ -525,8 +518,6 @@ router.post("/lodge-complaint-trial", async (req, res) => {
 
   const files = req.files.file;
 
-  console.log(req.files);
-
   async function move(image, idx) {
     let uploadPath;
     uploadPath = path.join(__dirname, "..");
@@ -560,7 +551,5 @@ router.post("/lodge-complaint-trial", async (req, res) => {
     error: "",
   });
 });
-
-
 
 module.exports = router;

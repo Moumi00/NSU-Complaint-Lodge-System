@@ -13,6 +13,7 @@ const CLIENT_ID =
   "992655217366-qiu0iegl7kmotoovl1630k6283o0jsuk.apps.googleusercontent.com";
 const client = new OAuth2Client(CLIENT_ID);
 
+
 //Used for google signins
 router.post("/google-accounts", async (req, res) => {
   try {
@@ -60,6 +61,7 @@ router.post("/google-accounts", async (req, res) => {
     });
   }
 });
+
 
 //Used for google signups
 router.post("/register/google", async (req, res) => {
@@ -112,7 +114,6 @@ router.post("/register/google", async (req, res) => {
         isVerified: true,
         nsuIdPhoto: req.body.nsuId + "." + file.name.split(".").pop(),
       });
-      //console.log("UNID");
       res.json({
         data: user,
         error: "",
@@ -134,6 +135,7 @@ router.post("/register/google", async (req, res) => {
     });
   }
 });
+
 
 //Used for default registration
 router.post("/register", async (req, res) => {

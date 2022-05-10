@@ -6,7 +6,6 @@ function AdminComplainRow(props) {
 
   useEffect(() => {
     async function fetchData() {
-        console.log(props);
     }
     fetchData();
   }, []);

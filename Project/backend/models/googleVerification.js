@@ -2,6 +2,7 @@
 
 module.exports = (sequelize, DataTypes) => {
   const GoogleVerification = sequelize.define("GoogleVerification", {
+    
     //Unique google ID
     googleID: {
       type: DataTypes.STRING,
@@ -16,6 +17,7 @@ module.exports = (sequelize, DataTypes) => {
   });
 
   GoogleVerification.associate = (models) => {
+
     //One to One association with User model
     //(Each Google Verification is done for a User)
     GoogleVerification.belongsTo(models.Users, {

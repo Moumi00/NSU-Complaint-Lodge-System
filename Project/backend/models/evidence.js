@@ -12,6 +12,7 @@ module.exports = (sequelize, DataTypes) => {
   });
 
   Evidence.associate = (models) => {
+    
     //One to many association with Complain model (Each Evidence belongs to a Complain)
     Evidence.belongsTo(models.Complain, {
       foreignKey: {

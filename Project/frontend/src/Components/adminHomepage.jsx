@@ -58,7 +58,6 @@ function AdminHomepage() {
             userUNID: newModalInput,
           }
         );
-        console.log(response);
         let myModal = new Modal (document.getElementById("confirmationModal"));
         myModal.show();
       }
@@ -72,7 +71,6 @@ function AdminHomepage() {
     setIsDeleting(true);
     setIsViewing(false);
     setIslodging(false);
-    //might delete later
     setErrorClass("none");
   }
 
