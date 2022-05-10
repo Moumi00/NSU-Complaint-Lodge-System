@@ -77,13 +77,19 @@ function Login() {
         googleID: res.getAuthResponse().id_token,
       }
     );
-    
+
     if (response.data.data) {
+      console.log(response);
       localStorage.setItem("userUNID", response.data.data.UserUNID);
       window.location.replace("http://localhost:3000");
     } else {
-      res.profileObj.googleID = res.getAuthResponse().id_token;
-      navigate("/google-registration", { state: res.profileObj });
+      if (response.data.error == "Account not found. Please contact admin.") {
+        setError(response.data.error);
+        setErrorClass("block");
+      } else {
+        res.profileObj.googleID = res.getAuthResponse().id_token;
+        navigate("/google-registration", { state: res.profileObj });
+      }
     }
   }
 

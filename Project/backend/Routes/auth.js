@@ -25,6 +25,12 @@ router.post("/google-accounts", async (req, res) => {
     console.log(payload);
     googleID = payload.sub;
     const result = await GoogleVerification.findOne({
+      include: [
+        {
+          model: Users,
+          attributes: ["active"],
+        },
+      ],
       where: {
         googleID: googleID,
       },
@@ -35,6 +41,13 @@ router.post("/google-accounts", async (req, res) => {
         error: "Account Not Registered using Google Signup",
       });
     } else {
+      if (result.User.active == false){
+        console.log(result.User.active)
+        return res.json({
+          data: "",
+          error: "Account not found. Please contact admin.",
+        });
+      }
       return res.json({
         data: result,
         error: "",
@@ -198,6 +211,12 @@ router.post("/register", async (req, res) => {
       verificationToken;
     mailSender(req.body.email, subject, text);
   } else {
+    if (result.active == false){
+      return res.json({
+        data: "",
+        error: "Account not found. Please contact admin.",
+      });
+    }
     res.json({ 
       data: "",
       error: "Email Already Registered",

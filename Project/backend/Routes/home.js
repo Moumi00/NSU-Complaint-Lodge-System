@@ -368,7 +368,8 @@ router.get("/all", async (req, res) => {
     where: {
       uniqueDetail: {
         [Op.substring]: req.query.query,
-      }, 
+      },
+      active: 1, 
     },
     limit: 10,
   });
@@ -391,6 +392,9 @@ router.get("/reviewers", async (req, res) => {
         },
         {
           actorType: "Reviewer",
+        },
+        {
+          active: 1
         },
         {
           userUNID: {
@@ -418,6 +422,9 @@ router.get("/complain-against", async (req, res) => {
           uniqueDetail: {
             [Op.substring]: req.query.query,
           },
+        },
+        {
+          active: 1,
         },
         {
           userUNID: {
