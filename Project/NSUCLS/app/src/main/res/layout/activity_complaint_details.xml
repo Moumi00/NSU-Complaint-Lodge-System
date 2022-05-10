@@ -100,30 +100,38 @@
             android:textColor="@color/black"
             android:textSize="100sp" />
 
-    <TextView
-        android:id="@+id/evidences"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/actualAgainst"
-        android:layout_marginTop="20dp"
-        android:gravity="left"
-        android:paddingLeft="20dp"
-        android:text="Evidence(s):"
-        android:textColor="@color/black"
-        android:textSize="25sp"
-        android:textStyle="bold" />
+        <TextView
+            android:id="@+id/evidences"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/actualAgainst"
+            android:layout_marginTop="20dp"
+            android:gravity="left"
+            android:paddingLeft="20dp"
+            android:text="Evidence(s):"
+            android:textColor="@color/black"
+            android:textSize="25sp"
+            android:textStyle="bold" />
 
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Evidence 1"
-        android:textSize="25sp"
-        android:gravity="left"
-        android:layout_below="@+id/evidences"
-        android:textColor="@color/black"
-        android:id="@+id/evidenceFile"
-        android:paddingLeft="20dp"
-        />
+<!--        <TextView-->
+<!--            android:id="@+id/evidenceFile"-->
+<!--            android:layout_width="match_parent"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:layout_below="@+id/evidences"-->
+<!--            android:clickable="true"-->
+<!--            android:gravity="left"-->
+<!--            android:onClick="onClickEvidence"-->
+<!--            android:paddingLeft="20dp"-->
+<!--            android:text="Evidence 1"-->
+<!--            android:textColor="@color/black"-->
+<!--            android:textSize="25sp" />-->
+        <LinearLayout
+            android:id="@+id/evidenceLayout"
+            android:layout_below="@id/evidences"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_margin="30dp"/>
 
     <TextView
         android:layout_width="match_parent"
@@ -131,7 +139,7 @@
         android:text="Complaint Reviewer:"
         android:textSize="25sp"
         android:gravity="left"
-        android:layout_below="@+id/evidenceFile"
+        android:layout_below="@+id/evidenceLayout"
         android:layout_marginTop="20dp"
         android:textColor="@color/black"
         android:id="@+id/reviewer"

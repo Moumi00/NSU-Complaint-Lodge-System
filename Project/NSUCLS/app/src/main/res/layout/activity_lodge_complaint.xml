@@ -6,69 +6,105 @@
     android:layout_height="match_parent"
     android:background="@drawable/background"
     tools:context=".LodgeComplaintActivity">
+
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Lodge Complaint"
-        android:textSize="40sp"
-        android:gravity="center"
-        android:layout_marginTop="50dp"
-        android:textColor="@color/white"
-        android:id="@+id/lodgeComplaint"
-        android:textStyle="bold"
-        />
 
-
-    <EditText
-        android:id="@+id/complaintTile"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/lodgeComplaint"
-        android:layout_marginHorizontal="20dp"
-        android:layout_marginTop="60dp"
-        android:background="#30ffffff"
-        android:hint="Complaint Title"
-        android:inputType="text"
-        android:padding="20dp"
-        android:textColor="@color/white"
-        android:textColorHint="@color/white" />
-
-    <EditText
-        android:id="@+id/complaintDescription"
-        android:layout_width="match_parent"
-        android:layout_height="150dp"
-        android:layout_below="@id/complaintTile"
-        android:layout_marginStart="20dp"
-        android:layout_marginTop="20dp"
-        android:layout_marginEnd="20dp"
-        android:layout_marginBottom="20dp"
-        android:background="#30ffffff"
-        android:gravity="top"
-        android:hint="Complaint Description (upto 250 words)"
-        android:inputType="text"
-        android:padding="20dp"
-        android:textColor="@color/white"
-        android:textColorHint="@color/white" />
-
-    <MultiAutoCompleteTextView
-        android:id="@+id/complainAgainst"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/complaintDescription"
-        android:layout_marginHorizontal="20dp"
-        android:background="#30ffffff"
-        android:hint="Complain Against"
-        android:padding="20dp"
-        android:textColorHint="@color/white" />
-
-        <LinearLayout
+        <TextView
+            android:id="@+id/lodgeComplaint"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginTop="50dp"
+            android:gravity="center"
+            android:text="Lodge Complaint"
+            android:textColor="@color/white"
+            android:textSize="40sp"
+            android:textStyle="bold" />
+
+        <LinearLayout
+            android:id="@+id/linearLayoutComplainTitle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/lodgeComplaint"
+            android:orientation="horizontal"
+            android:layout_marginHorizontal="20dp"
+            android:layout_marginTop="60dp">
+        <EditText
+            android:id="@+id/complaintTile"
+            android:layout_weight=".70"
+            android:layout_height="wrap_content"
+            android:layout_width="wrap_content"
+            android:background="#30ffffff"
+            android:hint="Complaint Title"
+            android:inputType="text"
+            android:padding="20dp"
+            android:textColor="@color/white"
+            android:textColorHint="@color/white" />
+
+            <ImageButton
+                android:id="@+id/titleMic"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="5dp"
+                android:onClick="speak"
+                android:src="@drawable/ic_baseline_mic_24"
+                android:padding="10dp"
+                android:layout_gravity="center_vertical"
+                android:background="@color/design_default_color_primary_variant"/>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/linearLayoutComplainDescription"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/linearLayoutComplainTitle"
+            android:orientation="horizontal"
+            android:layout_margin="20dp">
+        <EditText
+            android:id="@+id/complaintDescription"
+            android:layout_width="wrap_content"
+            android:layout_height="150dp"
+            android:layout_weight=".70"
+            android:background="#30ffffff"
+            android:gravity="top"
+            android:hint="Complaint Description \n(upto 250 words)"
+            android:inputType="text"
+            android:padding="20dp"
+            android:textColor="@color/white"
+            android:textColorHint="@color/white" />
+
+            <ImageButton
+                android:id="@+id/DescriptionMic"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="5dp"
+                android:onClick="speak"
+                android:src="@drawable/ic_baseline_mic_24"
+                android:padding="10dp"
+                android:layout_gravity="center_vertical"
+                android:background="@color/design_default_color_primary_variant"/>
+
+        </LinearLayout>
+
+        <MultiAutoCompleteTextView
+            android:id="@+id/complainAgainst"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/linearLayoutComplainDescription"
+            android:layout_marginHorizontal="20dp"
+            android:background="#30ffffff"
+            android:hint="Complain Against"
+            android:padding="20dp"
+            android:textColorHint="@color/white" />
+
+        <LinearLayout
             android:id="@+id/linearLayoutEvidence"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
             android:layout_below="@id/complainAgainst">
+
             <Button
                 android:id="@+id/evidence"
                 android:layout_width="match_parent"
@@ -84,30 +120,30 @@
                 android:textSize="20dp" />
         </LinearLayout>
 
-    <AutoCompleteTextView
-        android:id="@+id/complainReviewer"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/linearLayoutEvidence"
-        android:layout_marginHorizontal="20dp"
-        android:layout_marginTop="20dp"
-        android:background="#30ffffff"
-        android:hint="Choose Reviewer"
-        android:padding="20dp"
-        android:textColorHint="@color/white" />
+        <AutoCompleteTextView
+            android:id="@+id/complainReviewer"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/linearLayoutEvidence"
+            android:layout_marginHorizontal="20dp"
+            android:layout_marginTop="20dp"
+            android:background="#30ffffff"
+            android:hint="Choose Reviewer"
+            android:padding="20dp"
+            android:textColorHint="@color/white" />
 
-    <com.google.android.material.button.MaterialButton
-        android:id="@+id/lodgeComplaintButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/complainReviewer"
-        android:layout_centerHorizontal="true"
-        android:layout_marginStart="15dp"
-        android:layout_marginTop="20dp"
-        android:layout_marginBottom="15dp"
-        android:backgroundTint="@color/design_default_color_primary_variant"
-        android:text="Lodge Complaint"
-        android:textSize="15dp" />
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/lodgeComplaintButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/complainReviewer"
+            android:layout_centerHorizontal="true"
+            android:layout_marginStart="15dp"
+            android:layout_marginTop="20dp"
+            android:layout_marginBottom="15dp"
+            android:backgroundTint="@color/design_default_color_primary_variant"
+            android:text="Lodge Complaint"
+            android:textSize="15dp" />
 
     </RelativeLayout>
 

@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -37,6 +38,7 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
         String userUNID = settings.getString("userUNID", null);
 
 
+
         JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.GET,
                 SplashActivity.baseURL + "/home/user-details?userUNID=" + userUNID,null, new Response.Listener<JSONObject>() {
             @Override
@@ -59,6 +61,14 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
                     complains[0] = getSth.getJSONArray("Complains");
                     reviewComplains[0] = getSth.getJSONArray("ComplainReviewers");
                     //System.out.println(complains[0].getJSONObject(0));
+                    if (getSth.getString("actorType").equals("Non-Reviewer")){
+                        ((LinearLayout)findViewById(R.id.reviewComplains)).setEnabled(false);
+                        ((LinearLayout)findViewById(R.id.reviewComplains)).setAlpha(0.5f);
+                        ((ImageButton)findViewById(R.id.reviewComplainsImage)).setEnabled(false);
+                        ((LinearLayout)findViewById(R.id.reviewedComplains)).setEnabled(false);
+                        ((LinearLayout)findViewById(R.id.reviewedComplains)).setAlpha(0.5f);
+                        ((ImageButton)findViewById(R.id.reviewedComplainsImage)).setEnabled(false);
+                    }
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
@@ -77,17 +87,21 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
         LinearLayout myComplainsLinearlayout = (LinearLayout) findViewById(R.id.myComplains);
         LinearLayout reviewComplainsLinearLayout = (LinearLayout) findViewById(R.id.reviewComplains);
         LinearLayout lodgeComplainLayout = (LinearLayout) findViewById(R.id.lodgeComplain);
+        LinearLayout reviewedComplainsLinearLayout = (LinearLayout) findViewById(R.id.reviewedComplains);
         ImageView myComplainsImage = (ImageView) findViewById(R.id.myComplainsImage);
-        ImageView reviewedComplainsImage = (ImageView) findViewById(R.id.reviewedComplainsImage);
+        ImageView reviewComplainsImage = (ImageView) findViewById(R.id.reviewComplainsImage);
         ImageView lodgeComplainImage = (ImageView) findViewById(R.id.lodgeComplainImage);
+        ImageView reviewedComplainsImage = (ImageView) findViewById(R.id.reviewedComplainsImage);
         Button logoutButton = (Button) findViewById(R.id.logoutButton);
 
         myComplainsLinearlayout.setOnClickListener(this);
         reviewComplainsLinearLayout.setOnClickListener(this);
         lodgeComplainLayout.setOnClickListener(this);
+        reviewedComplainsLinearLayout.setOnClickListener(this);
         myComplainsImage.setOnClickListener(this);
-        reviewedComplainsImage.setOnClickListener(this);
+        reviewComplainsImage.setOnClickListener(this);
         lodgeComplainImage.setOnClickListener(this);
+        reviewedComplainsImage.setOnClickListener(this);
         logoutButton.setOnClickListener(this);
 
 
@@ -103,10 +117,21 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
                 startActivity(firstIntent);
                 break;
             case R.id.reviewComplains:
-            case R.id.reviewedComplainsImage:
+            case R.id.reviewComplainsImage:
                 Intent secondIntent = new Intent(HomeActivity.this, ReviewComplainsActivity.class);
                 System.out.println(reviewComplains[0]);
-                secondIntent.putExtra("jsonArray", reviewComplains[0].toString());
+                final JSONArray[] complainsToReview = {new JSONArray()};
+                for (int i = 0; i < reviewComplains[0].length(); i++){
+                    try {
+                        JSONObject obj = reviewComplains[0].getJSONObject(i);
+                        if (obj.getJSONObject("Complain").getString("status").equals("Open")){
+                            complainsToReview[0].put(obj);
+                        }
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                }
+                secondIntent.putExtra("jsonArray", complainsToReview[0].toString());
                 startActivity(secondIntent);
                 break;
             case R.id.lodgeComplain:
@@ -114,6 +139,24 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
                 System.out.println("POPO");
                 Intent thirdIntent = new Intent(HomeActivity.this, LodgeComplaintActivity.class);
                 startActivity(thirdIntent);
+                break;
+            case R.id.reviewedComplains:
+            case R.id.reviewedComplainsImage:
+                Intent fourthIntent = new Intent(HomeActivity.this, ReviewedComplainsActivity.class);
+                System.out.println(reviewComplains[0]);
+                final JSONArray[] complainsReviewed = {new JSONArray()};
+                for (int i = 0; i < reviewComplains[0].length(); i++){
+                    try {
+                        JSONObject obj = reviewComplains[0].getJSONObject(i);
+                        if (obj.getJSONObject("Complain").getString("status").equals("Close")){
+                            complainsReviewed[0].put(obj);
+                        }
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                }
+                fourthIntent.putExtra("jsonArray", complainsReviewed[0].toString());
+                startActivity(fourthIntent);
                 break;
             case R.id.logoutButton:
                 SharedPreferences settings = getApplicationContext().getSharedPreferences("localStorage", 0);

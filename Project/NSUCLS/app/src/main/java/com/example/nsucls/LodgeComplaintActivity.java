@@ -16,12 +16,14 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
 import android.provider.OpenableColumns;
+import android.speech.RecognizerIntent;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.MultiAutoCompleteTextView;
 import android.widget.TextView;
@@ -54,6 +56,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.LinkedHashSet;
 import java.util.List;
+import java.util.Locale;
 import java.util.Objects;
 import java.util.Set;
 
@@ -67,14 +70,18 @@ import retrofit2.Response;
 
 public class LodgeComplaintActivity extends AppCompatActivity {
 
+    //For the permissions
     private static final int REQUEST_EXTERNAL_STORAGE = 1;
     private static String[] PERMISSIONS_STORAGE = {
             Manifest.permission.READ_EXTERNAL_STORAGE,
             Manifest.permission.WRITE_EXTERNAL_STORAGE
     };
+    private int STORAGE_PERMISSION_CODE = 1;
+
+
+
     private String complainTitle, complainDescription;
     private Button uploadFileButton;
-    private int STORAGE_PERMISSION_CODE = 1;
     private List<Uri> images = new ArrayList<>();
     final ArrayList<User> reviewers = new ArrayList<User>();
     final ArrayList<User> complainAgainst = new ArrayList<User>();
@@ -82,10 +89,6 @@ public class LodgeComplaintActivity extends AppCompatActivity {
     User reviewerName;
     private ArrayList<User> complainAgainstUsers = new ArrayList<User>();
     String userUNID;
-//    private static final String[] COUNTRIES = new String[] {
-//            "Belgium", "France", "Italy", "Germany", "Spain"
-//    };
-
     private File mImageFile;
 
     @Override
@@ -95,18 +98,12 @@ public class LodgeComplaintActivity extends AppCompatActivity {
         SharedPreferences settings = getApplicationContext().getSharedPreferences("localStorage", 0);
         userUNID = settings.getString("userUNID", null);
 
-//        ArrayAdapter<String> adapter = new ArrayAdapter<String>(this,
-//                android.R.layout.simple_dropdown_item_1line, COUNTRIES);
-//        MultiAutoCompleteTextView textView = findViewById(R.id.edit);
-//        textView.setAdapter(adapter);
-//        textView.setTokenizer(new MultiAutoCompleteTextView.CommaTokenizer());
 
 
+        //Login for complain Against
         MultiAutoCompleteTextView complainAgainstTextField = (MultiAutoCompleteTextView)
                 findViewById(R.id.complainAgainst);
-//        complainAgainstTextField.setTokenizer(new MultiAutoCompleteTextView.CommaTokenizer());
         complainAgainstTextField.setThreshold(1);
-
         complainAgainstTextField.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
@@ -120,16 +117,20 @@ public class LodgeComplaintActivity extends AppCompatActivity {
 
             @Override
             public void afterTextChanged(Editable editable) {
-                System.out.println(editable);
+
+                //Value stores the string after the ","
+                //This is used so that we can give the next axios call with new user name
                 String value = null;
+
+
                 if (editable.toString().contains(",")) {
                     value = (editable).toString().substring(editable.toString().lastIndexOf(",") + 1).trim();
                 }
                 if (value == null){
                     value = editable.toString();
                 }
-                System.out.println(value);
-                System.out.println("KURUMA");
+
+                //API call to receive 10 users with matched input
                 JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.GET,
                         SplashActivity.baseURL + "/home/complain-against?query=" + value + "&userUNID=" + userUNID, null, new com.android.volley.Response.Listener<JSONObject>() {
                     @Override
@@ -352,6 +353,19 @@ public class LodgeComplaintActivity extends AppCompatActivity {
         });
 
     }
+
+    public void speak(View view) {
+        System.out.println(view.getId());
+        Intent intent = new Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH);
+        intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL, RecognizerIntent.LANGUAGE_MODEL_FREE_FORM);
+        intent.putExtra(RecognizerIntent.EXTRA_PROMPT, "Start Speaking");
+        intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE, Locale.getDefault());
+        if (view.getId() == R.id.titleMic)
+            startActivityForResult(intent, 100);
+        else
+            startActivityForResult(intent, 200);
+    }
+
 
 
     private boolean checkValidity(){
@@ -595,6 +609,12 @@ public class LodgeComplaintActivity extends AppCompatActivity {
                         individualLineForEvidence.addView(textView);
                         individualLineForEvidence.addView(myButton);
                     }
+                    break;
+                case 100:
+                    ((TextView)findViewById(R.id.complaintTile)).append(data.getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS).get(0));
+                    break;
+                case 200:
+                    ((TextView)findViewById(R.id.complaintDescription)).append(data.getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS).get(0));
             }
 
         }
@@ -646,6 +666,8 @@ public class LodgeComplaintActivity extends AppCompatActivity {
             @Override
             public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
                 Toast.makeText(LodgeComplaintActivity.this, "Uploaded", Toast.LENGTH_LONG).show();
+                Intent myIntent = new Intent(LodgeComplaintActivity.this, HomeActivity.class);
+                startActivity(myIntent);
             }
 
             @Override

@@ -163,7 +163,7 @@
             android:padding="10dp">
 
             <ImageButton
-                android:id="@+id/reviewedComplainsImage"
+                android:id="@+id/reviewComplainsImage"
                 android:layout_width="90dp"
                 android:layout_height="100dp"
                 android:layout_below="@+id/details"
@@ -194,6 +194,7 @@
             android:padding="10dp">
 
             <ImageButton
+                android:id="@+id/reviewedComplainsImage"
                 android:layout_width="90dp"
                 android:layout_height="100dp"
                 android:layout_below="@+id/details"
