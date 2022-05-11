@@ -143,7 +143,6 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
             case R.id.reviewedComplains:
             case R.id.reviewedComplainsImage:
                 Intent fourthIntent = new Intent(HomeActivity.this, ReviewedComplainsActivity.class);
-                System.out.println(reviewComplains[0]);
                 final JSONArray[] complainsReviewed = {new JSONArray()};
                 for (int i = 0; i < reviewComplains[0].length(); i++){
                     try {
@@ -155,6 +154,7 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
                         e.printStackTrace();
                     }
                 }
+                System.out.println(complainsReviewed[0]);
                 fourthIntent.putExtra("jsonArray", complainsReviewed[0].toString());
                 startActivity(fourthIntent);
                 break;

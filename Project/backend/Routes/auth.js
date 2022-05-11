@@ -4,6 +4,7 @@ const router = express.Router();
 const bcrypt = require("bcrypt");
 const saltRounds = 10;
 const uuid = require("uuid");
+const { Op } = require("sequelize");
 const { UserVerification } = require("../models");
 const { mailSender } = require("../utilities/utilities");
 const path = require("path");
@@ -76,7 +77,9 @@ router.post("/register/google", async (req, res) => {
     googleID = payload.sub;
     const result = await Users.findOne({
       where: {
-        email: req.body.email,
+        [Op.or]: [
+          { email: req.body.email }, 
+          { nsuId: req.body.nsuId}],
       },
     });
     if (result === null) {
@@ -122,10 +125,15 @@ router.post("/register/google", async (req, res) => {
         googleID: googleID,
         UserUNID: UNID,
       });
-    } else {
+    } else if (result.email == req.body.email){
       res.json({
         data: "",
         error: "Email Already Registered",
+      });
+    } else {
+      res.json({
+        data: "",
+        error: "NSU ID Already Used",
       });
     }
   } catch (error) {
@@ -141,7 +149,9 @@ router.post("/register/google", async (req, res) => {
 router.post("/register", async (req, res) => {
   const result = await Users.findOne({
     where: {
-      email: req.body.email,
+      [Op.or]: [
+        { email: req.body.email }, 
+        { nsuId: req.body.nsuId}],
     },
   });
   if (result === null) {
@@ -218,11 +228,17 @@ router.post("/register", async (req, res) => {
         data: "",
         error: "Account not found. Please contact admin.",
       });
+    } else if (result.email == req.body.email){
+      res.json({
+        data: "",
+        error: "Email Already Registered",
+      });
+    } else {
+      res.json({
+        data: "",
+        error: "NSU ID Already Used",
+      });
     }
-    res.json({ 
-      data: "",
-      error: "Email Already Registered",
-    });
   }
 });
 
