@@ -8,7 +8,8 @@ import android.os.Handler;
 
 public class SplashActivity extends AppCompatActivity {
 
-    public static final String baseURL = "http://10.0.2.2:8000";
+    public static final String baseURL = "http://172.20.130.133:8000";
+    public static final String frontendURL = "http://172.20.130.133:3000";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

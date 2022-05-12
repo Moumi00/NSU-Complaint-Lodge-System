@@ -4,8 +4,11 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.net.Uri;
 import android.os.Bundle;
+import android.text.method.LinkMovementMethod;
 import android.view.View;
+import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -34,6 +37,21 @@ public class LoginActivity extends AppCompatActivity {
         TextView password = (TextView) findViewById(R.id.password);
 
         MaterialButton loginBtn = (MaterialButton) findViewById(R.id.loginButton);
+
+        TextView registerTV = findViewById(R.id.registerNow);
+        registerTV.setMovementMethod(LinkMovementMethod.getInstance());
+        registerTV.setOnClickListener(view -> {
+            Uri uri = Uri.parse(SplashActivity.frontendURL + "/register"); // missing 'http://' will cause crashed
+            Intent intent = new Intent(Intent.ACTION_VIEW, uri);
+            startActivity(intent);
+        });
+
+        ImageButton googleButton = findViewById(R.id.googleButton);
+        googleButton.setOnClickListener(view -> {
+            Uri uri = Uri.parse(SplashActivity.frontendURL + "/login"); // missing 'http://' will cause crashed
+            Intent intent = new Intent(Intent.ACTION_VIEW, uri);
+            startActivity(intent);
+        });
 
         loginBtn.setOnClickListener(new View.OnClickListener() {
             @Override

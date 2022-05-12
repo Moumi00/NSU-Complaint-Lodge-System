@@ -85,13 +85,13 @@ router.get("/complain-history", async (req, res) => {
     include: [
       {
         model: ComplainAgainst,
-        where: {
+        where: { 
           editHistory: req.query.id,
         },
         include: [
           {
             model: Users,
-            attributes: ["fullName", "userUNID"],
+            attributes: ["fullName", "userUNID"], 
           },
         ],
       },

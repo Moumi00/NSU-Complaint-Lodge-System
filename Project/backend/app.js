@@ -5,11 +5,12 @@ const auth = require("./Routes/auth");
 const home = require("./Routes/home");
 const admin = require("./Routes/admin");
 const fileUpload = require("express-fileupload");
-const cors = require("cors");  
+const cors = require("cors");
+var fs = require('fs');
 
 app.use(cors());
 
-app.use(function (req, res, next) { 
+app.use(function (req, res, next) {
   res.header("Access-Control-Allow-Origin", "*");
   res.header("Access-Control-Allow-Credentials", "true");
   res.header("Access-Control-Allow-Methods", "GET,HEAD,OPTIONS,POST,PUT");
@@ -42,11 +43,23 @@ connection.query(
       db.sequelize.sync().then(() => {
         app.listen(8000, () => {
           console.log("Connected to 8000");
+
+          const dir = './uploads/Evidence';
+          if (!fs.existsSync(dir)) {
+            fs.mkdirSync(dir, {
+              recursive: true
+            });
+          }
+          const dir2 = './uploads/NSU IDs';
+          if (!fs.existsSync(dir2)) {
+            fs.mkdirSync(dir2, {
+              recursive: true
+            });
+          }
         });
-      });
+        });
     } else {
       console.log("KAAM KORENA");
     }
   }
-); 
- 
+);
