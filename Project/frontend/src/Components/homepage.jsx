@@ -8,11 +8,10 @@ function Homepage() {
           <div className="col-5 offset-2">
             <div className="display-5 my-2">Submit a complaint</div>
             <p class="fs-5 mt-3">
-              Each week we send more than 100 complaints about different issues
-              occuring in NSU premise. If another agency would be better able to
-              assist, we'll send it to them and let you know. I am just writing
-              garbage right now. I will definitely change this later. And now I
-              will stop.
+              Each week we receive more than 100 complaints about different issues
+              occuring in NSU premise. The complains are sent to specific reviewer
+              who reviews the complain and then helps by providing a solution to the
+              complaint.
             </p>
           </div>
           <div className="col-2">
@@ -46,7 +45,7 @@ function Homepage() {
                     aria-expanded="false"
                     aria-controls="flush-collapseOne"
                   >
-                    Accordion Item #1
+                    Can I lodge an anonymous complaint?
                   </button>
                 </h2>
                 <div
@@ -56,9 +55,31 @@ function Homepage() {
                   data-bs-parent="#accordionFlushExample"
                 >
                   <div class="accordion-body">
-                    Placeholder content for this accordion, which is intended to
-                    demonstrate the <code>.accordion-flush</code> class. This is
-                    the first item's accordion body.
+                    No. You must register before lodging your first complaint
+                  </div>
+                </div>
+              </div>
+              <div class="accordion-item">
+                <h2 class="accordion-header" id="flush-headingFour">
+                  <button
+                    class="accordion-button collapsed"
+                    type="button"
+                    data-bs-toggle="collapse"
+                    data-bs-target="#flush-collapseFour"
+                    aria-expanded="false"
+                    aria-controls="flush-collapseFour"
+                  >
+                    How to lodge a complaint?
+                  </button>
+                </h2>
+                <div
+                  id="flush-collapseFour"
+                  class="accordion-collapse collapse"
+                  aria-labelledby="flush-headingFour"
+                  data-bs-parent="#accordionFlushExample"
+                >
+                  <div class="accordion-body">
+                    You have to create an account at first to lodge a complaint. Once you are logged in you can  Click Lodge Complaint from dashboard and provide all the details of the complaint. In addition, the system admin can lodge a complaint on behalf of you.
                   </div>
                 </div>
               </div>
@@ -72,7 +93,7 @@ function Homepage() {
                     aria-expanded="false"
                     aria-controls="flush-collapseTwo"
                   >
-                    Accordion Item #2
+                    How do you process the complaints?
                   </button>
                 </h2>
                 <div
@@ -82,10 +103,7 @@ function Homepage() {
                   data-bs-parent="#accordionFlushExample"
                 >
                   <div class="accordion-body">
-                    Placeholder content for this accordion, which is intended to
-                    demonstrate the <code>.accordion-flush</code> class. This is
-                    the second item's accordion body. Let's imagine this being
-                    filled with some actual content.
+                    The complaint is first lodged by a lodger. Each complaint has a reviewer who reviews all the details. He can close the complaints once all appreciate steps are taken.
                   </div>
                 </div>
               </div>
@@ -99,7 +117,7 @@ function Homepage() {
                     aria-expanded="false"
                     aria-controls="flush-collapseThree"
                   >
-                    Accordion Item #3
+                    Do you have a mobile app version of the website?
                   </button>
                 </h2>
                 <div
@@ -109,13 +127,7 @@ function Homepage() {
                   data-bs-parent="#accordionFlushExample"
                 >
                   <div class="accordion-body">
-                    Placeholder content for this accordion, which is intended to
-                    demonstrate the <code>.accordion-flush</code> class. This is
-                    the third item's accordion body. Nothing more exciting
-                    happening here in terms of content, but just filling up the
-                    space to make it look, at least at first glance, a bit more
-                    representative of how this would look in a real-world
-                    application.
+                    Yes. We do have a mobile app version which you can download from the playstore
                   </div>
                 </div>
               </div>
