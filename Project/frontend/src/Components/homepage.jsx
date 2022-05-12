@@ -9,9 +9,11 @@ function Homepage() {
             <div className="display-5 my-2">Submit a complaint</div>
             <p class="fs-5 mt-3">
               Each week we receive more than 100 complaints about different issues
-              occuring in NSU premise. The complains are sent to specific reviewer
+              occuring in North South University premise. Anyone affiliated with North South University can
+              lodge complaints. The complains are sent to specific reviewer
               who reviews the complain and then helps by providing a solution to the
-              complaint.
+              complaint. This website also have a mobile application where complaints can be lodged via 
+              bangla speech.
             </p>
           </div>
           <div className="col-2">
@@ -107,7 +109,7 @@ function Homepage() {
                   </div>
                 </div>
               </div>
-              <div class="accordion-item">
+              <div class="accordion-item mb-3">
                 <h2 class="accordion-header" id="flush-headingThree">
                   <button
                     class="accordion-button collapsed"
